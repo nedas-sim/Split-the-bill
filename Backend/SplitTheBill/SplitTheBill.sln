@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{57671AB9-1703-42A3-AD5D-D4D1AC8696E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudTests", "CrudTests\CrudTests.csproj", "{378BE850-9DF3-4B49-BB63-BE861EB1CF30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{57671AB9-1703-42A3-AD5D-D4D1AC8696E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57671AB9-1703-42A3-AD5D-D4D1AC8696E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57671AB9-1703-42A3-AD5D-D4D1AC8696E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{378BE850-9DF3-4B49-BB63-BE861EB1CF30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{378BE850-9DF3-4B49-BB63-BE861EB1CF30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{378BE850-9DF3-4B49-BB63-BE861EB1CF30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{378BE850-9DF3-4B49-BB63-BE861EB1CF30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{2E8BBB4B-8D6B-4F7D-904F-5565A936BEBF} = {88853C9A-A5DD-4EC7-9D25-2DC43284CC12}
 		{1F0ECA07-C457-46B0-BA52-79B2E12A9E92} = {88853C9A-A5DD-4EC7-9D25-2DC43284CC12}
 		{57671AB9-1703-42A3-AD5D-D4D1AC8696E8} = {88853C9A-A5DD-4EC7-9D25-2DC43284CC12}
+		{378BE850-9DF3-4B49-BB63-BE861EB1CF30} = {0F095FD0-BF4A-4AC1-A18C-58460BB73AE4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0587E3F6-3B38-41DD-B54A-D42703C9D831}

@@ -7,6 +7,11 @@ public sealed class UserResponse
     public Guid Id { get; set; }
     public string Username { get; set; }
 
+    public UserResponse()
+    {
+
+    }
+
     public UserResponse(User user)
     {
         Id = user.Id;
