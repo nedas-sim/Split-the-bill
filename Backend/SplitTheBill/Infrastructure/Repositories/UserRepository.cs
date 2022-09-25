@@ -19,12 +19,9 @@ public sealed class UserRepository : BaseRepository<User, UserId>, IUserReposito
     {
         UserResponse? user =
             await context.Users
-                         .Select(u => new UserResponse
-                         {
-                             Id = u.Id,
-                             Username = u.Username,
-                         })
-                         .FirstOrDefaultAsync(u => u.Id == id);
+                         .Where(u => u.Id == id)
+                         .Select(u => new UserResponse(u))
+                         .FirstOrDefaultAsync();
 
         return user;
     }

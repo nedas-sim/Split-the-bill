@@ -16,6 +16,16 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
         this.context = context;
     }
 
+    public async Task<TEntity> Create(TEntity entity)
+    {
+        context.Set<TEntity>()
+               .Add(entity);
+
+        await context.SaveChangesAsync();
+
+        return entity;
+    }
+
     public async Task<TEntity?> GetById(TId id)
     {
         TEntity? entity =

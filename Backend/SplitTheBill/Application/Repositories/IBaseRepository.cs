@@ -8,4 +8,5 @@ public interface IBaseRepository<TEntity, TId>
 
 {
     public Task<TEntity?> GetById(TId id);
+    public Task<TEntity> Create(TEntity entity);
 }
