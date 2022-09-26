@@ -11,7 +11,7 @@ public class UserConfiguration
 
         userModelBuilder.HasKey(x => x.Id);
         userModelBuilder.Property(x => x.Id)
-                        .HasConversion(x => x.Id, l => l)
+                        .HasConversion(x => x.Id, id => new UserId { Id = id })
                         .HasColumnName(nameof(User.Id))
                         .ValueGeneratedOnAdd()
                         .IsRequired()
