@@ -10,11 +10,7 @@ public class UserConfiguration
         var userModelBuilder = modelBuilder.Entity<User>();
 
         userModelBuilder.HasKey(x => x.Id);
-        userModelBuilder.Property(x => x.Id)
-                        .HasConversion(x => x.Id, id => new UserId { Id = id })
-                        .HasColumnName(nameof(User.Id))
-                        .ValueGeneratedOnAdd()
-                        .IsRequired()
-                        ;
+
+        ConfigurationHelper.ConfigureIdForEntity<User, UserId>(userModelBuilder);
     }
 }
