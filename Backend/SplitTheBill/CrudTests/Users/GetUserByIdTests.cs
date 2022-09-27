@@ -30,7 +30,7 @@ public class GetUserByIdTests
             Username = "test_username",
         };
 
-        userRepository.Setup(x => x.GetUserResponse(id))
+        userRepository.Setup(x => x.GetUserResponse(id, default))
                       .ReturnsAsync(response);
 
         GetUserByIdQuery query = new(id);
@@ -54,7 +54,7 @@ public class GetUserByIdTests
             Username = "test_username",
         };
 
-        userRepository.Setup(x => x.GetUserResponse(id))
+        userRepository.Setup(x => x.GetUserResponse(id, default))
                       .Returns(Task.FromResult<UserResponse?>(null));
 
         GetUserByIdQuery query = new(id);

@@ -17,7 +17,7 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
 
     public async Task<BaseResult<UserResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        UserResponse? user = await _userRepository.GetUserResponse(request.Id);
+        UserResponse? user = await _userRepository.GetUserResponse(request.Id, cancellationToken);
 
         if (user is null)
         {

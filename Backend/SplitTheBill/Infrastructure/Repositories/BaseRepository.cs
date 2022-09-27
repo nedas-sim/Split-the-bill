@@ -16,21 +16,22 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
         this.context = context;
     }
 
-    public async Task<TEntity> Create(TEntity entity)
+    public async Task<TEntity> Create(TEntity entity, CancellationToken cancellationToken = default)
     {
         context.Set<TEntity>()
                .Add(entity);
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
 
         return entity;
     }
 
-    public async Task<TEntity?> GetById(TId id)
+    public async Task<TEntity?> GetById(TId id, CancellationToken cancellationToken = default)
     {
         TEntity? entity =
             await context.Set<TEntity>()
-                         .FirstOrDefaultAsync(x => x.Id == id);
+                         .FirstOrDefaultAsync(x => x.Id == id,
+                                              cancellationToken);
 
         return entity;
     }
