@@ -15,13 +15,13 @@ public sealed class UserRepository : BaseRepository<User, UserId>, IUserReposito
         this.context = context;
     }
 
-    public async Task<UserResponse?> GetUserResponse(UserId id)
+    public async Task<UserResponse?> GetUserResponse(UserId id, CancellationToken cancellationToken = default)
     {
         UserResponse? user =
             await context.Users
                          .Where(u => u.Id == id)
                          .Select(u => new UserResponse(u))
-                         .FirstOrDefaultAsync();
+                         .FirstOrDefaultAsync(cancellationToken);
 
         return user;
     }

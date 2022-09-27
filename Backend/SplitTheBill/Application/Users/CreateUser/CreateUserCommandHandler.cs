@@ -29,7 +29,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, BaseR
         }
 
         User user = request.Create();
-        user = await userRepository.Create(user);
+        user = await userRepository.Create(user, cancellationToken);
         return new UserResponse(user);
     }
 }

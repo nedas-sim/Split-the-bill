@@ -7,6 +7,6 @@ public interface IBaseRepository<TEntity, TId>
     where TId : DatabaseEntityId
 
 {
-    public Task<TEntity?> GetById(TId id);
-    public Task<TEntity> Create(TEntity entity);
+    public Task<TEntity?> GetById(TId id, CancellationToken cancellationToken = default);
+    public Task<TEntity> Create(TEntity entity, CancellationToken cancellationToken = default);
 }
