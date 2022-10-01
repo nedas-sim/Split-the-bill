@@ -9,8 +9,6 @@ public class UserConfiguration
     {
         var userModelBuilder = modelBuilder.Entity<User>();
 
-        userModelBuilder.HasKey(x => x.Id);
-
         ConfigurationHelper.ConfigureIdForEntity<User, UserId>(userModelBuilder);
     }
 }

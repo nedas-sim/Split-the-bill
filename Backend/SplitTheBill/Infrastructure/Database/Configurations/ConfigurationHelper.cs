@@ -10,6 +10,7 @@ public static class ConfigurationHelper
         where TEntity : BaseEntity<TId>
         where TId : DatabaseEntityId, new()
     {
+        typeBuilder.HasKey(x => x.Id);
         typeBuilder.Property(x => x.Id)
                    .HasConversion(x => x.Id, id => new TId { Id = id })
                    .HasColumnName(nameof(DatabaseEntityId.Id))

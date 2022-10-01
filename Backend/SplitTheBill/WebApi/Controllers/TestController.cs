@@ -24,7 +24,7 @@ public class TestController : BaseController
     [Route("payment")]
     public async Task<IActionResult> AddRandomPayment()
     {
-        Payment payment = new()
+        /*Payment payment = new()
         {
             Id = PaymentId.Default,
             DateOfPayment = DateTime.UtcNow,
@@ -32,7 +32,7 @@ public class TestController : BaseController
         };
 
         context.Payments.Add(payment);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync();*/
 
         return Ok();
     }

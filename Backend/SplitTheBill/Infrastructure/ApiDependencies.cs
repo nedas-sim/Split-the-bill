@@ -27,6 +27,7 @@ public static class ApiDependencies
     private static void AddRepositories(IServiceCollection services)
     {
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IPaymentRepository, PaymentRepository>();
     }
 
     private static void AddMediatR(IServiceCollection services)

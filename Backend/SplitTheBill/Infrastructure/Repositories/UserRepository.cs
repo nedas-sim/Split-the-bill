@@ -8,11 +8,8 @@ namespace Infrastructure.Repositories;
 
 public sealed class UserRepository : BaseRepository<User, UserId>, IUserRepository
 {
-    private readonly DataContext context;
-
     public UserRepository(DataContext context) : base(context)
     {
-        this.context = context;
     }
 
     public async Task<UserResponse?> GetUserResponse(UserId id, CancellationToken cancellationToken = default)

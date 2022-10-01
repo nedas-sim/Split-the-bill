@@ -9,7 +9,7 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
     where TEntity : BaseEntity<TId>
     where TId : DatabaseEntityId
 {
-    private readonly DataContext context;
+    protected readonly DataContext context;
 
     public BaseRepository(DataContext context)
     {
@@ -34,5 +34,14 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
                                               cancellationToken);
 
         return entity;
+    }
+
+    public async Task<int> GetCount(CancellationToken cancellationToken = default)
+    {
+        int count =
+            await context.Set<TEntity>()
+                         .CountAsync(cancellationToken);
+
+        return count;
     }
 }

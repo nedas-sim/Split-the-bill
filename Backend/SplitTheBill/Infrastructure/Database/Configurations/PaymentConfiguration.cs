@@ -1,4 +1,5 @@
 ﻿using Domain.Database;
+using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,9 +18,13 @@ public static class PaymentConfiguration
 
     private static void ConfigurePayments(EntityTypeBuilder<Payment> paymentBuilder)
     {
-        paymentBuilder.HasKey(x => x.Id);
-        
         ConfigurationHelper.ConfigureIdForEntity<Payment, PaymentId>(paymentBuilder);
+
+        paymentBuilder.OwnsOne(p => p.Amount)
+                      .Property(p => p.Value).HasColumnName(nameof(Payment.Amount));
+
+        paymentBuilder.OwnsOne(p => p.Amount)
+                      .Property(p => p.Currency).HasColumnName(nameof(Amount.Currency));
     }
 
     private static void ConfigureUserPayments(EntityTypeBuilder<UserPayment> userPaymentBuilder)

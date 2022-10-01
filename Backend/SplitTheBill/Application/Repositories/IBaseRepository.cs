@@ -9,4 +9,5 @@ public interface IBaseRepository<TEntity, TId>
 {
     public Task<TEntity?> GetById(TId id, CancellationToken cancellationToken = default);
     public Task<TEntity> Create(TEntity entity, CancellationToken cancellationToken = default);
+    Task<int> GetCount(CancellationToken cancellationToken = default);
 }
