@@ -1,4 +1,5 @@
-﻿using Application.Payments.GetPaymentById;
+﻿using Application.Payments.CreatePayment;
+using Application.Payments.GetPaymentById;
 using Application.Payments.GetPaymentList;
 using Domain.Responses.Payments;
 using Domain.Results;
@@ -19,7 +20,11 @@ public class PaymentController : BaseController
     public async Task<ActionResult<ListResult<PaymentResponse>>> GetList([FromQuery] GetPaymentListQuery query) 
         => Ok(await sender.Send(query));
 
-    [HttpGet("id")]
-    public async Task<ActionResult<PaymentResponse>> GetById([FromQuery] Guid id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<PaymentResponse>> GetById([FromRoute] Guid id)
         => FromResult(await sender.Send(new GetPaymentByIdQuery(id)));
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreatePaymentCommand command)
+        => ToNoContent(await sender.Send(command));
 }

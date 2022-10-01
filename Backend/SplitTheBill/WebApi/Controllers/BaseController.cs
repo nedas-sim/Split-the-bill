@@ -8,7 +8,9 @@ namespace WebApi.Controllers;
 [ApiController]
 public class BaseController : ControllerBase
 {
-	protected readonly ISender sender;
+	private readonly object _responseForUnimplementedResult = new { Message = "Api result not handled" };
+
+    protected readonly ISender sender;
 
 	public BaseController(ISender sender)
 	{
@@ -22,7 +24,17 @@ public class BaseController : ControllerBase
 			SuccessResult<T> success => Ok(success.Item),
 			ValidationErrorResult<T> validationErrorResult => BadRequest(validationErrorResult),
 			NotFoundResult<T> notFoundResult => NotFound(notFoundResult),
-			_ => StatusCode(500, new { Message = "Api result not handled" }),
+			_ => StatusCode(500, _responseForUnimplementedResult),
+		};
+	}
+
+	protected IActionResult ToNoContent(BaseResult<Unit> result)
+	{
+        return result switch
+		{
+			NoContentResult<Unit> => NoContent(),
+			ValidationErrorResult<Unit> validationErrorResult => BadRequest(validationErrorResult),
+			_ => StatusCode(500, _responseForUnimplementedResult),
 		};
 	}
 }
