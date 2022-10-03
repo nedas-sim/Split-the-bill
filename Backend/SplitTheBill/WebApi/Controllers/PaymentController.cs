@@ -1,6 +1,7 @@
 ﻿using Application.Payments.CreatePayment;
 using Application.Payments.GetPaymentById;
 using Application.Payments.GetPaymentList;
+using Application.Payments.UpdatePayment;
 using Domain.Responses.Payments;
 using Domain.Results;
 using MediatR;
@@ -27,4 +28,11 @@ public class PaymentController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePaymentCommand command)
         => ToNoContent(await sender.Send(command));
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdatePaymentCommand command)
+    {
+        command.SetId(new Domain.Database.PaymentId { Id = id });
+        return ToNoContent(await sender.Send(command));
+    }
 }

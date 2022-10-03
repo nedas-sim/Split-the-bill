@@ -12,7 +12,7 @@ public sealed class CreatePaymentCommand : BaseCreateRequest<Payment, PaymentId>
     public decimal Amount { get; set; }
     public Currency Currency { get; set; }
 
-    public override string ValidateAndGetErrorMessage()
+    public override bool IsValid(out string? errorMessage)
     {
         bool dateInPast = DateOfPayment < DateTime.Now;
         bool positiveAmount = Amount > 0;
@@ -23,7 +23,8 @@ public sealed class CreatePaymentCommand : BaseCreateRequest<Payment, PaymentId>
                      .AddIfFalse(positiveAmount is true, "Amount has to be positive")
                      .AddIfFalse(validCurrency is true, "Currency is not supported");
 
-        return errorMessages.BuildErrorMessage("Create payment request has validation errors");
+        errorMessage = errorMessages.BuildErrorMessage("Create payment request has validation errors");
+        return string.IsNullOrEmpty(errorMessage);
     }
 
     public override Payment BuildEntity()
@@ -31,7 +32,10 @@ public sealed class CreatePaymentCommand : BaseCreateRequest<Payment, PaymentId>
         Payment payment = new()
         {
             Id = PaymentId.Default,
-            DateOfPayment = DateOfPayment,
+            DateOfPayment = new PastDateTime
+            {
+                Date = DateOfPayment,
+            },
             Amount = new Amount
             {
                 Value = Amount,

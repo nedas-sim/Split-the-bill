@@ -17,13 +17,11 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
 
     public async Task<BaseResult<Unit>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
-        string errorMessage = request.ValidateAndGetErrorMessage();
-
-        if (string.IsNullOrEmpty(errorMessage) is false)
+        if (request.IsValid(out string? errorMessage ) is false)
         {
             return new ValidationErrorResult<Unit>
             {
-                Message = errorMessage,
+                Message = errorMessage!,
             };
         }
 

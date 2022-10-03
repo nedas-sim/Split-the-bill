@@ -8,6 +8,12 @@ public abstract class BaseCreateRequest<TDatabaseEntity, TId> : IRequest<BaseRes
     where TDatabaseEntity : BaseEntity<TId>
     where TId : DatabaseEntityId
 {
-    public virtual string? ValidateAndGetErrorMessage() => null;
+    public virtual bool IsValid(out string? errorMessage)
+    {
+        // By default the request is valid
+        errorMessage = null;
+        return true;
+    }
+
     public abstract TDatabaseEntity BuildEntity();
 }

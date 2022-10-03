@@ -44,4 +44,13 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
 
         return count;
     }
+
+    public async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        context.Set<TEntity>()
+               .Update(entity);
+
+        await context.SaveChangesAsync(cancellationToken);
+        return entity;
+    }
 }

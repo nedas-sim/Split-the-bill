@@ -13,4 +13,20 @@ public class Amount : ValueObject
         yield return Value;
         yield return Currency;
     }
+
+    public void UpdateValue(decimal? value)
+    {
+        if (value is not null)
+        {
+            Value = value.Value;
+        }
+    }
+
+    public void UpdateCurrency(Currency? currency)
+    {
+        if (currency is not null)
+        {
+            Currency = currency.Value;
+        }
+    }
 }

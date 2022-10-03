@@ -5,7 +5,7 @@ namespace Domain.Database;
 
 public sealed class Payment : BaseEntity<PaymentId>
 {
-    public DateTime DateOfPayment { get; set; }
+    public PastDateTime DateOfPayment { get; set; }
     public Amount Amount { get; set; }
 
     public ICollection<UserPayment> UserPayments { get; set; }

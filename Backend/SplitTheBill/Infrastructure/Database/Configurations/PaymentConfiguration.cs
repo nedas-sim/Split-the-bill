@@ -25,6 +25,9 @@ public static class PaymentConfiguration
 
         paymentBuilder.OwnsOne(p => p.Amount)
                       .Property(p => p.Currency).HasColumnName(nameof(Amount.Currency));
+
+        paymentBuilder.OwnsOne(p => p.DateOfPayment)
+                      .Property(p => p.Date).HasColumnName(nameof(Payment.DateOfPayment));
     }
 
     private static void ConfigureUserPayments(EntityTypeBuilder<UserPayment> userPaymentBuilder)

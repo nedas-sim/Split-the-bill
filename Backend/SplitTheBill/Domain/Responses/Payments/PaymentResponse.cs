@@ -17,7 +17,7 @@ public class PaymentResponse
     public PaymentResponse(Payment payment)
     {
         Id = payment.Id.Id;
-        Date = payment.DateOfPayment;
+        Date = payment.DateOfPayment.Date;
         Amount = payment.Amount.Value;
         Currency = payment.Amount.Currency.ToString();
     }

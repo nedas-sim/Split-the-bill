@@ -31,7 +31,7 @@ public class PaymentRepository : BaseRepository<Payment, PaymentId>, IPaymentRep
         List<PaymentResponse> paymentResponses =
             await context.Payments
                          .AsNoTracking()
-                         .OrderBy(p => p.DateOfPayment)
+                         .OrderBy(p => p.DateOfPayment.Date)
                          .ApplyPaging(parameters)
                          .Select(p => new PaymentResponse(p))
                          .ToListAsync(cancellationToken);

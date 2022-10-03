@@ -33,7 +33,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Database.User", b =>
@@ -48,7 +48,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Database.UserPayment", b =>
@@ -63,12 +63,12 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PaymentId");
 
-                    b.ToTable("UserPayments");
+                    b.ToTable("UserPayments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Database.Payment", b =>
                 {
-                    b.OwnsOne("Domain.ValueObjects.Amount", "Amount", b1 =>
+                    b.OwnsOne("Domain.Database.Payment.Amount#Domain.ValueObjects.Amount", "Amount", b1 =>
                         {
                             b1.Property<Guid>("PaymentId")
                                 .HasColumnType("uniqueidentifier");
@@ -83,7 +83,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("PaymentId");
 
-                            b1.ToTable("Payments");
+                            b1.ToTable("Payments", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PaymentId");
