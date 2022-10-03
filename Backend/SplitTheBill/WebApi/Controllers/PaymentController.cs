@@ -1,4 +1,5 @@
 ﻿using Application.Payments.CreatePayment;
+using Application.Payments.DeletePayment;
 using Application.Payments.GetPaymentById;
 using Application.Payments.GetPaymentList;
 using Application.Payments.UpdatePayment;
@@ -35,4 +36,8 @@ public class PaymentController : BaseController
         command.SetId(new Domain.Database.PaymentId { Id = id });
         return ToNoContent(await sender.Send(command));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+        => ToNoContent(await sender.Send(new DeletePaymentCommand(id)));
 }

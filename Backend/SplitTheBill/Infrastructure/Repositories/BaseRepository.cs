@@ -2,11 +2,12 @@
 using Domain.Common.Identity;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Repositories;
 
 public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TId>
-    where TEntity : BaseEntity<TId>
+    where TEntity : BaseEntity<TId>, new()
     where TId : DatabaseEntityId
 {
     protected readonly DataContext context;
@@ -52,5 +53,23 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
 
         await context.SaveChangesAsync(cancellationToken);
         return entity;
+    }
+
+    public async Task<bool> Delete(TId id, CancellationToken cancellationToken = default)
+    {
+        TEntity entity = new() { Id = id };
+
+        EntityEntry<TEntity> entry = context.Entry(entity);
+        entry.State = EntityState.Deleted;
+
+        try
+        {
+            await context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

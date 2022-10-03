@@ -34,7 +34,8 @@ public class BaseController : ControllerBase
 		{
 			NoContentResult<Unit> => NoContent(),
 			ValidationErrorResult<Unit> validationErrorResult => BadRequest(validationErrorResult),
-			_ => StatusCode(500, _responseForUnimplementedResult),
+            NotFoundResult<Unit> notFoundResult => NotFound(notFoundResult),
+            _ => StatusCode(500, _responseForUnimplementedResult),
 		};
 	}
 }

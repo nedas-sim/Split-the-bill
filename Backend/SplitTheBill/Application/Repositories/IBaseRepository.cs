@@ -11,4 +11,5 @@ public interface IBaseRepository<TEntity, TId>
     public Task<TEntity> Create(TEntity entity, CancellationToken cancellationToken = default);
     public Task<int> GetCount(CancellationToken cancellationToken = default);
     public Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default);
+    public Task<bool> Delete(TId id, CancellationToken cancellationToken = default);
 }
