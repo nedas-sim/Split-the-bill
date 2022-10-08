@@ -1,8 +1,10 @@
 ﻿using Application.Repositories;
+using Application.Services;
 using Application.Users.GetUserById;
 using Domain.Common;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,10 +17,11 @@ public static class ApiDependencies
     public static IServiceCollection AddInfrastructure(this IServiceCollection @this, IConfiguration configuration)
     {
         // Add db context:
-        string connString = configuration.GetConnectionString(nameof(ApiConfiguration.ConnectionStrings.DefaultConnection));
+        string connString = configuration.GetConnectionString(nameof(ConnectionStrings.DefaultConnection));
         @this.AddDbContext<DataContext>(options => options.UseSqlServer(connString));
 
         AddRepositories(@this);
+        AddServices(@this);
         AddMediatR(@this);
 
         return @this;
@@ -28,6 +31,11 @@ public static class ApiDependencies
     {
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IPaymentRepository, PaymentRepository>();
+    }
+
+    private static void AddServices(IServiceCollection services)
+    {
+        services.AddTransient<IAuthorizeService, AuthorizeService>();
     }
 
     private static void AddMediatR(IServiceCollection services)

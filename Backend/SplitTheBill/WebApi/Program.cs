@@ -10,7 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<ApiConfiguration>(builder.Configuration);
+builder.Services.AddOptions<UserSettings>().Bind(builder.Configuration.GetSection(nameof(UserSettings)));
+
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();

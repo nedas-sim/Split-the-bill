@@ -22,4 +22,31 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
 
         return user;
     }
+
+    public async Task<bool> EmailExists(string email)
+    {
+        bool exists =
+            await QueryByEmail(email)
+                .AnyAsync();
+
+        return exists;
+    }
+
+    public async Task<User?> GetByEmail(string email)
+    {
+        User? user =
+            await QueryByEmail(email)
+                .FirstOrDefaultAsync();
+
+        return user;
+    }
+
+    private IQueryable<User> QueryByEmail(string email)
+    {
+        IQueryable<User> queryByEmail = 
+            context.Users
+                   .Where(u => u.Email == email);
+
+        return queryByEmail;
+    }
 }
