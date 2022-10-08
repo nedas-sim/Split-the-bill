@@ -1,8 +1,17 @@
 ﻿namespace Domain.Common;
 
-public sealed class ApiConfiguration
+public sealed class ConnectionStrings
 {
-    public ConnectionStrings ConnectionStrings { get; set; }
+    public string DefaultConnection { get; set; }
 }
 
-public sealed record ConnectionStrings(string DefaultConnection);
+public sealed class JwtConfig
+{
+    public string SecretKey { get; set; }
+    public int ExpirationMinutes { get; set; }
+}
+
+public sealed class UserSettings
+{
+    public int MinPasswordLength { get; set; }
+}

@@ -4,13 +4,12 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseUpdateRequest<TDatabaseEntity, TId> : IRequest<BaseResult<Unit>>
-    where TDatabaseEntity : BaseEntity<TId>
-    where TId : DatabaseEntityId, new()
+public abstract class BaseUpdateRequest<TDatabaseEntity> : IRequest<BaseResult<Unit>>
+    where TDatabaseEntity : BaseEntity
 {
     // Internal to set the value in controller and
     // not to map it from request body
-    internal TId Id { get; private set; }
+    internal Guid Id { get; private set; }
 
     public abstract void Update(TDatabaseEntity databaseEntity);
     public virtual bool IsValid(out string? errorMessage)
@@ -20,7 +19,7 @@ public abstract class BaseUpdateRequest<TDatabaseEntity, TId> : IRequest<BaseRes
         return true;
     }
 
-    public void SetId(TId id)
+    public void SetId(Guid id)
     {
         Id = id;
     }

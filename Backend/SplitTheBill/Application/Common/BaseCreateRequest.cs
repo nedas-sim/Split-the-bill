@@ -4,9 +4,8 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseCreateRequest<TDatabaseEntity, TId> : IRequest<BaseResult<Unit>>
-    where TDatabaseEntity : BaseEntity<TId>
-    where TId : DatabaseEntityId
+public abstract class BaseCreateRequest<TDatabaseEntity> : IRequest<BaseResult<Unit>>
+    where TDatabaseEntity : BaseEntity
 {
     public virtual bool IsValid(out string? errorMessage)
     {

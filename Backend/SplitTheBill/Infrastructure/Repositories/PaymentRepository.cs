@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class PaymentRepository : BaseRepository<Payment, PaymentId>, IPaymentRepository
+public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
 {
     public PaymentRepository(DataContext context) : base(context)
     {
     }
 
-    public async Task<PaymentResponse?> GetPaymentResponse(PaymentId paymentId, CancellationToken cancellationToken = default)
+    public async Task<PaymentResponse?> GetPaymentResponse(Guid paymentId, CancellationToken cancellationToken = default)
     {
         PaymentResponse? paymentResponse =
             await context.Payments
