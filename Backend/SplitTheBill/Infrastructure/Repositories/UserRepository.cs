@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public sealed class UserRepository : BaseRepository<User, UserId>, IUserRepository
+public sealed class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(DataContext context) : base(context)
     {
     }
 
-    public async Task<UserResponse?> GetUserResponse(UserId id, CancellationToken cancellationToken = default)
+    public async Task<UserResponse?> GetUserResponse(Guid id, CancellationToken cancellationToken = default)
     {
         UserResponse? user =
             await context.Users

@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Repositories;
 
-public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TId>
-    where TEntity : BaseEntity<TId>, new()
-    where TId : DatabaseEntityId
+public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
+    where TEntity : BaseEntity, new()
 {
     protected readonly DataContext context;
 
@@ -27,7 +26,7 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
         return entity;
     }
 
-    public async Task<TEntity?> GetById(TId id, CancellationToken cancellationToken = default)
+    public async Task<TEntity?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
         TEntity? entity =
             await context.Set<TEntity>()
@@ -55,7 +54,7 @@ public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TI
         return entity;
     }
 
-    public async Task<bool> Delete(TId id, CancellationToken cancellationToken = default)
+    public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
     {
         TEntity entity = new() { Id = id };
 

@@ -25,22 +25,36 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Database.Payment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfPayment")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Domain.Database.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -48,7 +62,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Database.UserPayment", b =>
@@ -63,34 +77,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PaymentId");
 
-                    b.ToTable("UserPayments", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Database.Payment", b =>
-                {
-                    b.OwnsOne("Domain.Database.Payment.Amount#Domain.ValueObjects.Amount", "Amount", b1 =>
-                        {
-                            b1.Property<Guid>("PaymentId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Currency")
-                                .HasColumnType("int")
-                                .HasColumnName("Currency");
-
-                            b1.Property<decimal>("Value")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("Amount");
-
-                            b1.HasKey("PaymentId");
-
-                            b1.ToTable("Payments", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("PaymentId");
-                        });
-
-                    b.Navigation("Amount")
-                        .IsRequired();
+                    b.ToTable("UserPayments");
                 });
 
             modelBuilder.Entity("Domain.Database.UserPayment", b =>

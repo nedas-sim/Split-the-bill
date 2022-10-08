@@ -1,5 +1,4 @@
-﻿using Application.Users.CreateUser;
-using Application.Users.GetUserById;
+﻿using Application.Users.GetUserById;
 using Domain.Responses.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ public sealed class UserController : BaseController
     public async Task<ActionResult<UserResponse>> GetById([FromRoute] Guid id)
         => FromResult(await sender.Send(new GetUserByIdQuery(id)));
 
-    [HttpPost]
+    /*[HttpPost]
     public async Task<ActionResult<UserResponse>> Create([FromBody] CreateUserCommand command)
-        => FromResult(await sender.Send(command));
+        => FromResult(await sender.Send(command));*/
 }

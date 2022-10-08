@@ -1,7 +1,6 @@
 ﻿using Application.Repositories;
 using Application.Users.GetUserById;
 using Domain.Common.Results;
-using Domain.Database;
 using Domain.Responses.Users;
 using Domain.Results;
 using Moq;
@@ -23,7 +22,7 @@ public class GetUserByIdTests
     public async Task ValidId_ShouldReturnUserResponse()
     {
         // Arrange:
-        UserId id = UserId.Default;
+        Guid id = Guid.NewGuid();
         UserResponse response = new()
         {
             Id = id,
@@ -47,10 +46,10 @@ public class GetUserByIdTests
     public async Task InvalidId_ShouldReturnNotFoundResult()
     {
         // Arrange:
-        UserId id = UserId.Default;
+        Guid id = Guid.NewGuid();
         UserResponse response = new()
         {
-            Id = UserId.Default,
+            Id = Guid.NewGuid(),
             Username = "test_username",
         };
 

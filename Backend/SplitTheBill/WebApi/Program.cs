@@ -1,6 +1,5 @@
 using Domain.Common;
 using Infrastructure;
-using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 

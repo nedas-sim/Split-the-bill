@@ -15,7 +15,6 @@ public sealed class DataContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		UserConfiguration.Configure(modelBuilder);
 		PaymentConfiguration.Configure(modelBuilder);
 	}
 }

@@ -2,11 +2,10 @@
 using Domain.Database;
 using Domain.Enums;
 using Domain.Extensions;
-using Domain.ValueObjects;
 
 namespace Application.Payments.CreatePayment;
 
-public sealed class CreatePaymentCommand : BaseCreateRequest<Payment, PaymentId>
+public sealed class CreatePaymentCommand : BaseCreateRequest<Payment>
 {
     public DateTime DateOfPayment { get; set; }
     public decimal Amount { get; set; }
@@ -31,16 +30,9 @@ public sealed class CreatePaymentCommand : BaseCreateRequest<Payment, PaymentId>
     {
         Payment payment = new()
         {
-            Id = PaymentId.Default,
-            DateOfPayment = new PastDateTime
-            {
-                Date = DateOfPayment,
-            },
-            Amount = new Amount
-            {
-                Value = Amount,
-                Currency = Currency,
-            },
+            Amount = Amount,
+            Currency = Currency,
+            DateOfPayment = DateOfPayment,
         };
 
         return payment;

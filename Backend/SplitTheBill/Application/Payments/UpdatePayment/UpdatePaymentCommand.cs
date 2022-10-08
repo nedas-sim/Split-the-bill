@@ -5,7 +5,7 @@ using Domain.Extensions;
 
 namespace Application.Payments.UpdatePayment;
 
-public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment, PaymentId>
+public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment>
 {
     public DateTime? DateOfPayment { get; set; }
     public decimal? Amount { get; set; }
@@ -13,9 +13,9 @@ public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment, PaymentId>
 
     public override void Update(Payment databaseEntity)
     {
-        databaseEntity.Amount.UpdateValue(Amount);
-        databaseEntity.Amount.UpdateCurrency(Currency);
-        databaseEntity.DateOfPayment.UpdateDate(DateOfPayment);
+        databaseEntity.DateOfPayment = DateOfPayment ?? databaseEntity.DateOfPayment;
+        databaseEntity.Amount = Amount ?? databaseEntity.Amount;
+        databaseEntity.Currency = Currency ?? databaseEntity.Currency;
     }
 
     public override bool IsValid(out string? errorMessage)

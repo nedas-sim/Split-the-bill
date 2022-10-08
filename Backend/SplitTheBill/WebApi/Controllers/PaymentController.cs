@@ -33,7 +33,7 @@ public class PaymentController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdatePaymentCommand command)
     {
-        command.SetId(new Domain.Database.PaymentId { Id = id });
+        command.SetId(id);
         return ToNoContent(await sender.Send(command));
     }
 
