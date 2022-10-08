@@ -11,6 +11,9 @@ namespace Infrastructure.Services;
 
 public class AuthorizeService : IAuthorizeService
 {
+    private const int SaltLength = 16;
+    private const int HashLength = 20;
+
     private readonly JwtConfig config;
 
     public AuthorizeService(IOptions<JwtConfig> config)
@@ -21,14 +24,14 @@ public class AuthorizeService : IAuthorizeService
     public string GenerateHash(string password)
     {
         byte[] salt;
-        new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+        new RNGCryptoServiceProvider().GetBytes(salt = new byte[SaltLength]);
 
         var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
-        byte[] hash = pbkdf2.GetBytes(20);
+        byte[] hash = pbkdf2.GetBytes(HashLength);
 
-        byte[] hashBytes = new byte[36];
-        Array.Copy(salt, 0, hashBytes, 0, 16);
-        Array.Copy(hash, 0, hashBytes, 16, 20);
+        byte[] hashBytes = new byte[SaltLength + HashLength];
+        Array.Copy(salt, 0, hashBytes, 0, SaltLength);
+        Array.Copy(hash, 0, hashBytes, SaltLength, SaltLength + HashLength);
 
         return Convert.ToBase64String(hashBytes);
     }
@@ -55,18 +58,20 @@ public class AuthorizeService : IAuthorizeService
     public bool VerifyPassword(string inputPassword, string hashedPassword)
     {
         byte[] hashBytes = Convert.FromBase64String(hashedPassword);
-        byte[] salt = new byte[16];
-        Array.Copy(hashBytes, 0, salt, 0, 16);
+        byte[] salt = new byte[SaltLength];
+        Array.Copy(hashBytes, 0, salt, 0, SaltLength);
         Rfc2898DeriveBytes pbkdf2 = new(inputPassword, salt, 100000);
-        byte[] hash = pbkdf2.GetBytes(20);
-        for (int i = 0; i < 20; i++)
+        byte[] hash = pbkdf2.GetBytes(HashLength);
+
+        bool hashesMatch = true;
+        for (int i = 0; i < HashLength; i++)
         {
-            if (hashBytes[i + 16] != hash[i])
+            if (hashBytes[i + SaltLength] != hash[i])
             {
-                return false;
+                hashesMatch = false;
             }
         }
 
-        return true;
+        return hashesMatch;
     }
 }
