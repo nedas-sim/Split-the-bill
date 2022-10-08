@@ -2,6 +2,6 @@
 
 namespace Domain.Results;
 
-public sealed class NotFoundResult<T> : BaseMessageResult<T> where T : class
+public sealed class NotFoundResult<T> : BaseMessageResult<T> //where T : class
 {
 }

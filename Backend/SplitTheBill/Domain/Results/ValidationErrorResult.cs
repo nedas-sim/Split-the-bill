@@ -2,6 +2,6 @@
 
 namespace Domain.Results;
 
-public sealed class ValidationErrorResult<T> : BaseMessageResult<T> where T : class
+public sealed class ValidationErrorResult<T> : BaseMessageResult<T> //where T : class
 {
 }
