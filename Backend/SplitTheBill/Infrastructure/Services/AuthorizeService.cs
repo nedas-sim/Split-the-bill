@@ -31,7 +31,7 @@ public class AuthorizeService : IAuthorizeService
 
         byte[] hashBytes = new byte[SaltLength + HashLength];
         Array.Copy(salt, 0, hashBytes, 0, SaltLength);
-        Array.Copy(hash, 0, hashBytes, SaltLength, SaltLength + HashLength);
+        Array.Copy(hash, 0, hashBytes, SaltLength, HashLength);
 
         return Convert.ToBase64String(hashBytes);
     }
