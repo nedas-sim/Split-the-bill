@@ -2,14 +2,17 @@ import React from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
 import LoginForm from "../features/authentication/LoginForm";
 
-const MainScreen = () => {
+const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
         <Text style={styles.appName}>Split The Bill</Text>
         <LoginForm />
         <View style={styles.extraButtonsContainer}>
-          <Button title="Register" />
+          <Button
+            title="Register"
+            onPress={() => navigation.navigate("Registration")}
+          />
         </View>
       </View>
     </View>
