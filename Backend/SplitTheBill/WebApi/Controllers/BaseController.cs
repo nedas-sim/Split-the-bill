@@ -2,6 +2,8 @@
 using Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace WebApi.Controllers;
 
@@ -9,7 +11,7 @@ namespace WebApi.Controllers;
 public class BaseController : ControllerBase
 {
 	private readonly object _responseForUnimplementedResult = new { Message = "Api result not handled" };
-	private readonly string JwtCookieKey = "Token";
+	public const string JwtCookieKey = "Token";
 
     protected readonly ISender sender;
 
@@ -49,4 +51,17 @@ public class BaseController : ControllerBase
 
 		Response.Cookies.Append(JwtCookieKey, jwt, cookieOptions);
 	}
+
+	protected void RemoveJwt()
+	{
+		Response.Cookies.Delete(JwtCookieKey);
+	}
+
+	protected Guid GetId()
+	{
+		Guid id = Guid.Parse(Request.HttpContext.User.Claims.
+               FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId).Value);
+
+        return id;
+    }
 }

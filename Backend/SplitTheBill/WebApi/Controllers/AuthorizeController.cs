@@ -32,4 +32,11 @@ public class AuthorizeController : BaseController
 
         return ToNoContent(loginResponse);
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        RemoveJwt();
+        return NoContent();
+    }
 }

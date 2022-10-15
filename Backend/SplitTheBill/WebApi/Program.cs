@@ -1,6 +1,7 @@
 using Domain.Common;
 using Infrastructure;
 using WebApi.Extensions;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddConfig(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services
+    .AddAuthentication("Auth")
+    .AddScheme<CustomAuthenticationSchemeOptions, AuthorizationMiddleware>("Auth", null);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
