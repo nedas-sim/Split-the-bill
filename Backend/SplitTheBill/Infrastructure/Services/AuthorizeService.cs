@@ -31,7 +31,7 @@ public class AuthorizeService : IAuthorizeService
 
         byte[] hashBytes = new byte[SaltLength + HashLength];
         Array.Copy(salt, 0, hashBytes, 0, SaltLength);
-        Array.Copy(hash, 0, hashBytes, SaltLength, SaltLength + HashLength);
+        Array.Copy(hash, 0, hashBytes, SaltLength, HashLength);
 
         return Convert.ToBase64String(hashBytes);
     }
@@ -47,7 +47,6 @@ public class AuthorizeService : IAuthorizeService
             {
                 new(ClaimTypes.NameIdentifier, id.ToString()),
             }),
-            Expires = DateTime.UtcNow.AddMinutes(config.ExpirationMinutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
@@ -73,5 +72,36 @@ public class AuthorizeService : IAuthorizeService
         }
 
         return hashesMatch;
+    }
+
+    public void ThrowIfJwtIsInvalid(string jwt)
+    {
+        JwtSecurityTokenHandler tokenHandler = new();
+        TokenValidationParameters validationParameters = GetValidationParameters();
+        tokenHandler.ValidateToken(jwt, validationParameters, out _);
+    }
+
+    public IEnumerable<Claim>? ReadToken(string jwt)
+    {
+        JwtSecurityTokenHandler handler = new();
+        SecurityToken jsonToken = handler.ReadToken(jwt);
+
+        if (jsonToken is not JwtSecurityToken token)
+        {
+            return null;
+        }
+
+        return token.Claims;
+    }
+
+    private TokenValidationParameters GetValidationParameters()
+    {
+        return new TokenValidationParameters()
+        {
+            ValidateLifetime = false,
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.SecretKey)),
+        };
     }
 }

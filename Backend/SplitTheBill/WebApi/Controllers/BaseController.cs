@@ -2,6 +2,8 @@
 using Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace WebApi.Controllers;
 
@@ -9,6 +11,7 @@ namespace WebApi.Controllers;
 public class BaseController : ControllerBase
 {
 	private readonly object _responseForUnimplementedResult = new { Message = "Api result not handled" };
+	public const string JwtCookieKey = "Token";
 
     protected readonly ISender sender;
 
@@ -28,14 +31,37 @@ public class BaseController : ControllerBase
 		};
 	}
 
-	protected IActionResult ToNoContent(BaseResult<Unit> result)
+	protected IActionResult ToNoContent<T>(BaseResult<T> result)
 	{
         return result switch
 		{
-			NoContentResult<Unit> => NoContent(),
-			ValidationErrorResult<Unit> validationErrorResult => BadRequest(validationErrorResult),
-            NotFoundResult<Unit> notFoundResult => NotFound(notFoundResult),
+			SuccessResult<T> or NoContentResult<T> => NoContent(),
+			ValidationErrorResult<T> validationErrorResult => BadRequest(validationErrorResult),
+            NotFoundResult<T> notFoundResult => NotFound(notFoundResult),
             _ => StatusCode(500, _responseForUnimplementedResult),
 		};
 	}
+
+	protected void SetJwt(string jwt)
+	{
+		CookieOptions cookieOptions = new()
+		{
+			HttpOnly = true,
+		};
+
+		Response.Cookies.Append(JwtCookieKey, jwt, cookieOptions);
+	}
+
+	protected void RemoveJwt()
+	{
+		Response.Cookies.Delete(JwtCookieKey);
+	}
+
+	protected Guid GetId()
+	{
+		Guid id = Guid.Parse(Request.HttpContext.User.Claims.
+               FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId).Value);
+
+        return id;
+    }
 }

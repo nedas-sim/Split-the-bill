@@ -1,6 +1,7 @@
 ﻿using Domain.Database;
 using Infrastructure.Database;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,5 +79,17 @@ public class TestController : BaseController
                          .ToListAsync();
 
         return Ok(payments);
+    }
+
+    [HttpGet]
+    [Route("authPing")]
+    [Authorize]
+    public async Task<IActionResult> AuthPing()
+    {
+        Guid id = GetId();
+        return Ok(new
+        {
+            Id = id,
+        });
     }
 }
