@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
 import LoginForm from "../features/authentication/LoginForm";
+import { Screens } from "../common/screens";
 
 const MainScreen = ({ navigation }) => {
   return (
@@ -11,7 +12,7 @@ const MainScreen = ({ navigation }) => {
         <View style={styles.extraButtonsContainer}>
           <Button
             title="Register"
-            onPress={() => navigation.navigate("Registration")}
+            onPress={() => navigation.navigate(Screens.registration.name)}
           />
         </View>
       </View>
