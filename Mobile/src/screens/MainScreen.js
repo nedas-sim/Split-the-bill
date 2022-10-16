@@ -8,7 +8,7 @@ const MainScreen = ({ navigation }) => {
     <View style={styles.screen}>
       <View style={styles.container}>
         <Text style={styles.appName}>Split The Bill</Text>
-        <LoginForm />
+        <LoginForm navigation={navigation} />
         <View style={styles.extraButtonsContainer}>
           <Button
             title="Register"

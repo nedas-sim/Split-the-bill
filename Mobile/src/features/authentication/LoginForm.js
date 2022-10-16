@@ -1,7 +1,34 @@
-import React from "react";
-import { SafeAreaView, StyleSheet, TextInput, Button } from "react-native";
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  Button,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import authService from "../../services/authService";
+import { Screens } from "../../common/screens";
 
-const LoginForm = () => {
+const LoginForm = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const handleLoginButtonPress = async () => {
+    try {
+      setLoading(true);
+      await authService.login({ email, password });
+      navigation.navigate(Screens.groupList.name);
+    } catch (ex) {
+      console.error(ex);
+      Alert.alert("Error", ex.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -10,6 +37,8 @@ const LoginForm = () => {
         placeholderTextColor="#fff"
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={(email) => setEmail(email)}
       />
       <TextInput
         style={styles.input}
@@ -17,8 +46,11 @@ const LoginForm = () => {
         placeholderTextColor="#fff"
         secureTextEntry
         autoCapitalize="none"
+        value={password}
+        onChangeText={(password) => setPassword(password)}
       />
-      <Button title="Login" />
+      <Button title="Login" onPress={handleLoginButtonPress} />
+      {loading && <ActivityIndicator size="large" />}
     </SafeAreaView>
   );
 };

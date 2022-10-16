@@ -13,6 +13,7 @@ export default function App() {
             key={key}
             name={value.name}
             component={value.component}
+            options={value.options}
           />
         ))}
       </Stack.Navigator>
