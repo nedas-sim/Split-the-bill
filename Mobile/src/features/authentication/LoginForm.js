@@ -22,7 +22,6 @@ const LoginForm = ({ navigation }) => {
       await authService.login({ email, password });
       navigation.navigate(Screens.groupList.name);
     } catch (ex) {
-      console.error(ex);
       Alert.alert("Error", ex.response.data.message);
     } finally {
       setLoading(false);
