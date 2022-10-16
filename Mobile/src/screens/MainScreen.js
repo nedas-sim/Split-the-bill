@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
 import LoginForm from "../features/authentication/LoginForm";
 import { Screens } from "../common/screens";
+import authService from "../services/authService";
 
 const MainScreen = ({ navigation }) => {
+  useEffect(() => {
+    const redirectIfLoggedIn = async () => {
+      try {
+        await authService.isLoggedIn();
+        navigation.navigate(Screens.groupList.name);
+      } catch {}
+    };
+
+    redirectIfLoggedIn();
+  }, []);
+
   return (
     <View style={styles.screen}>
       <View style={styles.container}>

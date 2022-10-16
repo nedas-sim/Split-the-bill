@@ -3,6 +3,7 @@ const apiPaths = {
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
   LOGOUT: "/auth/logout",
+  IS_LOGGED_IN: "/auth/isLoggedIn",
 };
 
 export default apiPaths;

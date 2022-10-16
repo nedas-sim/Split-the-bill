@@ -39,4 +39,12 @@ public class AuthorizeController : BaseController
         RemoveJwt();
         return NoContent();
     }
+
+    [HttpPost("isLoggedIn")]
+    public async Task<IActionResult> IsLoggedIn()
+    {
+        return JwtExists()
+            ? Ok()
+            : BadRequest();
+    }
 }
