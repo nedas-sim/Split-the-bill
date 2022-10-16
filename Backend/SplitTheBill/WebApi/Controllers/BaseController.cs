@@ -57,6 +57,11 @@ public class BaseController : ControllerBase
 		Response.Cookies.Delete(JwtCookieKey);
 	}
 
+	protected bool JwtExists()
+	{
+		return Request.Cookies[JwtCookieKey] is not null;
+	}
+
 	protected Guid GetId()
 	{
 		Guid id = Guid.Parse(Request.HttpContext.User.Claims.

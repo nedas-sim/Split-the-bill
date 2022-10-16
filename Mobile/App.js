@@ -8,11 +8,12 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {Screens.map((screen) => (
+        {Object.entries(Screens).map(([key, value]) => (
           <Stack.Screen
-            key={screen.name}
-            name={screen.name}
-            component={screen.component}
+            key={key}
+            name={value.name}
+            component={value.component}
+            options={value.options}
           />
         ))}
       </Stack.Navigator>

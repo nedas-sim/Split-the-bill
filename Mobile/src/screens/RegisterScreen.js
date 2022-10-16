@@ -6,22 +6,31 @@ import {
   Button,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import authService from "../services/authService";
+import { Screens } from "../common/screens";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegisterButtonPress = async () => {
     try {
+      setLoading(true);
       await authService.register({ email, password, repeatPassword });
       Alert.alert("Success", "Registration successful!", [
-        { text: "Login", onPress: () => navigation.navigate("Main Screen") },
+        {
+          text: "Login",
+          onPress: () => navigation.navigate(Screens.mainScreen.name),
+        },
       ]);
     } catch (ex) {
       Alert.alert("Error", ex.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +70,7 @@ const RegisterScreen = ({ navigation }) => {
         title="Register"
         onPress={handleRegisterButtonPress}
       />
+      {loading && <ActivityIndicator size="large" />}
     </SafeAreaView>
   );
 };
