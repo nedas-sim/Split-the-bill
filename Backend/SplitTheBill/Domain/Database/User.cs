@@ -9,4 +9,5 @@ public sealed class User : BaseEntity
     public string Password { get; set; }
 
     public ICollection<UserPayment> UserPayments { get; set; }
+    public ICollection<UserGroup> UserGroups { get; set; }
 }
