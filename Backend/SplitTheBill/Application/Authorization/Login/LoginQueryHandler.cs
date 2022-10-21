@@ -22,7 +22,7 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, BaseResult<L
 
     public async Task<BaseResult<LoginResponse>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        User? user = await userRepository.GetByEmail(request.Email);
+        User? user = await userRepository.GetByEmail(request.Email, cancellationToken);
         if (user is null)
         {
             return BuildIncorrectRequestResult();
