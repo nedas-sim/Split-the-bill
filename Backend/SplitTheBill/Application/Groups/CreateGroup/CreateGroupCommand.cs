@@ -8,7 +8,7 @@ public sealed class CreateGroupCommand : BaseCreateRequest<Group>
 {
     public string Name { get; set; }
 
-    internal Guid UserId { get; private set; }
+    public Guid UserId { get; internal set; }
     public void SetUserId(Guid id) => UserId = id;
 
     public override Group BuildEntity()
