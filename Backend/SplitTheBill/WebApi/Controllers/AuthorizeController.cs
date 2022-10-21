@@ -47,4 +47,26 @@ public class AuthorizeController : BaseController
             ? Ok()
             : BadRequest();
     }
+
+    #region Private Methods
+    private void SetJwt(string jwt)
+    {
+        CookieOptions cookieOptions = new()
+        {
+            HttpOnly = true,
+        };
+
+        Response.Cookies.Append(JwtCookieKey, jwt, cookieOptions);
+    }
+
+    private void RemoveJwt()
+    {
+        Response.Cookies.Delete(JwtCookieKey);
+    }
+
+    private bool JwtExists()
+    {
+        return Request.Cookies[JwtCookieKey] is not null;
+    }
+    #endregion
 }
