@@ -3,7 +3,6 @@ using Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace WebApi.Controllers;
 
@@ -40,26 +39,6 @@ public class BaseController : ControllerBase
             NotFoundResult<T> notFoundResult => NotFound(notFoundResult),
             _ => StatusCode(500, _responseForUnimplementedResult),
 		};
-	}
-
-	protected void SetJwt(string jwt)
-	{
-		CookieOptions cookieOptions = new()
-		{
-			HttpOnly = true,
-		};
-
-		Response.Cookies.Append(JwtCookieKey, jwt, cookieOptions);
-	}
-
-	protected void RemoveJwt()
-	{
-		Response.Cookies.Delete(JwtCookieKey);
-	}
-
-	protected bool JwtExists()
-	{
-		return Request.Cookies[JwtCookieKey] is not null;
 	}
 
 	protected Guid GetId()

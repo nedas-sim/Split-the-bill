@@ -36,7 +36,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, BaseResul
             };
         }
 
-        bool emailExists = await userRepository.EmailExists(request.Email);
+        bool emailExists = await userRepository.EmailExists(request.Email, cancellationToken);
         if (emailExists)
         {
             return new ValidationErrorResult<Unit>

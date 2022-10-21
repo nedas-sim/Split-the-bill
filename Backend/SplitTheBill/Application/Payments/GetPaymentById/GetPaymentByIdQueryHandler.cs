@@ -1,12 +1,12 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using Domain.Common.Results;
 using Domain.Responses.Payments;
 using Domain.Results;
-using MediatR;
 
 namespace Application.Payments.GetPaymentById;
 
-public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, BaseResult<PaymentResponse>>
+public class GetPaymentByIdQueryHandler : IResultHandler<GetPaymentByIdQuery, PaymentResponse>
 {
     private readonly IPaymentRepository paymentRepository;
 

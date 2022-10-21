@@ -23,20 +23,20 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         return user;
     }
 
-    public async Task<bool> EmailExists(string email)
+    public async Task<bool> EmailExists(string email, CancellationToken cancellationToken = default)
     {
         bool exists =
             await QueryByEmail(email)
-                .AnyAsync();
+                .AnyAsync(cancellationToken);
 
         return exists;
     }
 
-    public async Task<User?> GetByEmail(string email)
+    public async Task<User?> GetByEmail(string email, CancellationToken cancellationToken = default)
     {
         User? user =
             await QueryByEmail(email)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
         return user;
     }

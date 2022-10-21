@@ -1,14 +1,14 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using Application.Services;
 using Domain.Common.Results;
 using Domain.Database;
 using Domain.Responses.Authorization;
 using Domain.Results;
-using MediatR;
 
 namespace Application.Authorization.Login;
 
-public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, BaseResult<LoginResponse>>
+public sealed class LoginQueryHandler : IResultHandler<LoginQuery, LoginResponse>
 {
     private readonly IAuthorizeService authorizeService;
     private readonly IUserRepository userRepository;
@@ -22,7 +22,7 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, BaseResult<L
 
     public async Task<BaseResult<LoginResponse>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        User? user = await userRepository.GetByEmail(request.Email);
+        User? user = await userRepository.GetByEmail(request.Email, cancellationToken);
         if (user is null)
         {
             return BuildIncorrectRequestResult();
