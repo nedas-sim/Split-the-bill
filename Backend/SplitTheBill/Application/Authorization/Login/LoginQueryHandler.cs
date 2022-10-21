@@ -1,14 +1,14 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using Application.Services;
 using Domain.Common.Results;
 using Domain.Database;
 using Domain.Responses.Authorization;
 using Domain.Results;
-using MediatR;
 
 namespace Application.Authorization.Login;
 
-public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, BaseResult<LoginResponse>>
+public sealed class LoginQueryHandler : IResultHandler<LoginQuery, LoginResponse>
 {
     private readonly IAuthorizeService authorizeService;
     private readonly IUserRepository userRepository;

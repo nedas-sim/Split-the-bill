@@ -1,9 +1,8 @@
-﻿using Domain.Common.Results;
+﻿using Application.Common;
 using Domain.Responses.Payments;
-using MediatR;
 
 namespace Application.Payments.GetPaymentById;
 
-public sealed record GetPaymentByIdQuery(Guid Id) : IRequest<BaseResult<PaymentResponse>>
+public sealed record GetPaymentByIdQuery(Guid Id) : IResultRequest<PaymentResponse>
 {
 }

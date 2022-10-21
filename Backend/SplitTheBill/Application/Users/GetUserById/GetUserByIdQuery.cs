@@ -1,9 +1,8 @@
-﻿using Domain.Common.Results;
+﻿using Application.Common;
 using Domain.Responses.Users;
-using MediatR;
 
 namespace Application.Users.GetUserById;
 
-public sealed record GetUserByIdQuery(Guid Id) : IRequest<BaseResult<UserResponse>>
+public sealed record GetUserByIdQuery(Guid Id) : IResultRequest<UserResponse>
 {
 }

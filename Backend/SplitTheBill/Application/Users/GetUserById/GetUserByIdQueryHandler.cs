@@ -1,12 +1,12 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using Domain.Common.Results;
 using Domain.Responses.Users;
 using Domain.Results;
-using MediatR;
 
 namespace Application.Users.GetUserById;
 
-public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, BaseResult<UserResponse>>
+public sealed class GetUserByIdQueryHandler : IResultHandler<GetUserByIdQuery, UserResponse>
 {
     private readonly IUserRepository _userRepository;
 
