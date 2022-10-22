@@ -37,7 +37,7 @@ public class RegisterCommandHandler : BaseCreateHandler<RegisterCommand, User>
         }
     }
 
-    public override async Task DatabaseEntityConfiguration(RegisterCommand request, User entity, CancellationToken cancellationToken)
+    public override async Task PostEntityBuilding(RegisterCommand request, User entity, CancellationToken cancellationToken)
     {
         entity.Password = authorizeService.GenerateHash(request.Password);
     }

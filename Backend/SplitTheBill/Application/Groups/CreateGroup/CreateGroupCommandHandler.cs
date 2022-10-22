@@ -23,7 +23,7 @@ public sealed class CreateGroupCommandHandler : BaseCreateHandler<CreateGroupCom
         }
     }
 
-    public override async Task DatabaseEntityConfiguration(CreateGroupCommand request, Group entity, CancellationToken cancellationToken)
+    public override async Task PostEntityBuilding(CreateGroupCommand request, Group entity, CancellationToken cancellationToken)
     {
         entity.UserGroups.Add(new UserGroup
         {

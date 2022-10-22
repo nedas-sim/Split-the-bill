@@ -8,6 +8,10 @@ namespace Application.Authorization.Registration;
 
 public sealed class RegisterCommand : BaseCreateRequest<User>
 {
+    public const string InvalidEmailErrorMessage = "Invalid email address";
+    public const string PasswordMismatchErrorMessage = "Passwords do not match";
+    public static string PasswordLengthErrorMessage(int length) => $"Password has to contain at least {length} characters";
+
     private UserSettings _config;
 
     public string Email { get; set; }
@@ -38,9 +42,9 @@ public sealed class RegisterCommand : BaseCreateRequest<User>
         bool passwordsMatch = Password == RepeatPassword;
 
         List<string> errorMessages = new();
-        errorMessages.AddIfFalse(validEmail, "Invalid email address")
-                     .AddIfFalse(validPasswordLength, $"Password has to contain at least {minPasswordLength} characters")
-                     .AddIfFalse(passwordsMatch, "Passwords do not match");
+        errorMessages.AddIfFalse(validEmail, InvalidEmailErrorMessage)
+                     .AddIfFalse(validPasswordLength, PasswordLengthErrorMessage(minPasswordLength))
+                     .AddIfFalse(passwordsMatch, PasswordMismatchErrorMessage);
 
         errorMessage = errorMessages.BuildErrorMessage("Registration request has validation errors");
         return string.IsNullOrEmpty(errorMessage);
