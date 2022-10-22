@@ -41,6 +41,17 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         return user;
     }
 
+    public async Task<bool> UsernameExists(string username, CancellationToken cancellationToken = default)
+    {
+        bool exists =
+            await context.Users
+                         .Where(u => u.Username == username)
+                         .AnyAsync(cancellationToken);
+
+        return exists;
+    }
+
+    #region Private Methods
     private IQueryable<User> QueryByEmail(string email)
     {
         IQueryable<User> queryByEmail = 
@@ -49,4 +60,5 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
 
         return queryByEmail;
     }
+    #endregion
 }

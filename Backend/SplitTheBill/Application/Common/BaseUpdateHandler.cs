@@ -13,8 +13,6 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
 {
     private readonly IBaseRepository<TDatabaseEntity> repository;
 
-    protected TDatabaseEntity databaseEntity;
-
     public BaseUpdateHandler(IBaseRepository<TDatabaseEntity> repository)
     {
         this.repository = repository;
@@ -26,10 +24,10 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
         {
             await PreValidation(request);
             request.ValidateAndThrow();
-            databaseEntity = await repository.GetById(request.Id, cancellationToken)
+            TDatabaseEntity databaseEntity = await repository.GetById(request.Id, cancellationToken)
                 ?? throw new NotFoundErrorException($"{typeof(TDatabaseEntity).Name} not found");
 
-            await DatabaseValidation(request, cancellationToken);
+            await DatabaseValidation(request, databaseEntity, cancellationToken);
 
             request.Update(databaseEntity);
             await repository.Update(databaseEntity, cancellationToken);
@@ -61,7 +59,7 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
     /// <summary>
     /// Called after request validation and entity retrieval by id
     /// </summary>
-    public virtual async Task DatabaseValidation(TRequest request, CancellationToken cancellationToken)
+    public virtual async Task DatabaseValidation(TRequest request, TDatabaseEntity databaseEntity, CancellationToken cancellationToken)
     {
     }
 }

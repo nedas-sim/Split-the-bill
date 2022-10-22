@@ -30,9 +30,12 @@ public class CreateGroupTests
 
         // Act:
         BaseResult<Unit> result = await handler.Handle(command, default);
+        bool isValid = command.IsValid(out _);
 
         // Assert:
+        Assert.False(isValid);
         Assert.IsType<ValidationErrorResult<Unit>>(result);
+
     }
 
     [Fact]
@@ -50,8 +53,10 @@ public class CreateGroupTests
 
         // Act:
         BaseResult<Unit> result = await handler.Handle(command, default);
+        bool isValid = command.IsValid(out _);
 
         // Assert:
+        Assert.True(isValid);
         Assert.IsType<ValidationErrorResult<Unit>>(result);
     }
 
@@ -70,8 +75,10 @@ public class CreateGroupTests
 
         // Act:
         BaseResult<Unit> result = await handler.Handle(command, default);
+        bool isValid = command.IsValid(out _);
 
         // Assert:
+        Assert.True(isValid);
         Assert.IsType<NoContentResult<Unit>>(result);
     }
 }

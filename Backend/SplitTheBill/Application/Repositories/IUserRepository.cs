@@ -8,4 +8,5 @@ public interface IUserRepository : IBaseRepository<User>
     public Task<UserResponse?> GetUserResponse(Guid id, CancellationToken cancellationToken = default);
     public Task<bool> EmailExists(string email, CancellationToken cancellationToken = default);
     public Task<User?> GetByEmail(string email, CancellationToken cancellationToken = default);
+    public Task<bool> UsernameExists(string username, CancellationToken cancellationToken = default);
 }

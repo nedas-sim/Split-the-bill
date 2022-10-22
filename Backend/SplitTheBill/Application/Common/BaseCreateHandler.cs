@@ -26,7 +26,7 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
             request.ValidateAndThrow();
             await DatabaseValidation(request, cancellationToken);
             TDatabaseEntity dbEntity = request.BuildEntity();
-            await DatabaseEntityConfiguration(request, dbEntity, cancellationToken);
+            await PostEntityBuilding(request, dbEntity, cancellationToken);
 
             await repository.Create(dbEntity, cancellationToken);
             return new NoContentResult<Unit>();
@@ -57,7 +57,7 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
     /// <summary>
     /// Called after request is mapped to entity which is not yet added to the database
     /// </summary>
-    public virtual async Task DatabaseEntityConfiguration(TRequest request, TDatabaseEntity entity, CancellationToken cancellationToken)
+    public virtual async Task PostEntityBuilding(TRequest request, TDatabaseEntity entity, CancellationToken cancellationToken)
     {
     }
 }
