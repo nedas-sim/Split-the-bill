@@ -7,13 +7,15 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHandler<TRequest, BaseResult<Unit>>
-    where TRequest : BaseCreateRequest<TDatabaseEntity>
+public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHandler<TRequest, BaseResult<Unit>>
+    where TRequest : BaseUpdateRequest<TDatabaseEntity>
     where TDatabaseEntity : BaseEntity
 {
     private readonly IBaseRepository<TDatabaseEntity> repository;
 
-    public BaseCreateHandler(IBaseRepository<TDatabaseEntity> repository)
+    protected TDatabaseEntity databaseEntity;
+
+    public BaseUpdateHandler(IBaseRepository<TDatabaseEntity> repository)
     {
         this.repository = repository;
     }
@@ -23,11 +25,13 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
         try
         {
             request.ValidateAndThrow();
-            await DatabaseValidation(request, cancellationToken);
-            TDatabaseEntity dbEntity = request.BuildEntity();
-            await DatabaseEntityConfiguration(request, dbEntity, cancellationToken);
+            databaseEntity = await repository.GetById(request.Id, cancellationToken)
+                ?? throw new NotFoundErrorException($"{typeof(TDatabaseEntity).Name} not found");
 
-            await repository.Create(dbEntity, cancellationToken);
+            await DatabaseValidation(request, cancellationToken);
+
+            request.Update(databaseEntity);
+            await repository.Update(databaseEntity, cancellationToken);
             return new NoContentResult<Unit>();
         }
         catch (ValidationErrorException validationEx)
@@ -37,19 +41,19 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
                 Message = validationEx.Message,
             };
         }
+        catch (NotFoundErrorException notFoundEx)
+        {
+            return new NotFoundResult<Unit>
+            {
+                Message = notFoundEx.Message,
+            };
+        }
     }
 
     /// <summary>
-    /// Called after request validation
+    /// Called after request validation and entity retrieval by id
     /// </summary>
     public virtual async Task DatabaseValidation(TRequest request, CancellationToken cancellationToken)
-    {
-    }
-
-    /// <summary>
-    /// Called after request is mapped to entity which is not yet added to the database
-    /// </summary>
-    public virtual async Task DatabaseEntityConfiguration(TRequest request, TDatabaseEntity entity, CancellationToken cancellationToken)
     {
     }
 }

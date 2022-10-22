@@ -9,7 +9,7 @@ public sealed class CreateGroupCommandHandler : BaseCreateHandler<CreateGroupCom
 {
     private readonly IGroupRepository groupRepository;
 
-    public CreateGroupCommandHandler(IGroupRepository groupRepository)
+    public CreateGroupCommandHandler(IGroupRepository groupRepository) : base(groupRepository)
     {
         this.groupRepository = groupRepository;
     }
@@ -23,7 +23,7 @@ public sealed class CreateGroupCommandHandler : BaseCreateHandler<CreateGroupCom
         }
     }
 
-    public override async Task InsertionToDatabase(CreateGroupCommand request, Group entity, CancellationToken cancellationToken)
+    public override async Task DatabaseEntityConfiguration(CreateGroupCommand request, Group entity, CancellationToken cancellationToken)
     {
         entity.UserGroups.Add(new UserGroup
         {
@@ -31,7 +31,5 @@ public sealed class CreateGroupCommandHandler : BaseCreateHandler<CreateGroupCom
             InvitedOn = entity.CreatedOn,
             AcceptedOn = entity.CreatedOn,
         });
-
-        await groupRepository.Create(entity, cancellationToken);
     }
 }
