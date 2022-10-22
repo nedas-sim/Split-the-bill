@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Button, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, Button, Alert, ActivityIndicator } from 'react-native';
 import authService from '../../services/authService';
-import { Screens } from '../../common/screens';
+import ScreenNames from '../../common/screenNames';
 import styles from './styles';
 import EmailInput from '../../components/EmailInput/EmailInput';
 import PasswordInput from '../../components/PasswordInput/PasswordInput';
@@ -21,7 +21,7 @@ const RegisterScreen = ({ navigation }) => {
       Alert.alert('Success', 'Registration successful!', [
         {
           text: 'Login',
-          onPress: () => navigation.navigate(Screens.mainScreen.name),
+          onPress: () => navigation.navigate(ScreenNames.mainScreen),
         },
       ]);
     } catch (ex) {

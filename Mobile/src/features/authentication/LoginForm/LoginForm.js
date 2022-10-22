@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Button, Alert, ActivityIndicator } from 'react-native';
-import { Screens } from '../../../common/screens';
+import ScreenNames from '../../../common/screenNames';
 import styles from './styles';
 import authService from '../../../services/authService';
 import EmailInput from '../../../components/EmailInput/EmailInput';
@@ -17,7 +17,7 @@ const LoginForm = ({ navigation }) => {
     try {
       setLoading(true);
       await authService.login(credentials);
-      navigation.navigate(Screens.groupList.name);
+      navigation.navigate(ScreenNames.groupList);
     } catch (ex) {
       Alert.alert('Error', ex.response.data.message);
     } finally {
