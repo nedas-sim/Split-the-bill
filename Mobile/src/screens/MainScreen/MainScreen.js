@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Text, View, Button } from 'react-native';
-import LoginForm from '../features/authentication/LoginForm';
-import { Screens } from '../common/screens';
-import authService from '../services/authService';
+import LoginForm from '../../features/authentication/LoginForm/LoginForm';
+import { Screens } from '../../common/screens';
+import authService from '../../services/authService';
 import styles from './styles';
 
 const MainScreen = ({ navigation }) => {

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Button, TextInput, Alert, ActivityIndicator } from 'react-native';
-import authService from '../services/authService';
-import { Screens } from '../common/screens';
+import authService from '../../services/authService';
+import { Screens } from '../../common/screens';
 import styles from './styles';
+import EmailInput from '../../components/EmailInput/EmailInput';
+import PasswordInput from '../../components/PasswordInput/PasswordInput';
 
 const RegisterScreen = ({ navigation }) => {
   const [credentials, setCredentials] = useState({
@@ -32,34 +34,18 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#fff"
-          keyboardType="email-address"
-          autoCapitalize="none"
+        <EmailInput
           value={credentials.email}
-          onChangeText={(email) => setCredentials((creds) => ({ ...creds, email }))}
+          onChange={(email) => setCredentials((creds) => ({ ...creds, email }))}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#fff"
-          secureTextEntry
-          autoCapitalize="none"
+        <PasswordInput
           value={credentials.password}
-          onChangeText={(password) => setCredentials((creds) => ({ ...creds, password }))}
+          onChange={(password) => setCredentials((creds) => ({ ...creds, password }))}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Repeat password"
-          placeholderTextColor="#fff"
-          secureTextEntry
-          autoCapitalize="none"
+        <PasswordInput
           value={credentials.repeatPassword}
-          onChangeText={(repeatPassword) =>
-            setCredentials((creds) => ({ ...creds, repeatPassword }))
-          }
+          onChange={(repeatPassword) => setCredentials((creds) => ({ ...creds, repeatPassword }))}
+          placeholder="Repeat password"
         />
       </View>
       <Button style={styles.button} title="Register" onPress={handleRegisterButtonPress} />

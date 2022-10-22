@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, BackHandler, Alert } from 'react-native';
 
-import API from '../services/api';
+import API from '../../services/api';
 
 const GroupListScreen = () => {
   const [id, setId] = useState('');

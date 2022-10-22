@@ -15,11 +15,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 40,
   },
-  input: {
-    backgroundColor: '#453176',
-    width: '100%',
-    color: '#fff',
-  },
 });
 
 export default styles;

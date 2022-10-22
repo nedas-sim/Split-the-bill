@@ -7,11 +7,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  input: {
-    backgroundColor: '#453176',
-    width: '100%',
-    color: '#fff',
-  },
 });
 
 export default styles;

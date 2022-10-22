@@ -1,7 +1,7 @@
-import MainScreen from '../screens/MainScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import GroupListScreen from '../screens/GroupListScreen';
-import LogoutButton from '../features/authentication/LogoutButton';
+import MainScreen from '../screens/MainScreen/MainScreen';
+import RegisterScreen from '../screens/RegisterScreen/RegisterScreen';
+import GroupListScreen from '../screens/GroupListScreen/GroupListScreen';
+import LogoutButton from '../features/authentication/LogoutButton/LogoutButton';
 
 export const Screens = {
   mainScreen: {

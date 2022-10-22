@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { SafeAreaView, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
-import authService from '../../../services/authService';
+import { SafeAreaView, Button, Alert, ActivityIndicator } from 'react-native';
 import { Screens } from '../../../common/screens';
 import styles from './styles';
+import authService from '../../../services/authService';
+import EmailInput from '../../../components/EmailInput/EmailInput';
+import PasswordInput from '../../../components/PasswordInput/PasswordInput';
 
 const LoginForm = ({ navigation }) => {
   const [credentials, setCredentials] = useState({
@@ -25,23 +27,13 @@ const LoginForm = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#fff"
-        keyboardType="email-address"
-        autoCapitalize="none"
+      <EmailInput
         value={credentials.email}
-        onChangeText={(email) => setCredentials((creds) => ({ ...creds, email }))}
+        onChange={(email) => setCredentials((creds) => ({ ...creds, email }))}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#fff"
-        secureTextEntry
-        autoCapitalize="none"
+      <PasswordInput
         value={credentials.password}
-        onChangeText={(password) => setCredentials((creds) => ({ ...creds, password }))}
+        onChange={(password) => setCredentials((creds) => ({ ...creds, password }))}
       />
       <Button title="Login" onPress={handleLoginButtonPress} />
       {loading && <ActivityIndicator size="large" />}
