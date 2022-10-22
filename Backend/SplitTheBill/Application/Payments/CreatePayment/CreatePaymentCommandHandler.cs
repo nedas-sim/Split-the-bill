@@ -1,12 +1,10 @@
-﻿using Application.Repositories;
-using Domain.Common.Results;
+﻿using Application.Common;
+using Application.Repositories;
 using Domain.Database;
-using Domain.Results;
-using MediatR;
 
 namespace Application.Payments.CreatePayment;
 
-public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, BaseResult<Unit>>
+public class CreatePaymentCommandHandler : BaseCreateHandler<CreatePaymentCommand, Payment>
 {
     private readonly IPaymentRepository paymentRepository;
 
@@ -15,18 +13,8 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
         this.paymentRepository = paymentRepository;
     }
 
-    public async Task<BaseResult<Unit>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
+    public override async Task InsertionToDatabase(CreatePaymentCommand request, Payment entity, CancellationToken cancellationToken)
     {
-        if (request.IsValid(out string? errorMessage ) is false)
-        {
-            return new ValidationErrorResult<Unit>
-            {
-                Message = errorMessage!,
-            };
-        }
-
-        Payment payment = request.BuildEntity();
-        await paymentRepository.Create(payment, cancellationToken);
-        return new NoContentResult<Unit>();
+        await paymentRepository.Create(entity, cancellationToken);
     }
 }

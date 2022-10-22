@@ -1,12 +1,11 @@
-﻿using Application.Repositories;
-using Domain.Common.Results;
+﻿using Application.Common;
+using Application.Repositories;
 using Domain.Database;
-using Domain.Results;
-using MediatR;
+using Domain.Exceptions;
 
 namespace Application.Groups.CreateGroup;
 
-public sealed class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand, BaseResult<Unit>>
+public sealed class CreateGroupCommandHandler : BaseCreateHandler<CreateGroupCommand, Group>
 {
     private readonly IGroupRepository groupRepository;
 
@@ -15,34 +14,24 @@ public sealed class CreateGroupCommandHandler : IRequestHandler<CreateGroupComma
         this.groupRepository = groupRepository;
     }
 
-    public async Task<BaseResult<Unit>> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
+    public override async Task DatabaseValidation(CreateGroupCommand request, CancellationToken cancellationToken)
     {
-        if (request.IsValid(out string? errorMessage) is false)
-        {
-            return new ValidationErrorResult<Unit>
-            {
-                Message = errorMessage!,
-            };
-        }
-
         bool groupNameExists = await groupRepository.GroupNameExists(request.Name, cancellationToken);
         if (groupNameExists)
         {
-            return new ValidationErrorResult<Unit>
-            {
-                Message = $"Group with name {request.Name} already exists",
-            };
+            throw new ValidationErrorException($"Group with name {request.Name} already exists");
         }
+    }
 
-        Group group = request.BuildEntity();
-        group.UserGroups.Add(new UserGroup
+    public override async Task InsertionToDatabase(CreateGroupCommand request, Group entity, CancellationToken cancellationToken)
+    {
+        entity.UserGroups.Add(new UserGroup
         {
             UserId = request.UserId,
-            InvitedOn = group.CreatedOn,
-            AcceptedOn = group.CreatedOn,
+            InvitedOn = entity.CreatedOn,
+            AcceptedOn = entity.CreatedOn,
         });
 
-        await groupRepository.Create(group, cancellationToken);
-        return new NoContentResult<Unit>();
+        await groupRepository.Create(entity, cancellationToken);
     }
 }
