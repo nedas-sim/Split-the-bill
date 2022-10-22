@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, BackHandler, Alert } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, Text, BackHandler, Alert } from 'react-native';
 
-import API from "../services/api";
+import API from '../services/api';
 
 const GroupListScreen = () => {
-  const [id, setId] = useState("");
+  const [id, setId] = useState('');
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", () => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
       Alert.alert(
-        "Exit",
-        "Do you want to exit the app?",
+        'Exit',
+        'Do you want to exit the app?',
         [
           {
-            text: "No",
+            text: 'No',
           },
           {
-            text: "Yes",
+            text: 'Yes',
             onPress: () => BackHandler.exitApp(),
           },
         ],
@@ -30,7 +30,7 @@ const GroupListScreen = () => {
 
   useEffect(() => {
     const callFunc = async () => {
-      const response = await API.get("/test/authPing");
+      const response = await API.get('/test/authPing');
       setId(response.data.id);
     };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,28 +7,28 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import authService from "../services/authService";
-import { Screens } from "../common/screens";
+} from 'react-native';
+import authService from '../services/authService';
+import { Screens } from '../common/screens';
 
 const RegisterScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRegisterButtonPress = async () => {
     try {
       setLoading(true);
       await authService.register({ email, password, repeatPassword });
-      Alert.alert("Success", "Registration successful!", [
+      Alert.alert('Success', 'Registration successful!', [
         {
-          text: "Login",
+          text: 'Login',
           onPress: () => navigation.navigate(Screens.mainScreen.name),
         },
       ]);
     } catch (ex) {
-      Alert.alert("Error", ex.response.data.message);
+      Alert.alert('Error', ex.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -65,11 +65,7 @@ const RegisterScreen = ({ navigation }) => {
           onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
         />
       </View>
-      <Button
-        style={styles.button}
-        title="Register"
-        onPress={handleRegisterButtonPress}
-      />
+      <Button style={styles.button} title="Register" onPress={handleRegisterButtonPress} />
       {loading && <ActivityIndicator size="large" />}
     </SafeAreaView>
   );
@@ -77,23 +73,23 @@ const RegisterScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   screen: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#260E63",
-    alignItems: "center",
-    justifyContent: "center",
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#260E63',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputsContainer: {
-    width: "70%",
-    height: "20%",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    width: '70%',
+    height: '20%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     marginBottom: 40,
   },
   input: {
-    backgroundColor: "#453176",
-    width: "100%",
-    color: "#fff",
+    backgroundColor: '#453176',
+    width: '100%',
+    color: '#fff',
   },
 });
 

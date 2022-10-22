@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,13 +6,13 @@ import {
   Button,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import authService from "../../services/authService";
-import { Screens } from "../../common/screens";
+} from 'react-native';
+import authService from '../../services/authService';
+import { Screens } from '../../common/screens';
 
 const LoginForm = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +22,7 @@ const LoginForm = ({ navigation }) => {
       await authService.login({ email, password });
       navigation.navigate(Screens.groupList.name);
     } catch (ex) {
-      Alert.alert("Error", ex.response.data.message);
+      Alert.alert('Error', ex.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -56,15 +56,15 @@ const LoginForm = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "70%",
-    height: "40%",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    width: '70%',
+    height: '40%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   input: {
-    backgroundColor: "#453176",
-    width: "100%",
-    color: "#fff",
+    backgroundColor: '#453176',
+    width: '100%',
+    color: '#fff',
   },
 });
 

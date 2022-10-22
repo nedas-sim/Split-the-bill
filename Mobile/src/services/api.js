@@ -1,11 +1,11 @@
-import axios from "axios";
-import apiPaths from "../common/apiPaths";
+import axios from 'axios';
+import apiPaths from '../common/apiPaths';
 
 const axiosInstance = axios.create({
   baseURL: apiPaths.BASE_URL,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   },
 });
 
