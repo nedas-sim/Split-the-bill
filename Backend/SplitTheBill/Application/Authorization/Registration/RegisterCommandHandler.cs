@@ -1,15 +1,14 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using Application.Services;
 using Domain.Common;
-using Domain.Common.Results;
 using Domain.Database;
-using Domain.Results;
-using MediatR;
+using Domain.Exceptions;
 using Microsoft.Extensions.Options;
 
 namespace Application.Authorization.Registration;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, BaseResult<Unit>>
+public class RegisterCommandHandler : BaseCreateHandler<RegisterCommand, User>
 {
     private readonly IUserRepository userRepository;
     private readonly IAuthorizeService authorizeService;
@@ -17,37 +16,29 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, BaseResul
 
     public RegisterCommandHandler(IUserRepository userRepository,
                                   IAuthorizeService authorizeService,
-                                  IOptions<UserSettings> config)
+                                  IOptions<UserSettings> config) : base(userRepository)
     {
         this.userRepository = userRepository;
         this.authorizeService = authorizeService;
         this.config = config.Value;
     }
 
-    public async Task<BaseResult<Unit>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public override async Task PreValidation(RegisterCommand request)
     {
         request.SetConfigurations(config);
+    }
 
-        if (request.IsValid(out string? errorMessage) is false)
-        {
-            return new ValidationErrorResult<Unit>
-            {
-                Message = errorMessage!,
-            };
-        }
-
+    public override async Task DatabaseValidation(RegisterCommand request, CancellationToken cancellationToken)
+    {
         bool emailExists = await userRepository.EmailExists(request.Email, cancellationToken);
         if (emailExists)
         {
-            return new ValidationErrorResult<Unit>
-            {
-                Message = "User with this email already exists",
-            };
+            throw new ValidationErrorException("User with this email already exists");
         }
+    }
 
-        User user = request.BuildEntity();
-        user.Password = authorizeService.GenerateHash(request.Password);
-        await userRepository.Update(user, cancellationToken);
-        return new NoContentResult<Unit>();
+    public override async Task DatabaseEntityConfiguration(RegisterCommand request, User entity, CancellationToken cancellationToken)
+    {
+        entity.Password = authorizeService.GenerateHash(request.Password);
     }
 }

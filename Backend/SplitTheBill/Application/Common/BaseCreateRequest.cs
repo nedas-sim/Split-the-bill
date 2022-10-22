@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Identity;
 using Domain.Common.Results;
+using Domain.Exceptions;
 using MediatR;
 
 namespace Application.Common;
@@ -15,4 +16,12 @@ public abstract class BaseCreateRequest<TDatabaseEntity> : IRequest<BaseResult<U
     }
 
     public abstract TDatabaseEntity BuildEntity();
+
+    public void ValidateAndThrow()
+    {
+        if (IsValid(out string? errorMessage) is false)
+        {
+            throw new ValidationErrorException(errorMessage!);
+        }
+    }
 }

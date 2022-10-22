@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Identity;
 using Domain.Common.Results;
+using Domain.Exceptions;
 using MediatR;
 
 namespace Application.Common;
@@ -7,9 +8,8 @@ namespace Application.Common;
 public abstract class BaseUpdateRequest<TDatabaseEntity> : IRequest<BaseResult<Unit>>
     where TDatabaseEntity : BaseEntity
 {
-    // Internal to set the value in controller and
-    // not to map it from request body
-    internal Guid Id { get; private set; }
+    public Guid Id { get; internal set; }
+    public void SetId(Guid id) => Id = id;
 
     public abstract void Update(TDatabaseEntity databaseEntity);
     public virtual bool IsValid(out string? errorMessage)
@@ -19,8 +19,11 @@ public abstract class BaseUpdateRequest<TDatabaseEntity> : IRequest<BaseResult<U
         return true;
     }
 
-    public void SetId(Guid id)
+    public void ValidateAndThrow()
     {
-        Id = id;
+        if (IsValid(out string? errorMessage) is false)
+        {
+            throw new ValidationErrorException(errorMessage!);
+        }
     }
 }
