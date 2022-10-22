@@ -24,6 +24,7 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
     {
         try
         {
+            await PreValidation(request);
             request.ValidateAndThrow();
             databaseEntity = await repository.GetById(request.Id, cancellationToken)
                 ?? throw new NotFoundErrorException($"{typeof(TDatabaseEntity).Name} not found");
@@ -48,6 +49,13 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
                 Message = notFoundEx.Message,
             };
         }
+    }
+
+    /// <summary>
+    /// Called at the start
+    /// </summary>
+    public virtual async Task PreValidation(TRequest request)
+    {
     }
 
     /// <summary>

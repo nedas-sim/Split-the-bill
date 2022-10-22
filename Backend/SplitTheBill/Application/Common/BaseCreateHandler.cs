@@ -22,6 +22,7 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
     {
         try
         {
+            await PreValidation(request);
             request.ValidateAndThrow();
             await DatabaseValidation(request, cancellationToken);
             TDatabaseEntity dbEntity = request.BuildEntity();
@@ -37,6 +38,13 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
                 Message = validationEx.Message,
             };
         }
+    }
+
+    /// <summary>
+    /// Called at the start
+    /// </summary>
+    public virtual async Task PreValidation(TRequest request)
+    {
     }
 
     /// <summary>
