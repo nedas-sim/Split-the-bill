@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  TextInput,
-  Button,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
-import authService from '../../services/authService';
-import { Screens } from '../../common/screens';
+import { SafeAreaView, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import authService from '../../../services/authService';
+import { Screens } from '../../../common/screens';
+import styles from './styles';
 
 const LoginForm = ({ navigation }) => {
   const [credentials, setCredentials] = useState({
@@ -54,19 +48,5 @@ const LoginForm = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '70%',
-    height: '40%',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  input: {
-    backgroundColor: '#453176',
-    width: '100%',
-    color: '#fff',
-  },
-});
 
 export default LoginForm;

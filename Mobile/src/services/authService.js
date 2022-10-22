@@ -10,11 +10,11 @@ const login = async (body) => {
 };
 
 const logout = async () => {
-  await API.post(apiPaths.LOGOUT, {});
+  await API.post(apiPaths.LOGOUT);
 };
 
 const isLoggedIn = async () => {
-  await API.post(apiPaths.IS_LOGGED_IN, {});
+  await API.post(apiPaths.IS_LOGGED_IN);
 };
 
 const authService = {

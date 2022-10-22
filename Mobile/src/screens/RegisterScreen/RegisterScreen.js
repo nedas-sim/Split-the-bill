@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Button,
-  TextInput,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { SafeAreaView, View, Button, TextInput, Alert, ActivityIndicator } from 'react-native';
 import authService from '../services/authService';
 import { Screens } from '../common/screens';
+import styles from './styles';
 
 const RegisterScreen = ({ navigation }) => {
   const [credentials, setCredentials] = useState({
@@ -74,27 +67,5 @@ const RegisterScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#260E63',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputsContainer: {
-    width: '70%',
-    height: '20%',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginBottom: 40,
-  },
-  input: {
-    backgroundColor: '#453176',
-    width: '100%',
-    color: '#fff',
-  },
-});
 
 export default RegisterScreen;
