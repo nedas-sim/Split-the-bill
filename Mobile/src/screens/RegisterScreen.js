@@ -12,15 +12,17 @@ import authService from '../services/authService';
 import { Screens } from '../common/screens';
 
 const RegisterScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+    repeatPassword: '',
+  });
   const [loading, setLoading] = useState(false);
 
   const handleRegisterButtonPress = async () => {
     try {
       setLoading(true);
-      await authService.register({ email, password, repeatPassword });
+      await authService.register(credentials);
       Alert.alert('Success', 'Registration successful!', [
         {
           text: 'Login',
@@ -43,8 +45,8 @@ const RegisterScreen = ({ navigation }) => {
           placeholderTextColor="#fff"
           keyboardType="email-address"
           autoCapitalize="none"
-          value={email}
-          onChangeText={(email) => setEmail(email)}
+          value={credentials.email}
+          onChangeText={(email) => setCredentials((creds) => ({ ...creds, email }))}
         />
         <TextInput
           style={styles.input}
@@ -52,8 +54,8 @@ const RegisterScreen = ({ navigation }) => {
           placeholderTextColor="#fff"
           secureTextEntry
           autoCapitalize="none"
-          value={password}
-          onChangeText={(password) => setPassword(password)}
+          value={credentials.password}
+          onChangeText={(password) => setCredentials((creds) => ({ ...creds, password }))}
         />
         <TextInput
           style={styles.input}
@@ -61,8 +63,10 @@ const RegisterScreen = ({ navigation }) => {
           placeholderTextColor="#fff"
           secureTextEntry
           autoCapitalize="none"
-          value={repeatPassword}
-          onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
+          value={credentials.repeatPassword}
+          onChangeText={(repeatPassword) =>
+            setCredentials((creds) => ({ ...creds, repeatPassword }))
+          }
         />
       </View>
       <Button style={styles.button} title="Register" onPress={handleRegisterButtonPress} />

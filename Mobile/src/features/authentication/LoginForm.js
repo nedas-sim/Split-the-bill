@@ -11,15 +11,16 @@ import authService from '../../services/authService';
 import { Screens } from '../../common/screens';
 
 const LoginForm = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+  });
   const [loading, setLoading] = useState(false);
 
   const handleLoginButtonPress = async () => {
     try {
       setLoading(true);
-      await authService.login({ email, password });
+      await authService.login(credentials);
       navigation.navigate(Screens.groupList.name);
     } catch (ex) {
       Alert.alert('Error', ex.response.data.message);
@@ -36,8 +37,8 @@ const LoginForm = ({ navigation }) => {
         placeholderTextColor="#fff"
         keyboardType="email-address"
         autoCapitalize="none"
-        value={email}
-        onChangeText={(email) => setEmail(email)}
+        value={credentials.email}
+        onChangeText={(email) => setCredentials((creds) => ({ ...creds, email }))}
       />
       <TextInput
         style={styles.input}
@@ -45,8 +46,8 @@ const LoginForm = ({ navigation }) => {
         placeholderTextColor="#fff"
         secureTextEntry
         autoCapitalize="none"
-        value={password}
-        onChangeText={(password) => setPassword(password)}
+        value={credentials.password}
+        onChangeText={(password) => setCredentials((creds) => ({ ...creds, password }))}
       />
       <Button title="Login" onPress={handleLoginButtonPress} />
       {loading && <ActivityIndicator size="large" />}
