@@ -13,7 +13,6 @@ const GroupListScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageButtonActive, setPageButtonActive] = useState({ previous: false, next: false });
-  const [lastPage, setLastPage] = useState(1);
 
   const firstRender = useRef(true);
 
@@ -22,7 +21,7 @@ const GroupListScreen = ({ navigation }) => {
       const fetchAsync = async () => {
         if (firstRender.current) {
           firstRender.current = false;
-          setPage(lastPage);
+          setPage(1);
         }
       };
       fetchAsync();
@@ -55,7 +54,6 @@ const GroupListScreen = ({ navigation }) => {
     const response = await groupService.getGroups(page);
     setGroups(response.data.items);
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
-    setLastPage(response.data.lastPage);
   };
 
   return (
@@ -64,7 +62,7 @@ const GroupListScreen = ({ navigation }) => {
         <ActivityIndicator size="large" />
       ) : (
         <>
-          <GroupList groups={groups} />
+          <GroupList groups={groups} navigation={navigation} />
           {groups?.length > 0 && (
             <View style={styles.navigationButtonContainer}>
               <View style={styles.leftButton}>

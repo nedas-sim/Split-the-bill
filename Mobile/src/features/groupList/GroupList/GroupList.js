@@ -4,13 +4,13 @@ import GroupListItem from '../GroupListItem/GroupListItem';
 import styles from './styles';
 import StaticTextArea from '../../../components/StaticTextArea/StaticTextArea';
 
-const GroupList = ({ groups }) => {
+const GroupList = ({ groups, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {groups?.length > 0 ? (
         <ScrollView style={styles.groupListContainer}>
           {groups?.map((g) => (
-            <GroupListItem key={g.groupId} group={g} />
+            <GroupListItem key={g.groupId} group={g} navigation={navigation} />
           ))}
         </ScrollView>
       ) : (
