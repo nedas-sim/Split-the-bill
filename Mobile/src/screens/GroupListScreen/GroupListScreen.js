@@ -13,33 +13,50 @@ const GroupListScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageButtonActive, setPageButtonActive] = useState({ previous: false, next: false });
+  const [lastPage, setLastPage] = useState(1);
 
   const firstRender = useRef(true);
 
   useFocusEffect(
     useCallback(() => {
+      const fetchAsync = async () => {
+        if (firstRender.current) {
+          firstRender.current = false;
+          setPage(lastPage);
+        }
+      };
+      fetchAsync();
+
       // setup event listener on mount
-      backHandlerHelper.setupBackHandler(BackHandler, Alert);
+      backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
       return () => {
         // remove event listener on unmount
-        backHandlerHelper.removeBackHandler(BackHandler);
+        backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
+        firstRender.current = true;
       };
     }, [])
   );
 
   useEffect(() => {
-    const retrieveGroups = async () => {
-      if (firstRender.current) setLoading(true);
-      const response = await groupService.getGroups(page);
-      setGroups(response.data.items);
-      setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
-      if (firstRender.current) setLoading(false);
-
-      firstRender.current = false;
+    const getGroups = async () => {
+      if (firstRender.current === false) {
+        if (firstRender.current) setLoading(true);
+        await retrieveGroups();
+        if (firstRender.current) setLoading(false);
+      }
     };
 
-    retrieveGroups();
+    getGroups();
+    firstRender.current = false;
   }, [page]);
+
+  const retrieveGroups = async () => {
+    console.log(page);
+    const response = await groupService.getGroups(page);
+    setGroups(response.data.items);
+    setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
+    setLastPage(response.data.lastPage);
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -54,14 +71,14 @@ const GroupListScreen = ({ navigation }) => {
                 <PageNavigationButton
                   enabled={pageButtonActive.previous}
                   text="<"
-                  onClick={() => setPage((curr) => curr - 1)}
+                  onClick={() => setPage(page - 1)}
                 />
               </View>
               <View style={styles.rightButton}>
                 <PageNavigationButton
                   enabled={pageButtonActive.next}
                   text=">"
-                  onClick={() => setPage((curr) => curr + 1)}
+                  onClick={() => setPage(page + 1)}
                 />
               </View>
             </View>

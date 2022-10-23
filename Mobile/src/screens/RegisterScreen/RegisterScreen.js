@@ -34,19 +34,25 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.inputsContainer}>
-        <EmailInput
-          value={credentials.email}
-          onChange={(email) => setCredentials((creds) => ({ ...creds, email }))}
-        />
-        <PasswordInput
-          value={credentials.password}
-          onChange={(password) => setCredentials((creds) => ({ ...creds, password }))}
-        />
-        <PasswordInput
-          value={credentials.repeatPassword}
-          onChange={(repeatPassword) => setCredentials((creds) => ({ ...creds, repeatPassword }))}
-          placeholder="Repeat password"
-        />
+        <View style={styles.inputWrapper}>
+          <EmailInput
+            value={credentials.email}
+            onChange={(email) => setCredentials((creds) => ({ ...creds, email }))}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <PasswordInput
+            value={credentials.password}
+            onChange={(password) => setCredentials((creds) => ({ ...creds, password }))}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <PasswordInput
+            value={credentials.repeatPassword}
+            onChange={(repeatPassword) => setCredentials((creds) => ({ ...creds, repeatPassword }))}
+            placeholder="Repeat password"
+          />
+        </View>
       </View>
       <Button style={styles.button} title="Register" onPress={handleRegisterButtonPress} />
       {loading && <ActivityIndicator size="large" />}

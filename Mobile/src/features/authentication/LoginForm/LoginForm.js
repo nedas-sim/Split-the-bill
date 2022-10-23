@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Button, Alert, ActivityIndicator } from 'react-native';
+import { SafeAreaView, Button, Alert, ActivityIndicator, View } from 'react-native';
 import ScreenNames from '../../../common/screenNames';
 import styles from './styles';
 import authService from '../../../services/authService';
@@ -27,14 +27,18 @@ const LoginForm = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <EmailInput
-        value={credentials.email}
-        onChange={(email) => setCredentials((creds) => ({ ...creds, email }))}
-      />
-      <PasswordInput
-        value={credentials.password}
-        onChange={(password) => setCredentials((creds) => ({ ...creds, password }))}
-      />
+      <View style={styles.inputContainer}>
+        <EmailInput
+          value={credentials.email}
+          onChange={(email) => setCredentials((creds) => ({ ...creds, email }))}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <PasswordInput
+          value={credentials.password}
+          onChange={(password) => setCredentials((creds) => ({ ...creds, password }))}
+        />
+      </View>
       <Button title="Login" onPress={handleLoginButtonPress} />
       {loading && <ActivityIndicator size="large" />}
     </SafeAreaView>

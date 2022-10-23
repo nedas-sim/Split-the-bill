@@ -1,6 +1,6 @@
-let cachedAction;
+let cachedAction = {};
 
-const setupBackHandler = (BackHandler, Alert) => {
+const setExitListener = (BackHandler, Alert, listenerName) => {
   const action = () => {
     Alert.alert(
       'Exit',
@@ -21,18 +21,31 @@ const setupBackHandler = (BackHandler, Alert) => {
     return true;
   };
 
-  cachedAction = action;
+  //cachedAction = action;
+  cachedAction[listenerName] = action;
 
-  BackHandler.addEventListener('hardwareBackPress', cachedAction);
+  BackHandler.addEventListener(listenerName, cachedAction[listenerName]);
 };
 
-const removeBackHandler = (BackHandler) => {
-  BackHandler.removeEventListener('hardwareBackPress', cachedAction);
+const removeBackHandler = (BackHandler, listenerName) => {
+  BackHandler.removeEventListener(listenerName, cachedAction[listenerName]);
+};
+
+const setBackScreen = (BackHandler, navigation, screenName, listenerName) => {
+  const action = () => {
+    navigation.navigate(screenName);
+    return true;
+  };
+
+  cachedAction[listenerName] = action;
+
+  BackHandler.addEventListener(listenerName, cachedAction[listenerName]);
 };
 
 const backHandlerHelper = {
-  setupBackHandler,
+  setExitListener,
   removeBackHandler,
+  setBackScreen,
 };
 
 export default backHandlerHelper;
