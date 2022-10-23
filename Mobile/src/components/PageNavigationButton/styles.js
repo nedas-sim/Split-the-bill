@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },
-  text: { color: '#fff', textAlign: 'center', paddingTop: 5 },
+  text: { color: '#fff', textAlign: 'center', fontSize: 30 },
 });
 
 export default styles;

@@ -8,12 +8,19 @@ const styles = StyleSheet.create({
   },
   navigationButtonContainer: {
     marginTop: 'auto',
-    flexDirection: 'row',
     height: '5%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'relative',
   },
-  buttonWrapper: { width: 100, marginLeft: 10, marginRight: 10 },
+  leftButton: { position: 'absolute', width: 100, left: 10 },
+  rightButton: { position: 'absolute', width: 100, right: 10 },
+  newGroupBtnContainer: {
+    width: 100,
+    height: 50,
+    position: 'absolute',
+    bottom: 0,
+    left: '50%',
+    marginLeft: -50, // marginLeft = -0.5 * width, then it's centered
+  },
 });
 
 export default styles;

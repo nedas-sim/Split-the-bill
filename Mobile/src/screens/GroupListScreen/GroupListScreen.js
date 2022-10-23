@@ -41,14 +41,14 @@ const GroupListScreen = () => {
           <GroupList groups={groups} />
           {groups?.length > 0 && (
             <View style={styles.navigationButtonContainer}>
-              <View style={styles.buttonWrapper}>
+              <View style={styles.leftButton}>
                 <PageNavigationButton
                   enabled={pageButtonActive.previous}
                   text="<"
                   onClick={() => setPage((curr) => curr - 1)}
                 />
               </View>
-              <View style={styles.buttonWrapper}>
+              <View style={styles.rightButton}>
                 <PageNavigationButton
                   enabled={pageButtonActive.next}
                   text=">"
@@ -57,6 +57,13 @@ const GroupListScreen = () => {
               </View>
             </View>
           )}
+          <View style={styles.newGroupBtnContainer}>
+            <PageNavigationButton
+              enabled={true}
+              text="+"
+              onClick={() => console.log('create new group')}
+            />
+          </View>
         </>
       )}
     </SafeAreaView>
