@@ -4,6 +4,7 @@ const apiPaths = {
   LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
   IS_LOGGED_IN: '/auth/isLoggedIn',
+  GROUP: '/group',
 };
 
 export default apiPaths;

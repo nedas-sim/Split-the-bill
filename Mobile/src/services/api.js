@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 });
 
 const API = {
-  get(path) {
-    return axiosInstance.get(path);
+  get(path, params) {
+    return axiosInstance.get(path, { params });
   },
   post(path, body) {
     return axiosInstance.post(path, body);
