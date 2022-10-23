@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 40,
   },
+  inputWrapper: {
+    height: 40,
+  },
 });
 
 export default styles;

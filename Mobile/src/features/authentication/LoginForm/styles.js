@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  inputContainer: {
+    height: 40,
+  },
 });
 
 export default styles;
