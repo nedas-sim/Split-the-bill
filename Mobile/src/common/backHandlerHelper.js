@@ -1,5 +1,7 @@
+let cachedAction;
+
 const setupBackHandler = (BackHandler, Alert) => {
-  BackHandler.addEventListener('hardwareBackPress', () => {
+  const action = () => {
     Alert.alert(
       'Exit',
       'Do you want to exit the app?',
@@ -17,7 +19,20 @@ const setupBackHandler = (BackHandler, Alert) => {
       }
     );
     return true;
-  });
+  };
+
+  cachedAction = action;
+
+  BackHandler.addEventListener('hardwareBackPress', cachedAction);
 };
 
-export default setupBackHandler;
+const removeBackHandler = (BackHandler) => {
+  BackHandler.removeEventListener('hardwareBackPress', cachedAction);
+};
+
+const backHandlerHelper = {
+  setupBackHandler,
+  removeBackHandler,
+};
+
+export default backHandlerHelper;

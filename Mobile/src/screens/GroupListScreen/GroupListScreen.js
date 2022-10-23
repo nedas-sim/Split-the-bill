@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { SafeAreaView, BackHandler, Alert, ActivityIndicator, View } from 'react-native';
 import groupService from '../../services/groupService';
 import GroupList from '../../features/groupList/GroupList/GroupList';
 import styles from './styles';
 import PageNavigationButton from '../../components/PageNavigationButton/PageNavigationButton';
-import setupBackHandler from '../../common/backHandlerHelper';
+import backHandlerHelper from '../../common/backHandlerHelper';
+import ScreenNames from '../../common/screenNames';
+import { useFocusEffect } from '@react-navigation/native';
 
-const GroupListScreen = () => {
+const GroupListScreen = ({ navigation }) => {
   const [groups, setGroups] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -14,9 +16,16 @@ const GroupListScreen = () => {
 
   const firstRender = useRef(true);
 
-  useEffect(() => {
-    setupBackHandler(BackHandler, Alert);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      // setup event listener on mount
+      backHandlerHelper.setupBackHandler(BackHandler, Alert);
+      return () => {
+        // remove event listener on unmount
+        backHandlerHelper.removeBackHandler(BackHandler);
+      };
+    }, [])
+  );
 
   useEffect(() => {
     const retrieveGroups = async () => {
@@ -61,7 +70,7 @@ const GroupListScreen = () => {
             <PageNavigationButton
               enabled={true}
               text="+"
-              onClick={() => console.log('create new group')}
+              onClick={() => navigation.navigate(ScreenNames.createGroupScreen)}
             />
           </View>
         </>

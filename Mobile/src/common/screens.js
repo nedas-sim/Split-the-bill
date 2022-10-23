@@ -1,8 +1,9 @@
+import ScreenNames from './screenNames';
 import MainScreen from '../screens/MainScreen/MainScreen';
 import RegisterScreen from '../screens/RegisterScreen/RegisterScreen';
 import GroupListScreen from '../screens/GroupListScreen/GroupListScreen';
 import LogoutButton from '../features/authentication/LogoutButton/LogoutButton';
-import ScreenNames from './screenNames';
+import CreateGroupScreen from '../screens/CreateGroupScreen/CreateGroupScreen';
 
 export const Screens = {
   mainScreen: {
@@ -24,5 +25,10 @@ export const Screens = {
       headerBackVisible: false,
       headerRight: () => <LogoutButton navigation={navigation} />,
     }),
+  },
+  createGroupScreen: {
+    name: ScreenNames.createGroupScreen,
+    component: CreateGroupScreen,
+    options: {},
   },
 };
