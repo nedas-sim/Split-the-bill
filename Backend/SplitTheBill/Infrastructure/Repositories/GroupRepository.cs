@@ -1,6 +1,10 @@
 ﻿using Application.Repositories;
+using Domain.Common;
 using Domain.Database;
+using Domain.Responses.Groups;
+using Domain.Views;
 using Infrastructure.Database;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -20,4 +24,34 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
 
         return groupNameExists;
     }
+
+    public async Task<List<GroupResponse>> GetUsersGroups(PagingParameters pagingParameters, Guid userId, CancellationToken cancellationToken = default)
+    {
+        List<GroupResponse> userGroups = await
+            QueryGroupMembershipViewsByUserId(userId)
+                .OrderBy(gm => gm.AcceptedOn)
+                .ApplyPaging(pagingParameters)
+                .Select(gm => new GroupResponse(gm))
+                .ToListAsync(cancellationToken);
+
+        return userGroups;
+    }
+
+    public async Task<int> UserGroupsCount(Guid userId, CancellationToken cancellationToken = default)
+    {
+        int totalCount = await
+            QueryGroupMembershipViewsByUserId(userId)
+                .CountAsync(cancellationToken);
+
+        return totalCount;
+    }
+
+    #region Private Methods
+    private IQueryable<GroupMembershipView> QueryGroupMembershipViewsByUserId(Guid userId)
+    {
+        return 
+            context.GroupMembershipViews
+                   .Where(gm => gm.UserId == userId);
+    }
+    #endregion
 }
