@@ -50,7 +50,6 @@ const GroupListScreen = ({ navigation }) => {
   }, [page]);
 
   const retrieveGroups = async () => {
-    console.log(page);
     const response = await groupService.getGroups(page);
     setGroups(response.data.items);
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
