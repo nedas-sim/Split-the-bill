@@ -1,8 +1,6 @@
 ﻿using Application.Common;
 using Domain.Common;
 using Domain.Responses.Payments;
-using Domain.Results;
-using MediatR;
 
 namespace Application.Payments.GetPaymentList;
 

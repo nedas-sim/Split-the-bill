@@ -1,6 +1,7 @@
 ﻿using Domain.Database;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Domain.Views;
 
 namespace Infrastructure.Database.Configurations;
 
@@ -11,6 +12,7 @@ public static class GroupConfiguration
         EntityTypeBuilder<UserGroup> userGroupBuilder = modelBuilder.Entity<UserGroup>();
 
         ConfigureUserGroups(userGroupBuilder);
+        ConfigureViews(modelBuilder);
     }
 
     private static void ConfigureUserGroups(EntityTypeBuilder<UserGroup> builder)
@@ -24,5 +26,14 @@ public static class GroupConfiguration
         builder.HasOne(ug => ug.Group)
                .WithMany(g => g.UserGroups)
                .HasForeignKey(ug => ug.GroupId);
+    }
+
+    private static void ConfigureViews(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<GroupMembershipView>(x =>
+        {
+            x.HasNoKey();
+            x.ToView(nameof(GroupMembershipView));
+        });
     }
 }
