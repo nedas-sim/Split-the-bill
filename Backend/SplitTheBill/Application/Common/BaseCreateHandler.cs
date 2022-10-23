@@ -2,12 +2,13 @@
 using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
+using Domain.Responses;
 using Domain.Results;
 using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHandler<TRequest, BaseResult<Unit>>
+public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHandler<TRequest, BaseResult<CreateResponse>>
     where TRequest : BaseCreateRequest<TDatabaseEntity>
     where TDatabaseEntity : BaseEntity
 {
@@ -18,7 +19,7 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
         this.repository = repository;
     }
 
-    public async Task<BaseResult<Unit>> Handle(TRequest request, CancellationToken cancellationToken)
+    public async Task<BaseResult<CreateResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -29,11 +30,11 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
             await PostEntityBuilding(request, dbEntity, cancellationToken);
 
             await repository.Create(dbEntity, cancellationToken);
-            return new NoContentResult<Unit>();
+            return new CreateResponse { Id = dbEntity.Id };
         }
         catch (ValidationErrorException validationEx)
         {
-            return new ValidationErrorResult<Unit>
+            return new ValidationErrorResult<CreateResponse>
             {
                 Message = validationEx.Message,
             };

@@ -1,11 +1,12 @@
 ﻿using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
+using Domain.Responses;
 using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseCreateRequest<TDatabaseEntity> : IRequest<BaseResult<Unit>>
+public abstract class BaseCreateRequest<TDatabaseEntity> : IRequest<BaseResult<CreateResponse>>
     where TDatabaseEntity : BaseEntity
 {
     public virtual bool IsValid(out string? errorMessage)

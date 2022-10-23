@@ -1,5 +1,6 @@
 ﻿using Application.Groups.CreateGroup;
 using Application.Groups.GetUsersGroupList;
+using Domain.Responses;
 using Domain.Responses.Groups;
 using Domain.Results;
 using MediatR;
@@ -18,11 +19,11 @@ public class GroupController : BaseController
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateGroup([FromBody] CreateGroupCommand command)
+    public async Task<ActionResult<CreateResponse>> CreateGroup([FromBody] CreateGroupCommand command)
     {
         Guid userId = GetId();
         command.SetUserId(userId);
-        return ToNoContent(await sender.Send(command));
+        return FromResult(await sender.Send(command));
     }
 
     [HttpGet]
