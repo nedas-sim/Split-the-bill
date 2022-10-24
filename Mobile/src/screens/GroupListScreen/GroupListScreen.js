@@ -11,7 +11,7 @@ import { useFocusEffect } from '@react-navigation/native';
 const GroupListScreen = ({ navigation }) => {
   const [groups, setGroups] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState([1]);
   const [pageButtonActive, setPageButtonActive] = useState({ previous: false, next: false });
 
   const firstRender = useRef(true);
@@ -19,27 +19,36 @@ const GroupListScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const fetchAsync = async () => {
-        if (firstRender.current) {
-          firstRender.current = false;
-          setPage(1);
-        }
-      };
-      fetchAsync();
+        //console.log('focus');
+          setPage([1]);
 
+        /*if (firstRender.current) {
+          //console.log('focus set page to 1');
+          firstRender.current = false;
+          setPage({value: 1});
+        }*/
+      };
+      //fetchAsync();
+      firstRender.current = false;
+      console.log('focus');
+      setPage([...page]);
       // setup event listener on mount
       backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
       return () => {
         // remove event listener on unmount
+        //console.log('unmount focus');
         backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
-        firstRender.current = true;
+        //firstRender.current = true;
       };
     }, [])
   );
 
   useEffect(() => {
     const getGroups = async () => {
+      //console.log('use effect');
       if (firstRender.current === false) {
         if (firstRender.current) setLoading(true);
+        //console.log('use effect retrieve');
         await retrieveGroups();
         if (firstRender.current) setLoading(false);
       }
@@ -47,10 +56,15 @@ const GroupListScreen = ({ navigation }) => {
 
     getGroups();
     firstRender.current = false;
+    return () => {
+      //console.log('unmount use effect');
+      firstRender.current = true;
+    }
   }, [page]);
 
   const retrieveGroups = async () => {
-    const response = await groupService.getGroups(page);
+    console.log('retrieve');
+    const response = await groupService.getGroups(page[0]);
     setGroups(response.data.items);
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
   };
@@ -68,14 +82,14 @@ const GroupListScreen = ({ navigation }) => {
                 <PageNavigationButton
                   enabled={pageButtonActive.previous}
                   text="<"
-                  onClick={() => setPage(page - 1)}
+                  onClick={() => setPage([page[0] - 1])}
                 />
               </View>
               <View style={styles.rightButton}>
                 <PageNavigationButton
                   enabled={pageButtonActive.next}
                   text=">"
-                  onClick={() => setPage(page + 1)}
+                  onClick={() => setPage([page[0] + 1])}
                 />
               </View>
             </View>

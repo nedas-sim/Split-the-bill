@@ -1,6 +1,7 @@
 ﻿using Application.Groups.CreateGroup;
 using Application.Repositories;
 using Domain.Common.Results;
+using Domain.Responses;
 using Domain.Results;
 using MediatR;
 using Moq;
@@ -29,12 +30,12 @@ public class CreateGroupTests
         };
 
         // Act:
-        BaseResult<Unit> result = await handler.Handle(command, default);
+        BaseResult<CreateResponse> result = await handler.Handle(command, default);
         bool isValid = command.IsValid(out _);
 
         // Assert:
         Assert.False(isValid);
-        Assert.IsType<ValidationErrorResult<Unit>>(result);
+        Assert.IsType<ValidationErrorResult<CreateResponse>>(result);
 
     }
 
@@ -52,12 +53,12 @@ public class CreateGroupTests
             .ReturnsAsync(true);
 
         // Act:
-        BaseResult<Unit> result = await handler.Handle(command, default);
+        BaseResult<CreateResponse> result = await handler.Handle(command, default);
         bool isValid = command.IsValid(out _);
 
         // Assert:
         Assert.True(isValid);
-        Assert.IsType<ValidationErrorResult<Unit>>(result);
+        Assert.IsType<ValidationErrorResult<CreateResponse>>(result);
     }
 
     [Fact]
@@ -74,11 +75,11 @@ public class CreateGroupTests
             .ReturnsAsync(false);
 
         // Act:
-        BaseResult<Unit> result = await handler.Handle(command, default);
+        BaseResult<CreateResponse> result = await handler.Handle(command, default);
         bool isValid = command.IsValid(out _);
 
         // Assert:
         Assert.True(isValid);
-        Assert.IsType<NoContentResult<Unit>>(result);
+        Assert.IsType<NoContentResult<CreateResponse>>(result);
     }
 }
