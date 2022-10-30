@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Repositories;
+using Domain.Common.Results;
 using Domain.Responses.Groups;
 using Domain.Results;
 
@@ -14,7 +15,7 @@ public sealed class GetUsersGroupListQueryHandler : IListHandler<GetUsersGroupLi
         this.groupRepository = groupRepository;
     }
 
-    public async Task<ListResult<GroupResponse>> Handle(GetUsersGroupListQuery request, CancellationToken cancellationToken)
+    public async Task<BaseListResult<GroupResponse>> Handle(GetUsersGroupListQuery request, CancellationToken cancellationToken)
     {
         List<GroupResponse> userGroups = 
             await groupRepository.GetUsersGroups(request, request.UserId, cancellationToken);
