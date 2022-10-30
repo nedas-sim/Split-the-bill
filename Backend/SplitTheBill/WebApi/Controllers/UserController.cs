@@ -36,6 +36,6 @@ public sealed class UserController : BaseController
     {
         Guid id = GetId();
         query.SetCallingUserId(id);
-        return Ok(await sender.Send(query));
+        return FromListResult(await sender.Send(query));
     }
 }

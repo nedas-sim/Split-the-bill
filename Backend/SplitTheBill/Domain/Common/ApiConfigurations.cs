@@ -14,4 +14,5 @@ public sealed class JwtConfig
 public sealed class UserSettings
 {
     public int MinPasswordLength { get; set; }
+    public int MinUsernameLength { get; set; }
 }

@@ -1,28 +1,36 @@
 ﻿using Application.Common;
 using Application.Repositories;
+using Domain.Common;
+using Domain.Common.Results;
 using Domain.Responses.Users;
 using Domain.Results;
+using Microsoft.Extensions.Options;
 
 namespace Application.Users.GetUserList;
 
 public sealed class GetUserListQueryHandler : IListHandler<GetUserListQuery, UserResponse>
 {
     private readonly IUserRepository userRepository;
+    private readonly UserSettings config;
 
-    public GetUserListQueryHandler(IUserRepository userRepository)
+    public GetUserListQueryHandler(IUserRepository userRepository,
+                                   IOptions<UserSettings> config)
     {
         this.userRepository = userRepository;
+        this.config = config.Value;
     }
 
-    public async Task<ListResult<UserResponse>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
+    public async Task<BaseListResult<UserResponse>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
     {
-        /*if (request.Username.Length < 3)
+        request.SetConfigurations(config);
+
+        if (request.IsValid(out string? errorMessage) is false)
         {
-            return new ValidationErrorResult<UserResponse>
+            return new ListValidationResult<UserResponse>
             {
-                Message = "",
+                Message = errorMessage!,
             };
-        }*/
+        }
 
         List<UserResponse> userResponses =
             await userRepository.GetUserList(request, request, cancellationToken);

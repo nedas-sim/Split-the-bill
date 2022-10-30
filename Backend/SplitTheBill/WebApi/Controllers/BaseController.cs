@@ -41,6 +41,16 @@ public class BaseController : ControllerBase
 		};
 	}
 
+	protected ActionResult FromListResult<T>(BaseListResult<T> listResult) where T : class
+	{
+		return listResult switch
+		{
+			ListResult<T> success => Ok(success),
+			ListValidationResult<T> validationErr => BadRequest(validationErr),
+			_ => StatusCode(500, _responseForUnimplementedResult),
+		};
+	}
+
 	protected Guid GetId()
 	{
 		Guid id = Guid.Parse(Request.HttpContext.User.Claims.
