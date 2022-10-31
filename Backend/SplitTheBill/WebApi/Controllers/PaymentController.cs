@@ -20,7 +20,7 @@ public class PaymentController : BaseController
 
     [HttpGet]
     public async Task<ActionResult<ListResult<PaymentResponse>>> GetList([FromQuery] GetPaymentListQuery query) 
-        => Ok(await sender.Send(query));
+        => FromListResult(await sender.Send(query));
 
     [HttpGet("{id}")]
     public async Task<ActionResult<PaymentResponse>> GetById([FromRoute] Guid id)

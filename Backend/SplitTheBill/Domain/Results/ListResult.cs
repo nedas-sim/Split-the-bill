@@ -3,7 +3,7 @@ using Domain.Common.Results;
 
 namespace Domain.Results;
 
-public sealed class ListResult<T> : BaseResult<T> //where T : class
+public sealed class ListResult<T> : BaseListResult<T>
 {
     public List<T> Items { get; set; }
     public int PageSize { get; set; }

@@ -1,7 +1,10 @@
 ﻿using Application.Repositories;
+using Application.Users.GetUserList;
+using Domain.Common;
 using Domain.Database;
 using Domain.Responses.Users;
 using Infrastructure.Database;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -16,8 +19,13 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     {
         UserResponse? user =
             await context.Users
+                         .AsNoTracking()
                          .Where(u => u.Id == id)
-                         .Select(u => new UserResponse(u))
+                         .Select(u => new UserResponse
+                         {
+                             Id = u.Id,
+                             Username = u.Username,
+                         })
                          .FirstOrDefaultAsync(cancellationToken);
 
         return user;
@@ -27,6 +35,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     {
         bool exists =
             await QueryByEmail(email)
+                .AsNoTracking()
                 .AnyAsync(cancellationToken);
 
         return exists;
@@ -36,6 +45,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     {
         User? user =
             await QueryByEmail(email)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
 
         return user;
@@ -45,10 +55,38 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     {
         bool exists =
             await context.Users
+                         .AsNoTracking()
                          .Where(u => u.Username == username)
                          .AnyAsync(cancellationToken);
 
         return exists;
+    }
+
+    public async Task<int> GetUserCount(GetUserListQuery filterParams, CancellationToken cancellationToken = default)
+    {
+        int totalCount =
+            await QueryByFilter(filterParams)
+                .AsNoTracking()
+                .CountAsync(cancellationToken);
+
+        return totalCount;
+    }
+
+    public async Task<List<UserResponse>> GetUserList(PagingParameters pagingParameters, GetUserListQuery filterParams, CancellationToken cancellationToken = default)
+    {
+        List<UserResponse> userList =
+            await QueryByFilter(filterParams)
+                .AsNoTracking()
+                .OrderBy(u => u.Username)
+                .ApplyPaging(pagingParameters)
+                .Select(u => new UserResponse
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                })
+                .ToListAsync(cancellationToken);
+
+        return userList;
     }
 
     #region Private Methods
@@ -59,6 +97,16 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                    .Where(u => u.Email == email);
 
         return queryByEmail;
+    }
+
+    private IQueryable<User> QueryByFilter(GetUserListQuery filterParams)
+    {
+        IQueryable<User> queryByFilter =
+            context.Users
+                   .Where(u => u.Id != filterParams.CallingUserId)
+                   .Where(u => u.Username.Contains(filterParams.Username));
+
+        return queryByFilter;
     }
     #endregion
 }

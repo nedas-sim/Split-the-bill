@@ -19,6 +19,7 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
         bool groupNameExists =
             await context.Groups
+                         .AsNoTracking()
                          .Where(g => g.Name == name)
                          .AnyAsync(cancellationToken);
 
@@ -29,9 +30,14 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
         List<GroupResponse> userGroups = await
             QueryGroupMembershipViewsByUserId(userId)
+                .AsNoTracking()
                 .OrderBy(gm => gm.AcceptedOn)
                 .ApplyPaging(pagingParameters)
-                .Select(gm => new GroupResponse(gm))
+                .Select(gm => new GroupResponse
+                {
+                    GroupId = gm.GroupId,
+                    GroupName = gm.GroupName,
+                })
                 .ToListAsync(cancellationToken);
 
         return userGroups;
@@ -41,6 +47,7 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
         int totalCount = await
             QueryGroupMembershipViewsByUserId(userId)
+                .AsNoTracking()
                 .CountAsync(cancellationToken);
 
         return totalCount;

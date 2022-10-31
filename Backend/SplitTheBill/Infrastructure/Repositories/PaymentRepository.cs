@@ -20,7 +20,13 @@ public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
             await context.Payments
                          .AsNoTracking()
                          .Where(p => p.Id == paymentId)
-                         .Select(p => new PaymentResponse(p))
+                         .Select(p => new PaymentResponse
+                         {
+                             Amount = p.Amount,
+                             Currency = p.Currency.ToString(),
+                             Date = p.DateOfPayment,
+                             Id = p.Id,
+                         })
                          .FirstOrDefaultAsync(cancellationToken);
 
         return paymentResponse;
@@ -33,7 +39,13 @@ public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
                          .AsNoTracking()
                          .OrderBy(p => p.DateOfPayment.Date)
                          .ApplyPaging(parameters)
-                         .Select(p => new PaymentResponse(p))
+                         .Select(p => new PaymentResponse
+                         {
+                             Amount = p.Amount,
+                             Currency = p.Currency.ToString(),
+                             Date = p.DateOfPayment,
+                             Id = p.Id,
+                         })
                          .ToListAsync(cancellationToken);
 
         return paymentResponses;

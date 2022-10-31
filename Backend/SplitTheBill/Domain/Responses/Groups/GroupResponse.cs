@@ -7,6 +7,11 @@ public sealed class GroupResponse
     public Guid GroupId { get; set; }
     public string GroupName { get; set; }
 
+    public GroupResponse()
+    {
+
+    }
+
     public GroupResponse(GroupMembershipView view)
     {
         GroupId = view.GroupId;

@@ -3,7 +3,6 @@ using Application.Repositories;
 using Domain.Common.Results;
 using Domain.Responses;
 using Domain.Results;
-using MediatR;
 using Moq;
 
 namespace CrudTests.Groups;
@@ -62,7 +61,7 @@ public class CreateGroupTests
     }
 
     [Fact]
-    public async Task ValidData_ShouldReturnNoContentResult()
+    public async Task ValidData_ShouldReturnSuccessResult()
     {
         // Arrange:
         CreateGroupCommand command = new()
@@ -80,6 +79,6 @@ public class CreateGroupTests
 
         // Assert:
         Assert.True(isValid);
-        Assert.IsType<NoContentResult<CreateResponse>>(result);
+        Assert.IsType<SuccessResult<CreateResponse>>(result);
     }
 }

@@ -32,6 +32,6 @@ public class GroupController : BaseController
     {
         Guid userId = GetId();
         query.SetUserId(userId);
-        return Ok(await sender.Send(query));
+        return FromListResult(await sender.Send(query));
     }
 }
