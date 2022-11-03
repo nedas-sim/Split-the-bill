@@ -37,6 +37,9 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
                 {
                     GroupId = gm.GroupId,
                     GroupName = gm.GroupName,
+                    MemberCount = context.GroupMembershipViews
+                                         .Where(gmv => gmv.GroupId == gm.GroupId)
+                                         .Count(),
                 })
                 .ToListAsync(cancellationToken);
 
