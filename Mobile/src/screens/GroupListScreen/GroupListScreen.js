@@ -1,22 +1,24 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { SafeAreaView, BackHandler, Alert, ActivityIndicator, View } from 'react-native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import groupService from '../../services/groupService';
 import GroupList from '../../features/groupList/GroupList/GroupList';
 import styles from './styles';
 import PageNavigationButton from '../../components/PageNavigationButton/PageNavigationButton';
 import backHandlerHelper from '../../common/backHandlerHelper';
 import ScreenNames from '../../common/screenNames';
-import { useFocusEffect } from '@react-navigation/native';
 
-const GroupListScreen = ({ navigation }) => {
+function GroupListScreen({ navigation }) {
   const [groups, setGroups] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageButtonActive, setPageButtonActive] = useState({ previous: false, next: false });
 
-  const firstRender = useRef(true);
+  // const firstRender = useRef(true);
 
-  useFocusEffect(
+  const isFocused = useIsFocused();
+
+  /* useFocusEffect(
     useCallback(() => {
       const fetchAsync = async () => {
         if (firstRender.current) {
@@ -34,20 +36,26 @@ const GroupListScreen = ({ navigation }) => {
         firstRender.current = true;
       };
     }, [])
-  );
+  ); */
 
   useEffect(() => {
     const getGroups = async () => {
-      if (firstRender.current === false) {
-        if (firstRender.current) setLoading(true);
+      // if (firstRender.current === false) {
+        // if (firstRender.current) setLoading(true);
         await retrieveGroups();
-        if (firstRender.current) setLoading(false);
-      }
+        // if (firstRender.current) setLoading(false);
+      // }
     };
 
-    getGroups();
-    firstRender.current = false;
-  }, [page]);
+
+    if (isFocused) {
+      getGroups();
+      backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
+    }
+    else {
+      backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
+    }
+  }, [isFocused, page]);
 
   const retrieveGroups = async () => {
     const response = await groupService.getGroups(page);
@@ -82,7 +90,7 @@ const GroupListScreen = ({ navigation }) => {
           )}
           <View style={styles.newGroupBtnContainer}>
             <PageNavigationButton
-              enabled={true}
+              enabled
               text="+"
               onClick={() => navigation.navigate(ScreenNames.createGroupScreen)}
             />
@@ -91,6 +99,6 @@ const GroupListScreen = ({ navigation }) => {
       )}
     </SafeAreaView>
   );
-};
+}
 
 export default GroupListScreen;

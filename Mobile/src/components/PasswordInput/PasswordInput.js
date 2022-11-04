@@ -3,7 +3,7 @@ import CoreInput from '../CoreInput/CoreInput';
 
 const defaultPlaceholder = 'Password';
 
-const PasswordInput = ({ value, onChange, placeholder }) => {
+function PasswordInput({ value, onChange, placeholder }) {
   return (
     <CoreInput
       placeholder={placeholder || defaultPlaceholder}
@@ -12,6 +12,6 @@ const PasswordInput = ({ value, onChange, placeholder }) => {
       onChangeText={onChange}
     />
   );
-};
+}
 
 export default PasswordInput;

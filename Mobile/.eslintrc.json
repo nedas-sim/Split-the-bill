@@ -8,8 +8,7 @@
         "plugin:react/recommended",
         "airbnb",
         "airbnb/hooks",
-        "prettier",
-        "prettier/react"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -30,6 +29,6 @@
         "no-use-before-define": ["error", { "variables": false }],
 
         // ignore errors for the react-navigation package
-        "react/prop-types": ["error", {"ignore": ["navigation", "navigation.navigate"]}]
+        "react/prop-types": [0]
     }
 }

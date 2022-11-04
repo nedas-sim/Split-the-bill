@@ -1,7 +1,7 @@
 import React from 'react';
 import CoreInput from '../CoreInput/CoreInput';
 
-const EmailInput = ({ value, onChange }) => {
+function EmailInput({ value, onChange }) {
   return (
     <CoreInput
       placeholder="Email"
@@ -10,6 +10,6 @@ const EmailInput = ({ value, onChange }) => {
       onChangeText={onChange}
     />
   );
-};
+}
 
 export default EmailInput;

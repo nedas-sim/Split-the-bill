@@ -1,5 +1,5 @@
 const apiPaths = {
-  BASE_URL: 'http://192.168.1.105:5015/api',
+  BASE_URL: 'http://192.168.1.225:5015/api',
   REGISTER: '/auth/register',
   LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
