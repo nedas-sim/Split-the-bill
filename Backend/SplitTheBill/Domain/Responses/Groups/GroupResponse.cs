@@ -6,6 +6,7 @@ public sealed class GroupResponse
 {
     public Guid GroupId { get; set; }
     public string GroupName { get; set; }
+    public int MemberCount { get; set; }
 
     public GroupResponse()
     {
