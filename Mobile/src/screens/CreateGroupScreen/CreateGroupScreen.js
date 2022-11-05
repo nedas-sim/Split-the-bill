@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
-import { View, Button, SafeAreaView, Alert } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Button, SafeAreaView, Alert, BackHandler } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
 import CoreInput from '../../components/CoreInput/CoreInput';
 import groupService from '../../services/groupService';
 import ScreenNames from '../../common/screenNames';
+import backHandlerHelper from '../../common/backHandlerHelper';
 
 const CreateGroupScreen = ({ navigation }) => {
   const [groupInfo, setGroupInfo] = useState({
     name: '',
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      // setup event listener on mount
+      backHandlerHelper.setBackScreen(
+        BackHandler,
+        navigation,
+        ScreenNames.groupList,
+        'backToGroupList'
+      );
+      return () => {
+        // remove event listener on unmount
+        backHandlerHelper.removeBackHandler(BackHandler, 'backToGroupList');
+      };
+    }, [])
+  );
 
   const handleCreateGroup = async () => {
     try {

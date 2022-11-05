@@ -1,4 +1,4 @@
-let cachedAction = {};
+const cachedAction = {};
 
 const setExitListener = (BackHandler, Alert, listenerName) => {
   const action = () => {
@@ -21,7 +21,7 @@ const setExitListener = (BackHandler, Alert, listenerName) => {
     return true;
   };
 
-  //cachedAction = action;
+  // cachedAction = action;
   cachedAction[listenerName] = action;
 
   BackHandler.addEventListener(listenerName, cachedAction[listenerName]);
