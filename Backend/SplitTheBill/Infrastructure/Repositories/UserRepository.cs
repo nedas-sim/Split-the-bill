@@ -104,7 +104,8 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         IQueryable<User> queryByFilter =
             context.Users
                    .Where(u => u.Id != filterParams.CallingUserId)
-                   .Where(u => u.Username.Contains(filterParams.Username));
+                   .Where(u => u.Username.Contains(filterParams.Search) ||
+                               u.Email == filterParams.Search);
 
         return queryByFilter;
     }
