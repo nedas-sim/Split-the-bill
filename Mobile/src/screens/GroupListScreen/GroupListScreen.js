@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, BackHandler, Alert, ActivityIndicator, View } from 'react-native';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import groupService from '../../services/groupService';
 import GroupList from '../../features/groupList/GroupList/GroupList';
 import styles from './styles';
@@ -8,51 +8,25 @@ import PageNavigationButton from '../../components/PageNavigationButton/PageNavi
 import backHandlerHelper from '../../common/backHandlerHelper';
 import ScreenNames from '../../common/screenNames';
 
-function GroupListScreen({ navigation }) {
+const GroupListScreen = ({ navigation }) => {
   const [groups, setGroups] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageButtonActive, setPageButtonActive] = useState({ previous: false, next: false });
 
-  // const firstRender = useRef(true);
-
   const isFocused = useIsFocused();
-
-  /* useFocusEffect(
-    useCallback(() => {
-      const fetchAsync = async () => {
-        if (firstRender.current) {
-          firstRender.current = false;
-          setPage(1);
-        }
-      };
-      fetchAsync();
-
-      // setup event listener on mount
-      backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
-      return () => {
-        // remove event listener on unmount
-        backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
-        firstRender.current = true;
-      };
-    }, [])
-  ); */
 
   useEffect(() => {
     const getGroups = async () => {
-      // if (firstRender.current === false) {
-        // if (firstRender.current) setLoading(true);
-        await retrieveGroups();
-        // if (firstRender.current) setLoading(false);
-      // }
+      setLoading(true);
+      await retrieveGroups();
+      setLoading(false);
     };
-
 
     if (isFocused) {
       getGroups();
       backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
-    }
-    else {
+    } else {
       backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
     }
   }, [isFocused, page]);
@@ -99,6 +73,6 @@ function GroupListScreen({ navigation }) {
       )}
     </SafeAreaView>
   );
-}
+};
 
 export default GroupListScreen;

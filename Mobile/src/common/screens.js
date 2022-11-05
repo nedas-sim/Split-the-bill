@@ -6,7 +6,7 @@ import LogoutButton from '../features/authentication/LogoutButton/LogoutButton';
 import CreateGroupScreen from '../screens/CreateGroupScreen/CreateGroupScreen';
 import GroupDetailsScreen from '../screens/GroupDetailsScreen/GroupDetailsScreen';
 
-export const Screens = {
+const Screens = {
   mainScreen: {
     name: ScreenNames.mainScreen,
     component: MainScreen,
@@ -42,3 +42,5 @@ export const Screens = {
     }),
   },
 };
+
+export default Screens;

@@ -29,6 +29,17 @@
         "no-use-before-define": ["error", { "variables": false }],
 
         // ignore errors for the react-navigation package
-        "react/prop-types": [0]
+        "react/prop-types": [0],
+        "react/function-component-definition": [
+            2,
+            {
+                "namedComponents": "arrow-function",
+                "unnamedComponents": "arrow-function"
+            }
+        ],
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "no-empty": "off"
     }
 }

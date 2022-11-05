@@ -1,4 +1,3 @@
-using Domain.Common;
 using Infrastructure;
 using WebApi.Extensions;
 using WebApi.Middlewares;
