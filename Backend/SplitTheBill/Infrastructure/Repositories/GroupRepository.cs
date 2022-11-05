@@ -15,17 +15,6 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
     }
 
-    public async Task<bool> GroupNameExists(string name, CancellationToken cancellationToken = default)
-    {
-        bool groupNameExists =
-            await context.Groups
-                         .AsNoTracking()
-                         .Where(g => g.Name == name)
-                         .AnyAsync(cancellationToken);
-
-        return groupNameExists;
-    }
-
     public async Task<List<GroupResponse>> GetUsersGroups(PagingParameters pagingParameters, Guid userId, CancellationToken cancellationToken = default)
     {
         List<GroupResponse> userGroups = await

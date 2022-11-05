@@ -39,28 +39,6 @@ public class CreateGroupTests
     }
 
     [Fact]
-    public async Task GroupNameAlreadyExists_ShouldReturnValidationErrorResult()
-    {
-        // Arrange:
-        CreateGroupCommand command = new()
-        {
-            Name = "existing name",
-            UserId = Guid.NewGuid(),
-        };
-
-        mock.Setup(x => x.GroupNameExists(command.Name, default))
-            .ReturnsAsync(true);
-
-        // Act:
-        BaseResult<CreateResponse> result = await handler.Handle(command, default);
-        bool isValid = command.IsValid(out _);
-
-        // Assert:
-        Assert.True(isValid);
-        Assert.IsType<ValidationErrorResult<CreateResponse>>(result);
-    }
-
-    [Fact]
     public async Task ValidData_ShouldReturnSuccessResult()
     {
         // Arrange:
@@ -69,9 +47,6 @@ public class CreateGroupTests
             Name = "valid name",
             UserId = Guid.NewGuid(),
         };
-
-        mock.Setup(x => x.GroupNameExists(command.Name, default))
-            .ReturnsAsync(false);
 
         // Act:
         BaseResult<CreateResponse> result = await handler.Handle(command, default);
