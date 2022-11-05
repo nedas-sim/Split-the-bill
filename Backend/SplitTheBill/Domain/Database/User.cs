@@ -10,4 +10,6 @@ public sealed class User : BaseEntity
 
     public ICollection<UserPayment> UserPayments { get; set; }
     public ICollection<UserGroup> UserGroups { get; set; }
+    //public ICollection<UserFriendship> SentFriendships { get; set; }
+    //public ICollection<UserFriendship> ReceivedFriendships { get; set; }
 }

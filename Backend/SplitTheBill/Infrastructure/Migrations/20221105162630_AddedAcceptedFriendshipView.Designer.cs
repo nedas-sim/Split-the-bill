@@ -4,6 +4,7 @@ using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221105162630_AddedAcceptedFriendshipView")]
+    partial class AddedAcceptedFriendshipView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,36 +146,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PaymentId");
 
                     b.ToTable("UserPayments");
-                });
-
-            modelBuilder.Entity("Domain.Views.AcceptedFriendshipView", b =>
-                {
-                    b.Property<DateTime>("AcceptedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReceiverEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReceiverUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RequestReceiverId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RequestSenderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SenderEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToView("AcceptedFriendshipView");
                 });
 
             modelBuilder.Entity("Domain.Views.GroupMembershipView", b =>
