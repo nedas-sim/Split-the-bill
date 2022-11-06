@@ -20,13 +20,11 @@ public static class FriendshipConfiguration
         builder.HasKey(x => new { x.RequestSenderId, x.RequestReceiverId });
 
         builder.HasOne(uf => uf.RequestSender)
-               //.WithMany(u => u.SentFriendships)
                .WithMany()
                .HasForeignKey(uf => uf.RequestSenderId)
                .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(uf => uf.RequestReceiver)
-               //.WithMany(u => u.ReceivedFriendships)
                .WithMany()
                .HasForeignKey(uf => uf.RequestReceiverId)
                .OnDelete(DeleteBehavior.NoAction);
