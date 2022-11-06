@@ -16,15 +16,19 @@ public sealed class DataContext : DbContext
 	public DbSet<UserPayment> UserPayments { get; set; }
 	public DbSet<Group> Groups { get; set; }
 	public DbSet<UserGroup> UserGroups { get; set; }
+	public DbSet<UserFriendship> UserFriendships { get; set; }
     #endregion
 
     #region Views
 	public DbSet<GroupMembershipView> GroupMembershipViews { get; set; }
-    #endregion
+	public DbSet<AcceptedFriendshipView> AcceptedFriendshipViews { get; set; }
+	public DbSet<PendingFriendshipView> PendingFriendshipViews { get; set; }
+	#endregion
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		PaymentConfiguration.Configure(modelBuilder);
 		GroupConfiguration.Configure(modelBuilder);
+		FriendshipConfiguration.Configure(modelBuilder);
 	}
 }

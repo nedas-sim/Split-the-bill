@@ -22,6 +22,37 @@ public class TestController : BaseController
     }
 
     [HttpPost]
+    [Route("friendship")]
+    public async Task<IActionResult> AddFriendships()
+    {
+        var users = await context.Users.ToListAsync();
+        var firstUser = users[0];
+
+        for (int index = 1; index < users.Count; index++)
+        {
+            var user = users[index];
+
+            var friendship = new UserFriendship
+            {
+                RequestSenderId = firstUser.Id,
+                RequestReceiverId = user.Id,
+                InvitedOn = DateTime.UtcNow,
+            };
+
+            if (index % 2 == 0)
+            {
+                friendship.AcceptedOn = friendship.InvitedOn.AddHours(1);
+            }
+
+            context.UserFriendships.Add(friendship);
+        }
+
+        await context.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpPost]
     [Route("payment")]
     public async Task<IActionResult> AddRandomPayment()
     {
