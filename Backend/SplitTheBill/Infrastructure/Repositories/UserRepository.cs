@@ -1,7 +1,9 @@
-﻿using Application.Repositories;
+﻿using Application.Friends.SendFriendRequest;
+using Application.Repositories;
 using Application.Users.GetUserList;
 using Domain.Common;
 using Domain.Database;
+using Domain.Enums;
 using Domain.Responses.Users;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,38 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     public UserRepository(DataContext context, IOptions<ConnectionStrings> options) 
         : base(context, options.Value.DefaultConnection)
     {
+    }
+
+    public async Task<FriendshipStatus> GetFriendshipStatus(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
+    {
+        UserFriendship? friendship = 
+            await GetUserFriendshipByUserIds(request.SendingUserId, 
+                                             request.ReceivingUserId, 
+                                             cancellationToken);
+
+        if (friendship is null)
+        {
+            return FriendshipStatus.NotInvited;
+        }
+
+        return friendship.AcceptedOn switch
+        {
+            null => FriendshipStatus.PendingAcception,
+            _ => FriendshipStatus.Friends,
+        };
+    }
+
+    public async Task PostFriendRequest(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
+    {
+        UserFriendship friendship = new()
+        {
+            RequestSenderId = request.SendingUserId,
+            RequestReceiverId = request.ReceivingUserId,
+            InvitedOn = DateTime.UtcNow,
+        };
+
+        context.UserFriendships.Add(friendship);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<UserResponse?> GetUserResponse(Guid id, CancellationToken cancellationToken = default)
@@ -139,7 +173,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     }
 
     #region Private Methods
-    private IQueryable<User> QueryByEmail(string email)
+    internal IQueryable<User> QueryByEmail(string email)
     {
         IQueryable<User> queryByEmail = 
             context.Users
@@ -148,7 +182,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         return queryByEmail;
     }
 
-    private IQueryable<User> QueryByFilter(GetUserListQuery filterParams)
+    internal IQueryable<User> QueryByFilter(GetUserListQuery filterParams)
     {
         IQueryable<User> queryByFilter =
             context.Users
@@ -157,6 +191,17 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                                u.Email == filterParams.Search);
 
         return queryByFilter;
+    }
+
+    internal async Task<UserFriendship?> GetUserFriendshipByUserIds(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
+    {
+        UserFriendship? friendship = await
+            context.UserFriendships
+                   .Where(uf => uf.RequestSenderId == senderId)
+                   .Where(uf => uf.RequestReceiverId == receiverId)
+                   .FirstOrDefaultAsync(cancellationToken);
+
+        return friendship;
     }
     #endregion
 }
