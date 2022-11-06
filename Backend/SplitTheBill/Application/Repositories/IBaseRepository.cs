@@ -4,7 +4,6 @@ namespace Application.Repositories;
 
 public interface IBaseRepository<TEntity> 
     where TEntity : BaseEntity
-
 {
     public Task<TEntity?> GetById(Guid id, CancellationToken cancellationToken = default);
     public Task<TEntity> Create(TEntity entity, CancellationToken cancellationToken = default);

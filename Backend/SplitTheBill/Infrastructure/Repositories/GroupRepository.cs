@@ -6,12 +6,14 @@ using Domain.Views;
 using Infrastructure.Database;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repositories;
 
 public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
 {
-    public GroupRepository(DataContext context) : base(context)
+    public GroupRepository(DataContext context, IOptions<ConnectionStrings> options) 
+        : base(context, options.Value.DefaultConnection)
     {
     }
 
