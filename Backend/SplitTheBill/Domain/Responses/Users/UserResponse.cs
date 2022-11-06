@@ -6,6 +6,7 @@ public sealed class UserResponse
 {
     public Guid Id { get; set; }
     public string Username { get; set; }
+    public bool IsFriend { get; set; }
 
     public UserResponse()
     {

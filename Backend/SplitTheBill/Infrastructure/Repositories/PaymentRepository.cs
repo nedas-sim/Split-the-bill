@@ -5,12 +5,14 @@ using Domain.Responses.Payments;
 using Infrastructure.Database;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repositories;
 
 public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
 {
-    public PaymentRepository(DataContext context) : base(context)
+    public PaymentRepository(DataContext context, IOptions<ConnectionStrings> options) 
+        : base(context, options.Value.DefaultConnection)
     {
     }
 
