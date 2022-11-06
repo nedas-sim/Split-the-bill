@@ -5,7 +5,7 @@ using Domain.Responses.Users;
 using Domain.Results;
 using Moq;
 
-namespace CrudTests.Users;
+namespace UnitTests.Users;
 
 public class GetUserByIdTests
 {

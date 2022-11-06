@@ -5,7 +5,7 @@ using Domain.Responses;
 using Domain.Results;
 using Moq;
 
-namespace CrudTests.Groups;
+namespace UnitTests.Groups;
 
 public class CreateGroupTests
 {

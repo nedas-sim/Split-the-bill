@@ -1,6 +1,6 @@
 ﻿using Domain.Results;
 
-namespace CrudTests.Common;
+namespace UnitTests.Common;
 
 public class ListResultTests
 {
