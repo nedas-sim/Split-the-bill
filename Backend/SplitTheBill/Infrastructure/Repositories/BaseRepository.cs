@@ -1,7 +1,6 @@
 ﻿using Application.Repositories;
 using Dapper;
 using Domain.Common.Identity;
-using Domain.Responses.Users;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
