@@ -1,10 +1,14 @@
-﻿using Application.Friends.SendFriendRequest;
+﻿using Application.Friends.GetRequestList;
+using Application.Friends.SendFriendRequest;
 using Application.Repositories;
 using Application.Users.GetUserList;
 using Domain.Common;
 using Domain.Database;
+using Domain.Enums;
 using Domain.Responses.Users;
+using Domain.Views;
 using Infrastructure.Database;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -15,6 +19,38 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     public UserRepository(DataContext context, IOptions<ConnectionStrings> options) 
         : base(context, options.Value.DefaultConnection)
     {
+    }
+
+    public async Task<int> GetPendingFriendshipCount(GetRequestListQuery filterParams, CancellationToken cancellationToken = default)
+    {
+        int totalCount =
+            await QueryByFilter(filterParams)
+                .AsNoTracking()
+                .CountAsync(cancellationToken);
+
+        return totalCount;
+    }
+
+    public async Task<List<UserResponse>> GetPendingFriendshipList
+        (PagingParameters pagingParameters, 
+         GetRequestListQuery filterParams, 
+         CancellationToken cancellationToken = default)
+    {
+        List<UserResponse> userResponses = await
+            QueryByFilter(filterParams)
+                .AsNoTracking()
+                .OrderBy(pf => pf.SenderUsername)
+                .ApplyPaging(pagingParameters)
+                .Select(pf => new UserResponse
+                {
+                    Id = pf.RequestSenderId,
+                    Username = pf.SenderUsername,
+                    UserSentTheRequest = true,
+                    InvitedOn = DateTime.UtcNow,
+                })
+                .ToListAsync(cancellationToken);
+
+        return userResponses;
     }
 
     public async Task<UserFriendship?> GetFriendship(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
@@ -179,6 +215,17 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                    .Where(u => u.Id != filterParams.CallingUserId)
                    .Where(u => u.Username.Contains(filterParams.Search) ||
                                u.Email == filterParams.Search);
+
+        return queryByFilter;
+    }
+
+    internal IQueryable<PendingFriendshipView> QueryByFilter(GetRequestListQuery filterParams)
+    {
+        IQueryable<PendingFriendshipView> queryByFilter =
+            context.PendingFriendshipViews
+                   .Where(pf => pf.RequestReceiverId == filterParams.CallingUserId)
+                   .Where(pf => pf.SenderUsername.Contains(filterParams.Search) ||
+                                pf.SenderEmail == filterParams.Search);
 
         return queryByFilter;
     }

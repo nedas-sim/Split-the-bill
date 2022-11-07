@@ -1,5 +1,9 @@
-﻿using Application.Friends.SendFriendRequest;
+﻿using Application.Friends.GetRequestList;
+using Application.Friends.SendFriendRequest;
+using Domain.Responses.Users;
+using Domain.Results;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -12,11 +16,21 @@ public class FriendController : BaseController
     {
     }
 
+    [Authorize]
     [HttpPost]
-    public async Task<IActionResult> SendFriendRequest(SendFriendRequestCommand command)
+    public async Task<IActionResult> SendFriendRequest([FromBody] SendFriendRequestCommand command)
     {
         Guid senderId = GetId();
         command.SetCallingUserId(senderId);
         return ToNoContent(await sender.Send(command));
+    }
+
+    [Authorize]
+    [HttpGet("request")]
+    public async Task<ActionResult<ListResult<UserResponse>>> GetFriendRequests([FromQuery] GetRequestListQuery query)
+    {
+        Guid receiverId = GetId();
+        query.SetCallingUserId(receiverId);
+        return FromListResult(await sender.Send(query));
     }
 }
