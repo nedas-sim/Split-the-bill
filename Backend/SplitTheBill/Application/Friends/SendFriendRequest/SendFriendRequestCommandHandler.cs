@@ -1,5 +1,6 @@
 ﻿using Application.Repositories;
 using Domain.Common.Results;
+using Domain.Database;
 using Domain.Enums;
 using Domain.Results;
 using MediatR;
@@ -18,21 +19,31 @@ public sealed class SendFriendRequestCommandHandler
 
     public async Task<BaseResult<Unit>> Handle(SendFriendRequestCommand request, CancellationToken cancellationToken)
     {
-        FriendshipStatus status = await userRepository.GetFriendshipStatus(request, cancellationToken);
+        UserFriendship? friendship = await userRepository.GetFriendship(request, cancellationToken);
 
-        switch (status)
+        if (friendship is not null)
         {
-            case FriendshipStatus.Friends:
-                return new ValidationErrorResult<Unit>
-                {
-                    Message = "You are already friends",
-                };
+            FriendshipStatus status = FriendshipStatusHelper.GetStatus(friendship, request.ReceivingUserId);
+            switch (status)
+            {
+                case FriendshipStatus.Friends:
+                    return new ValidationErrorResult<Unit>
+                    {
+                        Message = "You are already friends",
+                    };
 
-            case FriendshipStatus.PendingAcception:
-                return new ValidationErrorResult<Unit>
-                {
-                    Message = "Friend request is already sent",
-                };
+                case FriendshipStatus.WaitingForAcception:
+                    return new ValidationErrorResult<Unit>
+                    {
+                        Message = "Friend request is already sent",
+                    };
+
+                case FriendshipStatus.ReceivedInvitation:
+                    return new ValidationErrorResult<Unit>
+                    {
+                        Message = "You have already received an invitation from this user",
+                    };
+            }
         }
 
         await userRepository.PostFriendRequest(request, cancellationToken);

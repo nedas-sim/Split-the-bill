@@ -3,7 +3,6 @@ using Application.Repositories;
 using Application.Users.GetUserList;
 using Domain.Common;
 using Domain.Database;
-using Domain.Enums;
 using Domain.Responses.Users;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -18,23 +17,15 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     {
     }
 
-    public async Task<FriendshipStatus> GetFriendshipStatus(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
+    public async Task<UserFriendship?> GetFriendship(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
     {
-        UserFriendship? friendship = 
-            await GetUserFriendshipByUserIds(request.SendingUserId, 
-                                             request.ReceivingUserId, 
-                                             cancellationToken);
+        UserFriendship? friendship = await
+            context.UserFriendships
+                   .Where(uf => uf.RequestSenderId == request.SendingUserId || uf.RequestReceiverId == request.SendingUserId)
+                   .Where(uf => uf.RequestSenderId == request.ReceivingUserId || uf.RequestReceiverId == request.ReceivingUserId)
+                   .FirstOrDefaultAsync(cancellationToken);
 
-        if (friendship is null)
-        {
-            return FriendshipStatus.NotInvited;
-        }
-
-        return friendship.AcceptedOn switch
-        {
-            null => FriendshipStatus.PendingAcception,
-            _ => FriendshipStatus.Friends,
-        };
+        return friendship;
     }
 
     public async Task PostFriendRequest(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
@@ -60,7 +51,6 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                          {
                              Id = u.Id,
                              Username = u.Username,
-                             IsFriend = false, // have no user id to determine friendship, so set it to false
                          })
                          .FirstOrDefaultAsync(cancellationToken);
 
@@ -145,17 +135,17 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         #endregion
 
         string sql = $@"
-      SELECT [u].[Id], [u].[Username],
-	  
-	  (
-	  SELECT 1 
-	  FROM [AcceptedFriendshipView] AS a
-	  WHERE 1 = 1
-		AND ([a].[RequestSenderId] = [u].[Id] OR [a].[RequestReceiverId] = [u].[Id])
-		AND ([a].[RequestSenderId] = @callingUserId OR [a].[RequestReceiverId] = @callingUserId)
-	  ) AS IsFriend
+      SELECT [u].[Id], [u].[Username], [uf].[InvitedOn], [uf].[AcceptedOn], 
+      CASE
+        WHEN [u].[Id] = [uf].[RequestSenderId] THEN 1
+        ELSE 0
+      END AS UserSentTheRequest
 	  
       FROM [Users] AS [u]
+
+	  LEFT JOIN [UserFriendships] AS [uf]
+		ON ([uf].[RequestReceiverId] = @callingUserId OR [uf].[RequestSenderId] = @callingUserId)
+       AND ([uf].[RequestReceiverId] = [u].[Id] OR [uf].[RequestSenderId] = [u].[Id])
 
       WHERE ([u].[Id] <> @callingUserId) AND 
             (((@search LIKE N'') OR (CHARINDEX(@search, [u].[Username]) > 0)) OR ([u].[Email] = @search))
@@ -191,17 +181,6 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                                u.Email == filterParams.Search);
 
         return queryByFilter;
-    }
-
-    internal async Task<UserFriendship?> GetUserFriendshipByUserIds(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
-    {
-        UserFriendship? friendship = await
-            context.UserFriendships
-                   .Where(uf => uf.RequestSenderId == senderId)
-                   .Where(uf => uf.RequestReceiverId == receiverId)
-                   .FirstOrDefaultAsync(cancellationToken);
-
-        return friendship;
     }
     #endregion
 }
