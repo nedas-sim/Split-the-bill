@@ -1,10 +1,10 @@
 ﻿using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
+using Application.Friends.UpdateFriendRequest;
 using Application.Repositories;
 using Application.Users.GetUserList;
 using Domain.Common;
 using Domain.Database;
-using Domain.Enums;
 using Domain.Responses.Users;
 using Domain.Views;
 using Infrastructure.Database;
@@ -19,6 +19,18 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     public UserRepository(DataContext context, IOptions<ConnectionStrings> options) 
         : base(context, options.Value.DefaultConnection)
     {
+    }
+
+    public async Task AcceptFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default)
+    {
+        userFriendship.AcceptedOn = DateTime.UtcNow;
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default)
+    {
+        context.UserFriendships.Remove(userFriendship);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<int> GetPendingFriendshipCount(GetRequestListQuery filterParams, CancellationToken cancellationToken = default)
@@ -53,15 +65,14 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         return userResponses;
     }
 
+    public async Task<UserFriendship?> GetFriendship(UpdateFriendRequestCommand request, CancellationToken cancellationToken = default)
+    {
+        return await GetFriendship(request.SenderId, request.ReceiverId, cancellationToken);
+    }
+
     public async Task<UserFriendship?> GetFriendship(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
     {
-        UserFriendship? friendship = await
-            context.UserFriendships
-                   .Where(uf => uf.RequestSenderId == request.SendingUserId || uf.RequestReceiverId == request.SendingUserId)
-                   .Where(uf => uf.RequestSenderId == request.ReceivingUserId || uf.RequestReceiverId == request.ReceivingUserId)
-                   .FirstOrDefaultAsync(cancellationToken);
-
-        return friendship;
+        return await GetFriendship(request.SendingUserId, request.ReceivingUserId, cancellationToken);
     }
 
     public async Task PostFriendRequest(SendFriendRequestCommand request, CancellationToken cancellationToken = default)
@@ -228,6 +239,17 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                                 pf.SenderEmail == filterParams.Search);
 
         return queryByFilter;
+    }
+
+    internal async Task<UserFriendship?> GetFriendship(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
+    {
+        UserFriendship? friendship = await
+            context.UserFriendships
+                   .Where(uf => uf.RequestSenderId == senderId || uf.RequestReceiverId == senderId)
+                   .Where(uf => uf.RequestSenderId == receiverId || uf.RequestReceiverId == receiverId)
+                   .FirstOrDefaultAsync(cancellationToken);
+
+        return friendship;
     }
     #endregion
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
+using Application.Friends.UpdateFriendRequest;
 using Application.Users.GetUserList;
 using Domain.Common;
 using Domain.Database;
@@ -15,8 +16,11 @@ public interface IUserRepository : IBaseRepository<User>
     public Task<bool> UsernameExists(string username, CancellationToken cancellationToken = default);
     public Task<int> GetUserCount(GetUserListQuery filterParams, CancellationToken cancellationToken = default);
     public Task<UserFriendship?> GetFriendship(SendFriendRequestCommand request, CancellationToken cancellationToken = default);
+    public Task<UserFriendship?> GetFriendship(UpdateFriendRequestCommand request, CancellationToken cancellationToken = default);
     public Task PostFriendRequest(SendFriendRequestCommand request, CancellationToken cancellationToken = default);
     public Task<int> GetPendingFriendshipCount(GetRequestListQuery filterParams, CancellationToken cancellationToken = default);
+    public Task AcceptFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default);
+    public Task DeleteFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default);
     public Task<List<UserResponse>> GetUserList(PagingParameters pagingParameters,
                                                 GetUserListQuery filterParams,
                                                 CancellationToken cancellationToken = default);

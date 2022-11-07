@@ -1,5 +1,6 @@
 ﻿using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
+using Application.Friends.UpdateFriendRequest;
 using Domain.Responses.Users;
 using Domain.Results;
 using MediatR;
@@ -32,5 +33,14 @@ public class FriendController : BaseController
         Guid receiverId = GetId();
         query.SetCallingUserId(receiverId);
         return FromListResult(await sender.Send(query));
+    }
+
+    [Authorize]
+    [HttpPut("request")]
+    public async Task<IActionResult> UpdateFriendRequest([FromBody] UpdateFriendRequestCommand command)
+    {
+        Guid receiverId = GetId();
+        command.SetReceiverId(receiverId);
+        return ToNoContent(await sender.Send(command));
     }
 }
