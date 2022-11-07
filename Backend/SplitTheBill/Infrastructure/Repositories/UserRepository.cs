@@ -45,7 +45,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
                 {
                     Id = pf.RequestSenderId,
                     Username = pf.SenderUsername,
-                    UserSentTheRequest = true,
+                    UserSentTheRequest = true, // default values for API response to work
                     InvitedOn = DateTime.UtcNow,
                 })
                 .ToListAsync(cancellationToken);
