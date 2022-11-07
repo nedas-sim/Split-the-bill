@@ -4,8 +4,6 @@ using Domain.Common.Results;
 using Domain.Database;
 using Domain.Results;
 using MediatR;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace Application.Friends.UpdateFriendRequest;
 
