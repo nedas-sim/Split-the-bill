@@ -6,7 +6,7 @@ import ScreenNames from '../../../common/screenNames';
 const LogoutButton = ({ navigation }) => {
   const handleLogoutButtonPress = async () => {
     await authService.logout();
-    navigation.navigate(ScreenNames.mainScreen);
+    navigation.navigate(ScreenNames.loginScreen);
   };
 
   return <Button title="Logout" onPress={handleLogoutButtonPress} />;

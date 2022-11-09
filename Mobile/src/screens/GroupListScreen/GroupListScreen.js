@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, BackHandler, Alert, ActivityIndicator, View } from 'react-native';
+import { SafeAreaView, ActivityIndicator, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import groupService from '../../services/groupService';
 import GroupList from '../../features/groupList/GroupList/GroupList';
 import styles from './styles';
 import PageNavigationButton from '../../components/PageNavigationButton/PageNavigationButton';
-import backHandlerHelper from '../../common/backHandlerHelper';
 import ScreenNames from '../../common/screenNames';
 
 const GroupListScreen = ({ navigation }) => {
@@ -25,9 +24,6 @@ const GroupListScreen = ({ navigation }) => {
 
     if (isFocused) {
       getGroups();
-      backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
-    } else {
-      backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
     }
   }, [isFocused, page]);
 

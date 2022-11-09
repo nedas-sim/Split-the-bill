@@ -1,4 +1,5 @@
 const ScreenNames = {
+  loginScreen: 'Login',
   mainScreen: 'Main Screen',
   registration: 'Registration',
   groupList: 'Groups',

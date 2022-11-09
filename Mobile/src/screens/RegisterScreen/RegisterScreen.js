@@ -21,7 +21,7 @@ const RegisterScreen = ({ navigation }) => {
       Alert.alert('Success', 'Registration successful!', [
         {
           text: 'Login',
-          onPress: () => navigation.navigate(ScreenNames.mainScreen),
+          onPress: () => navigation.navigate(ScreenNames.loginScreen),
         },
       ]);
     } catch (ex) {

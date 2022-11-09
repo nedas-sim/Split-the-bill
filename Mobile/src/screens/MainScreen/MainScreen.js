@@ -1,31 +1,37 @@
 import React, { useEffect } from 'react';
-import { Text, View, Button } from 'react-native';
-import LoginForm from '../../features/authentication/LoginForm/LoginForm';
-import ScreenNames from '../../common/screenNames';
-import authService from '../../services/authService';
+import { View, Button, BackHandler, Alert } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import backHandlerHelper from '../../common/backHandlerHelper';
 import styles from './styles';
+import ScreenNames from '../../common/screenNames';
 
 const MainScreen = ({ navigation }) => {
-  useEffect(() => {
-    const redirectIfLoggedIn = async () => {
-      try {
-        await authService.isLoggedIn();
-        navigation.navigate(ScreenNames.groupList);
-      } catch {}
-    };
+  const isFocused = useIsFocused();
 
-    redirectIfLoggedIn();
-  }, []);
+  const buttons = [
+    {
+      title: 'Groups',
+      redirectTo: ScreenNames.groupList,
+    },
+  ];
+
+  useEffect(() => {
+    if (isFocused) {
+      backHandlerHelper.setExitListener(BackHandler, Alert, 'exitPress');
+    } else {
+      backHandlerHelper.removeBackHandler(BackHandler, 'exitPress');
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.screen}>
-      <View style={styles.container}>
-        <Text style={styles.appName}>Split The Bill</Text>
-        <LoginForm navigation={navigation} />
-        <View style={styles.extraButtonsContainer}>
-          <Button title="Register" onPress={() => navigation.navigate(ScreenNames.registration)} />
-        </View>
-      </View>
+      {buttons.map((btn) => (
+        <Button
+          key={btn.title}
+          title={btn.title}
+          onPress={() => navigation.navigate(btn.redirectTo)}
+        />
+      ))}
     </View>
   );
 };
