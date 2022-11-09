@@ -6,6 +6,7 @@ import GroupListScreen from '../screens/GroupListScreen/GroupListScreen';
 import LogoutButton from '../features/authentication/LogoutButton/LogoutButton';
 import CreateGroupScreen from '../screens/CreateGroupScreen/CreateGroupScreen';
 import GroupDetailsScreen from '../screens/GroupDetailsScreen/GroupDetailsScreen';
+import UserListScreen from '../screens/UserListScreen/UserListScreen';
 
 const Screens = {
   loginScreen: {
@@ -46,6 +47,13 @@ const Screens = {
   groupDetailsScreen: {
     name: ScreenNames.groupDetailsScreen,
     component: GroupDetailsScreen,
+    options: ({ navigation }) => ({
+      headerRight: () => <LogoutButton navigation={navigation} />,
+    }),
+  },
+  userListScreen: {
+    name: ScreenNames.userList,
+    component: UserListScreen,
     options: ({ navigation }) => ({
       headerRight: () => <LogoutButton navigation={navigation} />,
     }),

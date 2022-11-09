@@ -5,6 +5,7 @@ const ScreenNames = {
   groupList: 'Groups',
   createGroupScreen: 'Create Group',
   groupDetailsScreen: 'Group Details',
+  userList: 'Users',
 };
 
 export default ScreenNames;

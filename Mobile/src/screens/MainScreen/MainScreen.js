@@ -13,6 +13,10 @@ const MainScreen = ({ navigation }) => {
       title: 'Groups',
       redirectTo: ScreenNames.groupList,
     },
+    {
+      title: 'Users',
+      redirectTo: ScreenNames.userList,
+    },
   ];
 
   useEffect(() => {
