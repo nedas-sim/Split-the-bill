@@ -17,15 +17,21 @@ const UserListScreen = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const getUsers = async () => {
-      setLoading(true);
-      await retrieveUsers();
-      setLoading(false);
-    };
-
-    if (isFocused && search?.length >= 3) {
-      getUsers();
+    if (!(search?.length >= 3)) {
+      return;
     }
+
+    const timeout = setTimeout(() => {
+      const getUsers = async () => {
+        setLoading(true);
+        await retrieveUsers();
+        setLoading(false);
+      };
+
+      getUsers();
+    }, 1000);
+
+    return () => clearTimeout(timeout);
   }, [isFocused, page, search]);
 
   const retrieveUsers = async () => {
