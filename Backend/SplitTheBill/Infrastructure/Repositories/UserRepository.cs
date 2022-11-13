@@ -1,4 +1,5 @@
-﻿using Application.Friends.GetRequestList;
+﻿using Application.Friends.GetFriendList;
+using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
 using Application.Friends.UpdateFriendRequest;
 using Application.Repositories;
@@ -16,6 +17,50 @@ namespace Infrastructure.Repositories;
 
 public sealed class UserRepository : BaseRepository<User>, IUserRepository
 {
+    #region Private Methods
+    internal IQueryable<User> QueryByEmail(string email)
+    {
+        IQueryable<User> queryByEmail =
+            context.Users
+                   .Where(u => u.Email == email);
+
+        return queryByEmail;
+    }
+
+    internal IQueryable<User> QueryByFilter(GetUserListQuery filterParams)
+    {
+        IQueryable<User> queryByFilter =
+            context.Users
+                   .Where(u => u.Id != filterParams.CallingUserId)
+                   .Where(u => u.Username.Contains(filterParams.Search) ||
+                               u.Email == filterParams.Search);
+
+        return queryByFilter;
+    }
+
+    internal IQueryable<PendingFriendshipView> QueryByFilter(GetRequestListQuery filterParams)
+    {
+        IQueryable<PendingFriendshipView> queryByFilter =
+            context.PendingFriendshipViews
+                   .Where(pf => pf.RequestReceiverId == filterParams.CallingUserId)
+                   .Where(pf => pf.SenderUsername.Contains(filterParams.Search) ||
+                                pf.SenderEmail == filterParams.Search);
+
+        return queryByFilter;
+    }
+
+    internal async Task<UserFriendship?> GetFriendship(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
+    {
+        UserFriendship? friendship = await
+            context.UserFriendships
+                   .Where(uf => uf.RequestSenderId == senderId || uf.RequestReceiverId == senderId)
+                   .Where(uf => uf.RequestSenderId == receiverId || uf.RequestReceiverId == receiverId)
+                   .FirstOrDefaultAsync(cancellationToken);
+
+        return friendship;
+    }
+    #endregion
+
     public UserRepository(DataContext context, IOptions<ConnectionStrings> options) 
         : base(context, options.Value.DefaultConnection)
     {
@@ -209,47 +254,59 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         return userResponses.ToList();
     }
 
-    #region Private Methods
-    internal IQueryable<User> QueryByEmail(string email)
+    public async Task<int> GetFriendCount(GetFriendListQuery filterParams, CancellationToken cancellationToken = default)
     {
-        IQueryable<User> queryByEmail = 
-            context.Users
-                   .Where(u => u.Email == email);
+        string sql = $@"
+SELECT COUNT(*)
+FROM (
+SELECT afw.RequestReceiverId AS Id, afw.ReceiverUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.ReceiverEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestSenderId = @callingUserId
 
-        return queryByEmail;
+UNION ALL
+SELECT afw.RequestSenderId AS Id, afw.SenderUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.SenderEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestReceiverId = @callingUserId
+) AS u
+
+WHERE (@search LIKE N'') OR (CHARINDEX(@search, [u].[Username]) > 0) OR ([u].[Email] = @search)";
+
+        Dictionary<string, object> parameters = new()
+        {
+            { "callingUserId", filterParams.CallingUserId },
+            { "search", filterParams.Search },
+        };
+
+        return await QueryValue<int>(sql, parameters);
     }
 
-    internal IQueryable<User> QueryByFilter(GetUserListQuery filterParams)
+    public async Task<List<UserResponse>> GetFriendList(PagingParameters pagingParameters, GetFriendListQuery filterParams, CancellationToken cancellationToken = default)
     {
-        IQueryable<User> queryByFilter =
-            context.Users
-                   .Where(u => u.Id != filterParams.CallingUserId)
-                   .Where(u => u.Username.Contains(filterParams.Search) ||
-                               u.Email == filterParams.Search);
+        string sql = $@"
+SELECT [u].[Id], [u].[Username], [u].[InvitedOn], [u].[AcceptedOn], 1 AS UserSentTheRequest
+FROM (
+SELECT afw.RequestReceiverId AS Id, afw.ReceiverUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.ReceiverEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestSenderId = @callingUserId
 
-        return queryByFilter;
+UNION ALL
+SELECT afw.RequestSenderId AS Id, afw.SenderUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.SenderEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestReceiverId = @callingUserId
+) AS u
+
+WHERE (@search LIKE N'') OR (CHARINDEX(@search, [u].[Username]) > 0) OR ([u].[Email] = @search)
+
+ORDER BY [u].[Username]
+OFFSET {pagingParameters.Skip} ROWS FETCH NEXT {pagingParameters.Take} ROWS ONLY";
+
+        Dictionary<string, object> parameters = new()
+        {
+            { "callingUserId", filterParams.CallingUserId },
+            { "search", filterParams.Search },
+        };
+
+        IEnumerable<UserResponse> userResponses = await QueryList<UserResponse>(sql, parameters);
+        return userResponses.ToList();
     }
-
-    internal IQueryable<PendingFriendshipView> QueryByFilter(GetRequestListQuery filterParams)
-    {
-        IQueryable<PendingFriendshipView> queryByFilter =
-            context.PendingFriendshipViews
-                   .Where(pf => pf.RequestReceiverId == filterParams.CallingUserId)
-                   .Where(pf => pf.SenderUsername.Contains(filterParams.Search) ||
-                                pf.SenderEmail == filterParams.Search);
-
-        return queryByFilter;
-    }
-
-    internal async Task<UserFriendship?> GetFriendship(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
-    {
-        UserFriendship? friendship = await
-            context.UserFriendships
-                   .Where(uf => uf.RequestSenderId == senderId || uf.RequestReceiverId == senderId)
-                   .Where(uf => uf.RequestSenderId == receiverId || uf.RequestReceiverId == receiverId)
-                   .FirstOrDefaultAsync(cancellationToken);
-
-        return friendship;
-    }
-    #endregion
 }

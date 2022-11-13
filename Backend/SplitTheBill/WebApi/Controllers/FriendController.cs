@@ -1,4 +1,5 @@
-﻿using Application.Friends.GetRequestList;
+﻿using Application.Friends.GetFriendList;
+using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
 using Application.Friends.UpdateFriendRequest;
 using Domain.Responses.Users;
@@ -42,5 +43,14 @@ public class FriendController : BaseController
         Guid receiverId = GetId();
         command.SetReceiverId(receiverId);
         return ToNoContent(await sender.Send(command));
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<ListResult<UserResponse>>> GetFriendList([FromQuery] GetFriendListQuery query)
+    {
+        Guid userId = GetId();
+        query.SetCallingUserId(userId);
+        return FromListResult(await sender.Send(query));
     }
 }

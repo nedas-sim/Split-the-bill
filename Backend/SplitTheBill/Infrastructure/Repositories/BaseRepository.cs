@@ -85,4 +85,12 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
 
         return responses;
     }
+
+    protected async Task<T> QueryValue<T>(string query, Dictionary<string, object> parameters)
+    {
+        using SqlConnection connection = new(ConnectionString);
+        connection.Open();
+        T value = (await connection.QueryAsync<T>(query, parameters)).First();
+        return value;
+    }
 }
