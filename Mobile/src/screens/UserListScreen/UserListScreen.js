@@ -1,46 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ActivityIndicator, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import groupService from '../../services/groupService';
-import GroupList from '../../features/groupList/GroupList/GroupList';
 import styles from './styles';
+import userService from '../../services/userService';
 import PageNavigationButton from '../../components/PageNavigationButton/PageNavigationButton';
-import ScreenNames from '../../common/screenNames';
+import UserList from '../../features/userList/UserList/UserList';
+import CoreInput from '../../components/CoreInput/CoreInput';
 
-const GroupListScreen = ({ navigation }) => {
-  const [groups, setGroups] = useState(null);
+const UserListScreen = () => {
+  const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageButtonActive, setPageButtonActive] = useState({ previous: false, next: false });
+  const [search, setSearch] = useState('');
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const getGroups = async () => {
-      setLoading(true);
-      await retrieveGroups();
-      setLoading(false);
-    };
-
-    if (isFocused) {
-      getGroups();
+    if (!(search?.length >= 3)) {
+      return;
     }
-  }, [isFocused, page]);
 
-  const retrieveGroups = async () => {
-    const response = await groupService.getGroups(page);
-    setGroups(response.data.items);
+    const timeout = setTimeout(() => {
+      const getUsers = async () => {
+        setLoading(true);
+        await retrieveUsers();
+        setLoading(false);
+      };
+
+      getUsers();
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [isFocused, page, search]);
+
+  const retrieveUsers = async () => {
+    const response = await userService.getUsers(page, search);
+    setUsers(response.data.items);
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
   };
 
   return (
     <SafeAreaView style={styles.screen}>
+      <View style={styles.searchBar}>
+        <CoreInput
+          value={search}
+          onChangeText={(term) => setSearch(term)}
+          placeholder="Search..."
+        />
+      </View>
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
         <>
-          <GroupList groups={groups} navigation={navigation} />
-          {groups?.length > 0 && (
+          <UserList users={users} />
+          {users?.length > 0 && (
             <View style={styles.navigationButtonContainer}>
               <View style={styles.leftButton}>
                 <PageNavigationButton
@@ -58,17 +72,10 @@ const GroupListScreen = ({ navigation }) => {
               </View>
             </View>
           )}
-          <View style={styles.newGroupBtnContainer}>
-            <PageNavigationButton
-              enabled
-              text="+"
-              onClick={() => navigation.navigate(ScreenNames.createGroupScreen)}
-            />
-          </View>
         </>
       )}
     </SafeAreaView>
   );
 };
 
-export default GroupListScreen;
+export default UserListScreen;

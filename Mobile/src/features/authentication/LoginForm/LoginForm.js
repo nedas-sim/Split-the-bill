@@ -17,7 +17,7 @@ const LoginForm = ({ navigation }) => {
     try {
       setLoading(true);
       await authService.login(credentials);
-      navigation.navigate(ScreenNames.groupList);
+      navigation.navigate(ScreenNames.mainScreen);
     } catch (ex) {
       Alert.alert('Error', ex.response.data.message);
     } finally {
