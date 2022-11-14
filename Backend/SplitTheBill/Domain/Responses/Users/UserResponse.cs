@@ -10,6 +10,7 @@ public sealed class UserResponse
     public string Status => 
         FriendshipStatusHelper.GetStatus(InvitedOn, AcceptedOn, UserSentTheRequest)
                               .ToString();
+    public bool CanInvite => Status == FriendshipStatus.NotInvited.ToString();
 
     internal DateTime? AcceptedOn { get; set; }
     internal DateTime? InvitedOn { get; set; }
