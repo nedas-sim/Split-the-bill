@@ -6,6 +6,7 @@ const apiPaths = {
   IS_LOGGED_IN: '/auth/isLoggedIn',
   GROUP: '/group',
   USER: '/user',
+  FRIEND: '/friend',
 };
 
 export default apiPaths;
