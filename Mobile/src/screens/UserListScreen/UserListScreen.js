@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { SafeAreaView, ActivityIndicator, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import { RefetchContext } from '../../common/context';
 import styles from './styles';
 import userService from '../../services/userService';
 import PageNavigationButton from '../../components/PageNavigationButton/PageNavigationButton';
@@ -34,11 +35,24 @@ const UserListScreen = () => {
     return () => clearTimeout(timeout);
   }, [isFocused, page, search]);
 
+  useEffect(() => {
+    console.log('search changed');
+  }, [search]);
+
   const retrieveUsers = async () => {
+    console.log(users);
+    console.log(search);
     const response = await userService.getUsers(page, search);
     setUsers(response.data.items);
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
   };
+
+  const refetchContextValue = useMemo(
+    () => ({
+      fetch: retrieveUsers,
+    }),
+    []
+  );
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -53,7 +67,9 @@ const UserListScreen = () => {
         <ActivityIndicator size="large" />
       ) : (
         <>
-          <UserList users={users} />
+          <RefetchContext.Provider value={refetchContextValue}>
+            <UserList users={users} fetch={retrieveUsers} />
+          </RefetchContext.Provider>
           {users?.length > 0 && (
             <View style={styles.navigationButtonContainer}>
               <View style={styles.leftButton}>
