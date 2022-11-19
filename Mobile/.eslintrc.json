@@ -41,6 +41,7 @@
         "react/jsx-props-no-spreading": "off",
         "react-hooks/exhaustive-deps": "off",
         "no-empty": "off",
-        "consistent-return": "off"
+        "consistent-return": "off",
+        "react/jsx-no-constructed-context-values": "off"
     }
 }
