@@ -4,12 +4,12 @@ import UserListItem from '../UserListItem/UserListItem';
 import styles from './styles';
 import StaticTextArea from '../../../components/StaticTextArea/StaticTextArea';
 
-const UserList = ({ users, fetch }) => (
+const UserList = ({ users }) => (
   <SafeAreaView style={styles.container}>
     {users?.length > 0 ? (
       <ScrollView style={styles.userListContainer}>
         {users?.map((user) => (
-          <UserListItem key={user.id} user={user} fetch={fetch} />
+          <UserListItem key={user.id} user={user} />
         ))}
       </ScrollView>
     ) : (

@@ -4,15 +4,15 @@ import styles from './styles';
 import friendService from '../../../services/friendService';
 import { RefetchContext } from '../../../common/context';
 
-const UserListItem = ({ user, fetch }) => {
-  // const { fetch } = useContext(RefetchContext);
+const UserListItem = ({ user }) => {
+  const { fetch } = useContext(RefetchContext);
 
   const handleSendFriendRequest = async () => {
     try {
       const body = {
         receivingUserId: user.id,
       };
-      // await friendService.sendFriendRequest(body);
+      await friendService.sendFriendRequest(body);
       await fetch();
     } catch (ex) {
       Alert.alert('Error', ex.response.data.message);
