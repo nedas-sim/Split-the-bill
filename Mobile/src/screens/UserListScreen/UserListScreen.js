@@ -41,10 +41,6 @@ const UserListScreen = () => {
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
   };
 
-  const refetchContextValue = {
-    fetch: retrieveUsers,
-  };
-
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.searchBar}>
@@ -58,7 +54,7 @@ const UserListScreen = () => {
         <ActivityIndicator size="large" />
       ) : (
         <>
-          <RefetchContext.Provider value={refetchContextValue}>
+          <RefetchContext.Provider value={retrieveUsers}>
             <UserList users={users} />
           </RefetchContext.Provider>
           {users?.length > 0 && (
