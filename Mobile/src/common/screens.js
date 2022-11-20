@@ -34,7 +34,6 @@ const Screens = {
     name: ScreenNames.groupList,
     component: GroupListScreen,
     options: ({ navigation }) => ({
-      headerBackVisible: false,
       headerRight: () => <LogoutButton navigation={navigation} />,
     }),
   },

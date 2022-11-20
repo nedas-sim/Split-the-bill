@@ -7,7 +7,9 @@ import CoreInput from '../../../components/CoreInput/CoreInput';
 import GenericList from '../GenericList/GenericList';
 import PageNavigationButton from '../../../components/PageNavigationButton/PageNavigationButton';
 
-const GenericListScreen = ({ searchEnabled, fetchItems, renderItem, noItemsMessages }) => {
+const GenericListScreen = (props) => {
+  const { searchEnabled, fetchItems, renderItem, noItemsMessages, onAddNew } = props;
+
   const [items, setItems] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -28,7 +30,9 @@ const GenericListScreen = ({ searchEnabled, fetchItems, renderItem, noItemsMessa
         setLoading(false);
       };
 
-      getItems();
+      if (isFocused) {
+        getItems();
+      }
     }, 1000);
 
     return () => clearTimeout(debounceTimeout);
@@ -74,6 +78,11 @@ const GenericListScreen = ({ searchEnabled, fetchItems, renderItem, noItemsMessa
                   onClick={() => setPage(page + 1)}
                 />
               </View>
+            </View>
+          )}
+          {onAddNew && (
+            <View style={styles.addNewButtonContainer}>
+              <PageNavigationButton enabled text="+" onClick={onAddNew} />
             </View>
           )}
         </>
