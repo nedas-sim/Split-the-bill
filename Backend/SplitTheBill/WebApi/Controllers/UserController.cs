@@ -21,13 +21,22 @@ public sealed class UserController : BaseController
     public async Task<ActionResult<UserResponse>> GetById([FromRoute] Guid id)
         => FromResult(await sender.Send(new GetUserByIdQuery(id)));
 
-    [HttpPut]
+    [HttpGet("profile")]
     [Authorize]
-    public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
+    public async Task<ActionResult<UserResponse>> GetProfile()
+    {
+        Guid userId = GetId();
+        GetUserByIdQuery query = new(userId);
+        return FromResult(await sender.Send(query));
+    }
+
+    [HttpPut("profile")]
+    [Authorize]
+    public async Task<ActionResult<UserResponse>> Update([FromBody] UpdateUserCommand command)
     {
         Guid id = GetId();
         command.SetId(id);
-        return ToNoContent(await sender.Send(command));
+        return FromResult(await sender.Send(command));
     }
 
     [HttpGet]

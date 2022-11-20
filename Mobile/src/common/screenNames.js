@@ -8,6 +8,7 @@ const ScreenNames = {
   userList: 'Users',
   friendRequests: 'Friend Requests',
   friendList: 'Friends',
+  profile: 'Profile',
 };
 
 export default ScreenNames;

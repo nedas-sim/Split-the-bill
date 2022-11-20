@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseUpdateRequest<TDatabaseEntity> : IRequest<BaseResult<Unit>>
+public abstract class BaseUpdateRequest<TDatabaseEntity, TResponse> : IRequest<BaseResult<TResponse>>
     where TDatabaseEntity : BaseEntity
 {
     public Guid Id { get; internal set; }
