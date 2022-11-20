@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import GenericListScreen from '../../features/genericList/GenericListScreen/GenericListScreen';
+import friendService from '../../services/friendService';
+import UserListItem from '../../features/userList/UserListItem/UserListItem';
 
-const FriendRequestScreen = () => {
-  console.log('a');
-  return (
-    <View>
-      <Text>FriendRequestScreen</Text>
-    </View>
-  );
-};
-
+const FriendRequestScreen = () => (
+  <GenericListScreen
+    searchEnabled
+    fetchItems={friendService.getFriendRequests}
+    renderItem={(user) => <UserListItem key={user.id} user={user} />}
+    noItemsMessages={['You have no friend requests']}
+    emptySearch
+  />
+);
 export default FriendRequestScreen;

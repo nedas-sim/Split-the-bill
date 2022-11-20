@@ -43,7 +43,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         IQueryable<PendingFriendshipView> queryByFilter =
             context.PendingFriendshipViews
                    .Where(pf => pf.RequestReceiverId == filterParams.CallingUserId)
-                   .Where(pf => pf.SenderUsername.Contains(filterParams.Search) ||
+                   .Where(pf => pf.SenderUsername.Contains(filterParams.Search ?? string.Empty) ||
                                 pf.SenderEmail == filterParams.Search);
 
         return queryByFilter;

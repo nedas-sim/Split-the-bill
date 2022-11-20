@@ -12,6 +12,7 @@ const GroupListScreen = ({ navigation }) => (
     )}
     noItemsMessages={["There aren't any groups that you are a member of", '😔']}
     onAddNew={() => navigation.navigate(ScreenNames.createGroupScreen)}
+    emptySearch
   />
 );
 

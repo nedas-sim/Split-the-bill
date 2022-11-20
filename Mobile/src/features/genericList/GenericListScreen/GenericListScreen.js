@@ -8,7 +8,7 @@ import GenericList from '../GenericList/GenericList';
 import PageNavigationButton from '../../../components/PageNavigationButton/PageNavigationButton';
 
 const GenericListScreen = (props) => {
-  const { searchEnabled, fetchItems, renderItem, noItemsMessages, onAddNew } = props;
+  const { searchEnabled, fetchItems, renderItem, noItemsMessages, onAddNew, emptySearch } = props;
 
   const [items, setItems] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -19,9 +19,11 @@ const GenericListScreen = (props) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (searchEnabled && !(search?.length >= 3)) {
+    if (searchEnabled && !emptySearch && !(search?.length >= 3)) {
       return;
     }
+
+    const debounceTimeInMs = emptySearch && search.length === 0 ? 0 : 1000;
 
     const debounceTimeout = setTimeout(() => {
       const getItems = async () => {
@@ -33,7 +35,7 @@ const GenericListScreen = (props) => {
       if (isFocused) {
         getItems();
       }
-    }, 1000);
+    }, debounceTimeInMs);
 
     return () => clearTimeout(debounceTimeout);
   }, [isFocused, page, search]);
