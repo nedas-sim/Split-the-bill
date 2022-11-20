@@ -19,15 +19,36 @@ const UserListItem = ({ user }) => {
     }
   };
 
+  const handleFriendRequestInteraction = async (isAccepted) => {
+    try {
+      const body = {
+        senderId: user.id,
+        isAccepted,
+      };
+      await friendService.interactWithFriendRequest(body);
+      await retrieveUsers();
+    } catch (ex) {
+      Alert.alert('Error', ex.response.data.message);
+    }
+  };
+
+  const showButtonContainer = user.canInvite || user.canAccept;
+
   return (
     <TouchableOpacity style={styles.card}>
       <View>
         <Text style={styles.username}>{user.username}</Text>
         <Text style={styles.status}>{user.status}</Text>
       </View>
-      {user.canInvite && (
+      {showButtonContainer && (
         <View style={styles.buttonContainer}>
-          <Button title="Invite" onPress={handleSendFriendRequest} />
+          {user.canInvite && <Button title="Invite" onPress={handleSendFriendRequest} />}
+          {user.canAccept && (
+            <>
+              <Button title="Accept" onPress={() => handleFriendRequestInteraction(true)} />
+              <Button title="Reject" onPress={() => handleFriendRequestInteraction(false)} />
+            </>
+          )}
         </View>
       )}
     </TouchableOpacity>
