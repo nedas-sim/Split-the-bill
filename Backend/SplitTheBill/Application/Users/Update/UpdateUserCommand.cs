@@ -9,8 +9,6 @@ namespace Application.Users.Update;
 
 public sealed class UpdateUserCommand : BaseUpdateRequest<User, UserResponse>
 {
-    public static string UsernameLengthErrorMessage(int length) => $"Username has to contain at least {length} characters";
-
     public string? Username { get; set; }
     public string? Email { get; set; }
 
@@ -23,10 +21,10 @@ public sealed class UpdateUserCommand : BaseUpdateRequest<User, UserResponse>
         bool validEmail = new EmailAddressAttribute().IsValid(Email);
         bool validUsernameLength = Username is null || Username.Length >= Config.MinUsernameLength;
 
-        errorMessages.AddIfFalse(validEmail, "Invalid email address");
-        errorMessages.AddIfFalse(validUsernameLength, UsernameLengthErrorMessage(Config.MinUsernameLength));
+        errorMessages.AddIfFalse(validEmail, ErrorMessages.User.InvalidEmail);
+        errorMessages.AddIfFalse(validUsernameLength, ErrorMessages.User.MinimumUsernameLength(Config.MinUsernameLength));
 
-        errorMessage = errorMessages.BuildErrorMessage("Update user profile request has validation errors");
+        errorMessage = errorMessages.BuildErrorMessage(ErrorMessages.User.UpdateRequestPrefix);
 
         return string.IsNullOrEmpty(errorMessage);
     }

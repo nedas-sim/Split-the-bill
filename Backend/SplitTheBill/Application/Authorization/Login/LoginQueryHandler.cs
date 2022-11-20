@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.Repositories;
 using Application.Services;
+using Domain.Common;
 using Domain.Common.Results;
 using Domain.Database;
 using Domain.Responses.Authorization;
@@ -45,7 +46,7 @@ public sealed class LoginQueryHandler : IResultHandler<LoginQuery, LoginResponse
     {
         return new NotFoundResult<LoginResponse>
         {
-            Message = "Email or password is incorrect",
+            Message = ErrorMessages.User.IncorrectEmailOrPassword,
         };
     }
 }

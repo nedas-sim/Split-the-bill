@@ -2,7 +2,7 @@
 
 namespace Domain.Common.Results;
 
-public abstract class BaseResult<T>// where T : class
+public abstract class BaseResult<T>
 {
     public static implicit operator BaseResult<T>(T item)
     {

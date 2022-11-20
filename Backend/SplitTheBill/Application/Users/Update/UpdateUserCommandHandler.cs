@@ -31,7 +31,7 @@ public sealed class UpdateUserCommandHandler : BaseUpdateHandler<UpdateUserComma
             bool emailExists = await userRepository.EmailExists(request.Email!, cancellationToken);
             if (emailExists)
             {
-                throw new ValidationErrorException("Profile with this email already exists");
+                throw new ValidationErrorException(ErrorMessages.User.EmailAlreadyExists);
             }
         }
 
@@ -40,7 +40,7 @@ public sealed class UpdateUserCommandHandler : BaseUpdateHandler<UpdateUserComma
             bool usernameExists = await userRepository.UsernameExists(request.Username!, cancellationToken);
             if (usernameExists)
             {
-                throw new ValidationErrorException("Profile with this username already exists");
+                throw new ValidationErrorException(ErrorMessages.User.UsernameAlreadyExists);
             }
         }
     }

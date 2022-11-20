@@ -1,7 +1,7 @@
 ﻿using Application.Services;
+using Domain.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using WebApi.Controllers;
@@ -32,7 +32,7 @@ public class AuthorizationMiddleware : AuthenticationHandler<CustomAuthenticatio
         string? token = Request.Cookies[BaseController.JwtCookieKey];
         if (token is null)
         {
-            return AuthenticateResult.Fail("Token not found");
+            return AuthenticateResult.Fail(ErrorMessages.API.TokenNotFound);
         }
 
         try
@@ -41,13 +41,13 @@ public class AuthorizationMiddleware : AuthenticationHandler<CustomAuthenticatio
         }
         catch
         {
-            return AuthenticateResult.Fail("Invalid token");
+            return AuthenticateResult.Fail(ErrorMessages.API.InvalidToken);
         }
 
         IEnumerable<Claim>? claims = authorizeService.ReadToken(token);
         if (claims is null)
         {
-            return AuthenticateResult.Fail("Invalid token");
+            return AuthenticateResult.Fail(ErrorMessages.API.InvalidToken);
         }
 
         ClaimsIdentity claimsIdentity = new(claims, nameof(AuthorizationMiddleware));

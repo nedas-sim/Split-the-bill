@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Repositories;
+using Domain.Common;
 using Domain.Common.Results;
 using Domain.Responses.Users;
 using Domain.Results;
@@ -23,7 +24,7 @@ public sealed class GetUserByIdQueryHandler : IResultHandler<GetUserByIdQuery, U
         {
             return new NotFoundResult<UserResponse>
             {
-                Message = "User not found",
+                Message = ErrorMessages.User.NotFound,
             };
         }
 

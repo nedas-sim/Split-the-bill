@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Domain.Common;
 using Domain.Database;
 using Domain.Extensions;
 
@@ -27,9 +28,9 @@ public sealed class CreateGroupCommand : BaseCreateRequest<Group>
         bool emptyName = string.IsNullOrWhiteSpace(Name);
 
         List<string> errorMessages = new();
-        errorMessages.AddIfFalse(emptyName is false, "Group name should not be empty");
+        errorMessages.AddIfFalse(emptyName is false, ErrorMessages.Group.EmptyName);
 
-        errorMessage = errorMessages.BuildErrorMessage("Create group request has validation errors");
+        errorMessage = errorMessages.BuildErrorMessage(ErrorMessages.Group.CreateRequestPrefix);
         return string.IsNullOrEmpty(errorMessage);
     }
 }

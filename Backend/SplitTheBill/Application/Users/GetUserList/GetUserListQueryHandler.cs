@@ -22,7 +22,7 @@ public sealed class GetUserListQueryHandler : IListHandler<GetUserListQuery, Use
 
     public async Task<BaseListResult<UserResponse>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
     {
-        request.SetConfigurations(config);
+        request.Config = config;
 
         if (request.IsValid(out string? errorMessage) is false)
         {
