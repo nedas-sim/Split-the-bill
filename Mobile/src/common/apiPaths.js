@@ -7,6 +7,7 @@ const apiPaths = {
   GROUP: '/group',
   USER: '/user',
   FRIEND: '/friend',
+  FRIEND_REQUEST: '/friend/request',
 };
 
 export default apiPaths;
