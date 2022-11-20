@@ -2,10 +2,11 @@
 using Domain.Database;
 using Domain.Enums;
 using Domain.Extensions;
+using Domain.Responses.Payments;
 
 namespace Application.Payments.UpdatePayment;
 
-public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment>
+public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment, PaymentResponse>
 {
     public DateTime? DateOfPayment { get; set; }
     public decimal? Amount { get; set; }

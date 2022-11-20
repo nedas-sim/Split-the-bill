@@ -9,6 +9,7 @@ import GroupDetailsScreen from '../screens/GroupDetailsScreen/GroupDetailsScreen
 import UserListScreen from '../screens/UserListScreen/UserListScreen';
 import FriendRequestScreen from '../screens/FriendRequestScreen/FriendRequestScreen';
 import FriendListScreen from '../screens/FriendListScreen/FriendListScreen';
+import UserProfileScreen from '../screens/UserProfileScreen/UserProfileScreen';
 
 const Screens = {
   loginScreen: {
@@ -69,6 +70,13 @@ const Screens = {
   friendListScreen: {
     name: ScreenNames.friendList,
     component: FriendListScreen,
+    options: ({ navigation }) => ({
+      headerRight: () => <LogoutButton navigation={navigation} />,
+    }),
+  },
+  profileScreen: {
+    name: ScreenNames.profile,
+    component: UserProfileScreen,
     options: ({ navigation }) => ({
       headerRight: () => <LogoutButton navigation={navigation} />,
     }),

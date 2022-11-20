@@ -7,8 +7,8 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHandler<TRequest, BaseResult<Unit>>
-    where TRequest : BaseUpdateRequest<TDatabaseEntity>
+public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity, TResponse> : IRequestHandler<TRequest, BaseResult<TResponse>>
+    where TRequest : BaseUpdateRequest<TDatabaseEntity, TResponse>
     where TDatabaseEntity : BaseEntity
 {
     private readonly IBaseRepository<TDatabaseEntity> repository;
@@ -18,7 +18,7 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
         this.repository = repository;
     }
 
-    public async Task<BaseResult<Unit>> Handle(TRequest request, CancellationToken cancellationToken)
+    public async Task<BaseResult<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -31,18 +31,18 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
 
             request.Update(databaseEntity);
             await repository.Update(databaseEntity, cancellationToken);
-            return new NoContentResult<Unit>();
+            return await BuildResponse(request, databaseEntity);
         }
         catch (ValidationErrorException validationEx)
         {
-            return new ValidationErrorResult<Unit>
+            return new ValidationErrorResult<TResponse>
             {
                 Message = validationEx.Message,
             };
         }
         catch (NotFoundErrorException notFoundEx)
         {
-            return new NotFoundResult<Unit>
+            return new NotFoundResult<TResponse>
             {
                 Message = notFoundEx.Message,
             };
@@ -62,4 +62,6 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity> : IRequestHan
     public virtual async Task DatabaseValidation(TRequest request, TDatabaseEntity databaseEntity, CancellationToken cancellationToken)
     {
     }
+
+    public abstract Task<TResponse> BuildResponse(TRequest request, TDatabaseEntity databaseEntity);
 }
