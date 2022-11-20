@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.Common;
 using Domain.Common.Results;
 using Domain.Database;
 using Domain.Enums;
@@ -29,19 +30,19 @@ public sealed class SendFriendRequestCommandHandler
                 case FriendshipStatus.Friends:
                     return new ValidationErrorResult<Unit>
                     {
-                        Message = "You are already friends",
+                        Message = ErrorMessages.Friends.AlreadyFriends,
                     };
 
                 case FriendshipStatus.WaitingForAcception:
                     return new ValidationErrorResult<Unit>
                     {
-                        Message = "Friend request is already sent",
+                        Message = ErrorMessages.Friends.RequestSent,
                     };
 
                 case FriendshipStatus.ReceivedInvitation:
                     return new ValidationErrorResult<Unit>
                     {
-                        Message = "You have already received an invitation from this user",
+                        Message = ErrorMessages.Friends.RequestReceived,
                     };
             }
         }

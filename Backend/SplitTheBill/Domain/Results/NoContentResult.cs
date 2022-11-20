@@ -2,6 +2,6 @@
 
 namespace Domain.Results;
 
-public sealed class NoContentResult<T> : BaseResult<T> //where T : class
+public sealed class NoContentResult<T> : BaseResult<T>
 {
 }

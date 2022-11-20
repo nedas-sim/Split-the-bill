@@ -9,7 +9,7 @@ public class RegistrationTests
 
     public RegistrationTests()
     {
-        command.SetConfigurations(new UserSettings { MinPasswordLength = 6 });
+        command.Config = new UserSettings { MinPasswordLength = 6 };
     }
 
     [Fact]
@@ -28,8 +28,8 @@ public class RegistrationTests
     }
 
     [Theory]
-    [InlineData("email", "password", "password", RegisterCommand.InvalidEmailErrorMessage)]
-    [InlineData("email", "password", "unmatch", RegisterCommand.PasswordMismatchErrorMessage)]
+    [InlineData("email", "password", "password", ErrorMessages.User.InvalidEmail)]
+    [InlineData("email", "password", "unmatch", ErrorMessages.User.PasswordMismatch)]
     [InlineData("email", "a", "a", "has to contain")]
     public void InvalidRegistrationFormTests(string email, string password, string repeatPassword, string expectedError)
     {

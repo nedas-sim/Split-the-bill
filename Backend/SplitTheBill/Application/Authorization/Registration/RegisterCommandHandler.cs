@@ -25,7 +25,7 @@ public class RegisterCommandHandler : BaseCreateHandler<RegisterCommand, User>
 
     public override async Task PreValidation(RegisterCommand request)
     {
-        request.SetConfigurations(config);
+        request.Config = config;
     }
 
     public override async Task DatabaseValidation(RegisterCommand request, CancellationToken cancellationToken)

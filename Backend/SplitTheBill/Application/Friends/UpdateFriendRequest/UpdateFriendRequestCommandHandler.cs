@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Repositories;
+using Domain.Common;
 using Domain.Common.Results;
 using Domain.Database;
 using Domain.Results;
@@ -25,7 +26,7 @@ public sealed class UpdateFriendRequestCommandHandler
         {
             return new ValidationErrorResult<Unit>
             {
-                Message = "Friend request does not exist",
+                Message = ErrorMessages.Friends.RequestDoesNotExist,
             };
         }
 
