@@ -21,6 +21,10 @@ const MainScreen = ({ navigation }) => {
       title: 'Friend Requests',
       redirectTo: ScreenNames.friendRequests,
     },
+    {
+      title: 'Friends',
+      redirectTo: ScreenNames.friendList,
+    },
   ];
 
   useEffect(() => {
