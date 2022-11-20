@@ -274,7 +274,7 @@ WHERE (@search LIKE N'') OR (CHARINDEX(@search, [u].[Username]) > 0) OR ([u].[Em
         Dictionary<string, object> parameters = new()
         {
             { "callingUserId", filterParams.CallingUserId },
-            { "search", filterParams.Search },
+            { "search", filterParams.Search ?? string.Empty },
         };
 
         return await QueryValue<int>(sql, parameters);
@@ -303,7 +303,7 @@ OFFSET {pagingParameters.Skip} ROWS FETCH NEXT {pagingParameters.Take} ROWS ONLY
         Dictionary<string, object> parameters = new()
         {
             { "callingUserId", filterParams.CallingUserId },
-            { "search", filterParams.Search },
+            { "search", filterParams.Search ?? string.Empty },
         };
 
         IEnumerable<UserResponse> userResponses = await QueryList<UserResponse>(sql, parameters);
