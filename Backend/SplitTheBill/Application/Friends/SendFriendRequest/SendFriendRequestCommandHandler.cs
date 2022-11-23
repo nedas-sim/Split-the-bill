@@ -25,29 +25,26 @@ public sealed class SendFriendRequestCommandHandler
         if (friendship is not null)
         {
             FriendshipStatus status = FriendshipStatusHelper.GetStatus(friendship, request.ReceivingUserId);
-            switch (status)
+            string? errorMessage = GetErrorMessageForStatus(status);
+            if (errorMessage is not null)
             {
-                case FriendshipStatus.Friends:
-                    return new ValidationErrorResult<Unit>
-                    {
-                        Message = ErrorMessages.Friends.AlreadyFriends,
-                    };
-
-                case FriendshipStatus.WaitingForAcception:
-                    return new ValidationErrorResult<Unit>
-                    {
-                        Message = ErrorMessages.Friends.RequestSent,
-                    };
-
-                case FriendshipStatus.ReceivedInvitation:
-                    return new ValidationErrorResult<Unit>
-                    {
-                        Message = ErrorMessages.Friends.RequestReceived,
-                    };
+                return new ValidationErrorResult<Unit>
+                {
+                    Message = errorMessage!,
+                };
             }
         }
 
         await userRepository.PostFriendRequest(request, cancellationToken);
         return Unit.Value;
     }
+
+    private static string? GetErrorMessageForStatus(FriendshipStatus status)
+        => status switch
+        {
+            FriendshipStatus.Friends => ErrorMessages.Friends.AlreadyFriends,
+            FriendshipStatus.WaitingForAcception => ErrorMessages.Friends.RequestSent,
+            FriendshipStatus.ReceivedInvitation => ErrorMessages.Friends.RequestReceived,
+            _ => null,
+        };
 }
