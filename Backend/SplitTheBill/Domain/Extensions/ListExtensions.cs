@@ -1,4 +1,6 @@
-﻿namespace Domain.Extensions;
+﻿using System.Text;
+
+namespace Domain.Extensions;
 
 public static class ListExtensions
 {
@@ -19,9 +21,12 @@ public static class ListExtensions
             return string.Empty;
         }
 
-        @this.Insert(0, messagePrefix);
+        StringBuilder sb = new();
+        sb.Append(messagePrefix);
+        sb.Append(": ");
+        sb.Append(string.Join("; ", @this));
+        sb.Append('.');
 
-        string message = $"{string.Join(". ", @this)}.";
-        return message;
+        return sb.ToString();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Application.Common;
 using Domain.Common;
 using Domain.Database;
-using Domain.Extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Authorization.Registration;
@@ -13,6 +12,8 @@ public sealed class RegisterCommand : BaseCreateRequest<User>
     public string Email { get; set; }
     public string Password { get; set; }
     public string RepeatPassword { get; set; }
+
+    public override string ApiErrorMessagePrefix => ErrorMessages.User.RegistrationRequestPrefix;
 
     public void SetConfigurations(UserSettings config)
     {
@@ -29,7 +30,7 @@ public sealed class RegisterCommand : BaseCreateRequest<User>
         return user;
     }
 
-    public override bool IsValid(out string? errorMessage)
+    public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         int minPasswordLength = Config.MinPasswordLength;
 
@@ -37,12 +38,8 @@ public sealed class RegisterCommand : BaseCreateRequest<User>
         bool validPasswordLength = Password.Length >= minPasswordLength;
         bool passwordsMatch = Password == RepeatPassword;
 
-        List<string> errorMessages = new();
-        errorMessages.AddIfFalse(validEmail, ErrorMessages.User.InvalidEmail)
-                     .AddIfFalse(validPasswordLength, ErrorMessages.User.MinimumPasswordLength(minPasswordLength))
-                     .AddIfFalse(passwordsMatch, ErrorMessages.User.PasswordMismatch);
-
-        errorMessage = errorMessages.BuildErrorMessage("Registration request has validation errors");
-        return string.IsNullOrEmpty(errorMessage);
+        yield return (validEmail, ErrorMessages.User.InvalidEmail);
+        yield return (validPasswordLength, ErrorMessages.User.MinimumPasswordLength(minPasswordLength));
+        yield return (passwordsMatch, ErrorMessages.User.PasswordMismatch);
     }
 }

@@ -1,14 +1,34 @@
 ﻿using Domain.Exceptions;
+using Domain.Extensions;
 
 namespace Domain.Common;
 
 public abstract class BaseValidation
 {
-    public virtual bool IsValid(out string? errorMessage)
+    public abstract string ApiErrorMessagePrefix { get; }
+
+    public virtual IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
-        // By default the request is valid
-        errorMessage = null;
-        return true;
+        yield break;
+    }
+
+    public bool IsValid(out string? errorMessage)
+    {
+        List<string> validations =
+            ValidateProperties()
+                .Where(v => v.Success is false)
+                .Select(v => v.ErrorMessage)
+                .ToList();
+
+        if (validations.Any() is false)
+        {
+            errorMessage = null;
+            return true;
+        }
+
+        errorMessage = validations.BuildErrorMessage(ApiErrorMessagePrefix);
+
+        return string.IsNullOrEmpty(errorMessage);
     }
 
     public void ValidateAndThrow()

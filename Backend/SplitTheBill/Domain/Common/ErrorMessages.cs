@@ -12,6 +12,7 @@ public static class ErrorMessages
         public const string UpdateRequestPrefix = "Update user profile request has validation errors";
         public const string EmailAlreadyExists = "Profile with this email already exists";
         public const string UsernameAlreadyExists = "Profile with this username already exists";
+        public const string RegistrationRequestPrefix = "Registration request has validation errors";
 
         public static string MinimumUsernameLength(int minimumLength) => $"Username has to contain at least {minimumLength} characters";
         public static string MinimumPasswordLength(int minimumLength) => $"Password has to contain at least {minimumLength} characters";
