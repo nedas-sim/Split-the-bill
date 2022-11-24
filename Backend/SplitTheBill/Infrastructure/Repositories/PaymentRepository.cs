@@ -34,7 +34,7 @@ public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
         return paymentResponse;
     }
 
-    public async Task<List<PaymentResponse>> GetPaymentResponseList(PagingParameters parameters, CancellationToken cancellationToken = default)
+    public async Task<List<PaymentResponse>> GetPaymentResponseList(IPaging parameters, CancellationToken cancellationToken = default)
     {
         List<PaymentResponse> paymentResponses =
             await context.Payments

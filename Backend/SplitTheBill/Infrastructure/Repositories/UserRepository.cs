@@ -89,7 +89,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     }
 
     public async Task<List<UserResponse>> GetPendingFriendshipList
-        (PagingParameters pagingParameters, 
+        (IPaging pagingParameters, 
          GetRequestListQuery filterParams, 
          CancellationToken cancellationToken = default)
     {
@@ -190,7 +190,7 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
         return totalCount;
     }
 
-    public async Task<List<UserResponse>> GetUserList(PagingParameters pagingParameters, GetUserListQuery filterParams, CancellationToken cancellationToken = default)
+    public async Task<List<UserResponse>> GetUserList(IPaging pagingParameters, GetUserListQuery filterParams, CancellationToken cancellationToken = default)
     {
         #region EF
         /*List<UserResponse> userList =
@@ -280,7 +280,7 @@ WHERE (@search LIKE N'') OR (CHARINDEX(@search, [u].[Username]) > 0) OR ([u].[Em
         return await QueryValue<int>(sql, parameters);
     }
 
-    public async Task<List<UserResponse>> GetFriendList(PagingParameters pagingParameters, GetFriendListQuery filterParams, CancellationToken cancellationToken = default)
+    public async Task<List<UserResponse>> GetFriendList(IPaging pagingParameters, GetFriendListQuery filterParams, CancellationToken cancellationToken = default)
     {
         string sql = $@"
 SELECT [u].[Id], [u].[Username], [u].[InvitedOn], [u].[AcceptedOn], 1 AS UserSentTheRequest

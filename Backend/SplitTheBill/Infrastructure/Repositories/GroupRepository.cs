@@ -17,7 +17,7 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
     }
 
-    public async Task<List<GroupResponse>> GetUsersGroups(PagingParameters pagingParameters, Guid userId, CancellationToken cancellationToken = default)
+    public async Task<List<GroupResponse>> GetUsersGroups(IPaging pagingParameters, Guid userId, CancellationToken cancellationToken = default)
     {
         List<GroupResponse> userGroups = await
             QueryGroupMembershipViewsByUserId(userId)

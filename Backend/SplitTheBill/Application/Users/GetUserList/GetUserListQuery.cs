@@ -1,44 +1,27 @@
 ﻿using Application.Common;
 using Domain.Common;
-using Domain.Extensions;
 using Domain.Responses.Users;
 
 namespace Application.Users.GetUserList;
 
-public sealed class GetUserListQuery : PagingParameters, IListRequest<UserResponse>
+public sealed class GetUserListQuery : BaseValidation, IPaging, IListRequest<UserResponse>
 {
+    public int Page { get; set; } = 1;
+    public int Size { get; set; } = 20;
+
     internal Guid CallingUserId { get; set; }
     public void SetCallingUserId(Guid id) => CallingUserId = id;
 
     public string Search { get; set; }
 
+    public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
+
     internal UserSettings Config;
 
-    private GetUserListQueryValidator? _validator = null;
-
-    public bool IsValid(out string? errorMessage)
+    public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
-        _validator ??= new()
-        {
-            Search = Search,
-            Config = Config,
-        };
+        bool validUsernameLength = Search?.Length >= Config.MinUsernameLength;
 
-        return _validator.IsValid(out errorMessage);
-    }
-
-    internal class GetUserListQueryValidator : BaseValidation
-    {
-        public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
-
-        internal string Search { get; set; }
-        internal UserSettings Config { get; set; }
-
-        public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
-        {
-            bool validUsernameLength = Search?.Length >= Config.MinUsernameLength;
-
-            yield return (validUsernameLength, ErrorMessages.User.MinimumSearchLength(Config.MinUsernameLength));
-        }
+        yield return (validUsernameLength, ErrorMessages.User.MinimumSearchLength(Config.MinUsernameLength));
     }
 }

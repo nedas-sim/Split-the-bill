@@ -22,18 +22,18 @@ public interface IUserRepository : IBaseRepository<User>
     public Task DeleteFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default);
 
     public Task<int> GetUserCount(GetUserListQuery filterParams, CancellationToken cancellationToken = default);
-    public Task<List<UserResponse>> GetUserList(PagingParameters pagingParameters,
+    public Task<List<UserResponse>> GetUserList(IPaging pagingParameters,
                                                 GetUserListQuery filterParams,
                                                 CancellationToken cancellationToken = default);
 
 
     public Task<int> GetPendingFriendshipCount(GetRequestListQuery filterParams, CancellationToken cancellationToken = default);
-    public Task<List<UserResponse>> GetPendingFriendshipList(PagingParameters pagingParameters,
+    public Task<List<UserResponse>> GetPendingFriendshipList(IPaging pagingParameters,
                                                              GetRequestListQuery filterParams,
                                                              CancellationToken cancellationToken = default);
 
     public Task<int> GetFriendCount(GetFriendListQuery filterParams, CancellationToken cancellationToken = default);
-    public Task<List<UserResponse>> GetFriendList(PagingParameters pagingParameters,
+    public Task<List<UserResponse>> GetFriendList(IPaging pagingParameters,
                                                   GetFriendListQuery filterParams,
                                                   CancellationToken cancellationToken = default);
 }
