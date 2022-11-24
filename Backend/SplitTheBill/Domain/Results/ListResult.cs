@@ -12,7 +12,7 @@ public sealed class ListResult<T> : BaseListResult<T>
     public bool PreviousPage { get; set; }
     public bool NextPage { get; set; }
 
-    public ListResult(List<T> items, int totalCount, PagingParameters parameters)
+    public ListResult(List<T> items, int totalCount, IPaging parameters)
     {
         Items = items;
         LastPage = GetLastPage(parameters.Size, totalCount);

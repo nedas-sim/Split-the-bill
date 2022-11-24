@@ -1,7 +1,6 @@
 ﻿using Application.Common;
 using Domain.Common;
 using Domain.Database;
-using Domain.Extensions;
 
 namespace Application.Groups.CreateGroup;
 
@@ -9,8 +8,10 @@ public sealed class CreateGroupCommand : BaseCreateRequest<Group>
 {
     public string Name { get; set; }
 
-    public Guid UserId { get; internal set; }
+    internal Guid UserId { get; set; }
     public void SetUserId(Guid id) => UserId = id;
+
+    public override string ApiErrorMessagePrefix => ErrorMessages.Group.CreateRequestPrefix;
 
     public override Group BuildEntity()
     {
@@ -23,14 +24,10 @@ public sealed class CreateGroupCommand : BaseCreateRequest<Group>
         return group;
     }
 
-    public override bool IsValid(out string? errorMessage)
+    public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
-        bool emptyName = string.IsNullOrWhiteSpace(Name);
+        bool validName = string.IsNullOrWhiteSpace(Name) is false;
 
-        List<string> errorMessages = new();
-        errorMessages.AddIfFalse(emptyName is false, ErrorMessages.Group.EmptyName);
-
-        errorMessage = errorMessages.BuildErrorMessage(ErrorMessages.Group.CreateRequestPrefix);
-        return string.IsNullOrEmpty(errorMessage);
+        yield return (validName, ErrorMessages.Group.EmptyName);
     }
 }

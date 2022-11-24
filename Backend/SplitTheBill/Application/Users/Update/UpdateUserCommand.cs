@@ -1,7 +1,6 @@
 ﻿using Application.Common;
 using Domain.Common;
 using Domain.Database;
-using Domain.Extensions;
 using Domain.Responses.Users;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,21 +11,17 @@ public sealed class UpdateUserCommand : BaseUpdateRequest<User, UserResponse>
     public string? Username { get; set; }
     public string? Email { get; set; }
 
+    public override string ApiErrorMessagePrefix => ErrorMessages.User.UpdateRequestPrefix;
+
     internal UserSettings Config { get; set; }
 
-    public override bool IsValid(out string? errorMessage)
+    public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
-        List<string> errorMessages = new();
-
         bool validEmail = new EmailAddressAttribute().IsValid(Email);
         bool validUsernameLength = Username is null || Username.Length >= Config.MinUsernameLength;
 
-        errorMessages.AddIfFalse(validEmail, ErrorMessages.User.InvalidEmail);
-        errorMessages.AddIfFalse(validUsernameLength, ErrorMessages.User.MinimumUsernameLength(Config.MinUsernameLength));
-
-        errorMessage = errorMessages.BuildErrorMessage(ErrorMessages.User.UpdateRequestPrefix);
-
-        return string.IsNullOrEmpty(errorMessage);
+        yield return (validEmail, ErrorMessages.User.InvalidEmail);
+        yield return (validUsernameLength, ErrorMessages.User.MinimumUsernameLength(Config.MinUsernameLength));
     }
 
     public override void Update(User databaseEntity)
