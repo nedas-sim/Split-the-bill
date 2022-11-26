@@ -1,6 +1,4 @@
 ﻿using Application.Authorization.Registration;
-using Application.Repositories;
-using Application.Services;
 using Microsoft.Extensions.Options;
 
 namespace UnitTests.Auth;

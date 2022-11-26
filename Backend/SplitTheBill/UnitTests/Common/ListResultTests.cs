@@ -1,6 +1,4 @@
-﻿using Domain.Results;
-
-namespace UnitTests.Common;
+﻿namespace UnitTests.Common;
 
 public class ListResultTests
 {
