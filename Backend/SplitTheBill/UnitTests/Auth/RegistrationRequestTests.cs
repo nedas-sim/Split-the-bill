@@ -1,24 +1,21 @@
 ﻿using Application.Authorization.Registration;
-using Domain.Common;
 
 namespace UnitTests.Auth;
 
-public class RegistrationTests
+public class RegistrationRequestTests
 {
     readonly RegisterCommand command = new();
 
-    public RegistrationTests()
+    public RegistrationRequestTests()
     {
-        command.Config = new UserSettings { MinPasswordLength = 6 };
+        command.Config = AuthTestHelper.UserSettings;
     }
 
     [Fact]
     public void ValidRegistrationForm_ShouldReturnTrue()
     {
         // Arrange:
-        command.Email = "email@email.com";
-        command.Password = "password";
-        command.RepeatPassword = "password";
+        command.FillDataWithSamePassword();
 
         // Act:
         bool isValid = command.IsValid(out _);
