@@ -37,8 +37,8 @@ public class SendFriendRequestHandlerTests
 
         // Assert:
         userRepository.Verify(ur => ur.PostFriendRequest(command, default), Times.Never());
-        ValidationErrorResult<Unit> validationErrorResult = Assert.IsType<ValidationErrorResult<Unit>>(response);
-        Assert.Contains(ErrorMessages.Friends.AlreadyFriends, validationErrorResult.Message);
+        Assert.IsType<ValidationErrorResult<Unit>>(response)
+              .ShouldContain(ErrorMessages.Friends.AlreadyFriends);
     }
 
     [Fact]

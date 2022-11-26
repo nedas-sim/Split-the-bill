@@ -35,8 +35,8 @@ public class RegistrationHandlerTests
 
 		// Assert:
 		userRepository.Verify(ur => ur.EmailExists(command.Email, default), Times.Once());
-		ValidationErrorResult<CreateResponse> validationErrorResult = Assert.IsType<ValidationErrorResult<CreateResponse>>(response);
-		Assert.Contains(ErrorMessages.User.EmailAlreadyExists, validationErrorResult.Message);
+        Assert.IsType<ValidationErrorResult<CreateResponse>>(response)
+              .ShouldContain(ErrorMessages.User.EmailAlreadyExists);
     }
 
 	[Fact]

@@ -5,11 +5,10 @@ namespace UnitTests.Friends;
 public class UpdateFriendRequestTests
 {
     private readonly UpdateFriendRequestCommandHandler handler;
-    private readonly Mock<IUserRepository> mock;
+    private readonly Mock<IUserRepository> mock = new();
 
     public UpdateFriendRequestTests()
     {
-        mock = new Mock<IUserRepository>();
         handler = new(mock.Object);
     }
 
@@ -31,8 +30,8 @@ public class UpdateFriendRequestTests
         BaseResult<Unit> result = await handler.Handle(command, default);
 
         // Assert:
-        ValidationErrorResult<Unit> validationErrorResult = Assert.IsType<ValidationErrorResult<Unit>>(result);
-        Assert.Contains(ErrorMessages.Friends.RequestDoesNotExist, validationErrorResult.Message);
+        Assert.IsType<ValidationErrorResult<Unit>>(result)
+              .ShouldContain(ErrorMessages.Friends.RequestDoesNotExist);
     }
 
     [Fact]
@@ -63,8 +62,8 @@ public class UpdateFriendRequestTests
         BaseResult<Unit> result = await handler.Handle(command, default);
 
         // Assert:
-        ValidationErrorResult<Unit> validationErrorResult = Assert.IsType<ValidationErrorResult<Unit>>(result);
-        Assert.Contains(ErrorMessages.Friends.RequestDoesNotExist, validationErrorResult.Message);
+        Assert.IsType<ValidationErrorResult<Unit>>(result)
+              .ShouldContain(ErrorMessages.Friends.RequestDoesNotExist);
     }
 
     [Fact]

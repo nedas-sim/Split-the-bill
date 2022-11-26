@@ -1,20 +1,15 @@
-﻿using Application.Repositories;
-using Application.Users.GetUserById;
-using Domain.Common.Results;
+﻿using Application.Users.GetUserById;
 using Domain.Responses.Users;
-using Domain.Results;
-using Moq;
 
 namespace UnitTests.Users;
 
 public class GetUserByIdTests
 {
-    private readonly Mock<IUserRepository> userRepository;
+    private readonly Mock<IUserRepository> userRepository = new();
     private readonly GetUserByIdQueryHandler handler;
 
     public GetUserByIdTests()
     {
-        userRepository = new Mock<IUserRepository>();
         handler = new GetUserByIdQueryHandler(userRepository.Object);
     }
 
@@ -62,6 +57,7 @@ public class GetUserByIdTests
         BaseResult<UserResponse> result = await handler.Handle(query, default);
 
         // Assert:
-        NotFoundResult<UserResponse> notFoundResult = Assert.IsType<NotFoundResult<UserResponse>>(result);
+        Assert.IsType<NotFoundResult<UserResponse>>(result)
+              .ShouldContain(ErrorMessages.User.NotFound);
     }
 }
