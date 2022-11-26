@@ -1,20 +1,14 @@
 ﻿using Application.Groups.CreateGroup;
-using Application.Repositories;
-using Domain.Common.Results;
-using Domain.Responses;
-using Domain.Results;
-using Moq;
 
 namespace UnitTests.Groups;
 
 public class CreateGroupTests
 {
     private readonly CreateGroupCommandHandler handler;
-    private readonly Mock<IGroupRepository> mock;
+    private readonly Mock<IGroupRepository> mock = new();
 
     public CreateGroupTests()
     {
-        mock = new Mock<IGroupRepository>();
         handler = new CreateGroupCommandHandler(mock.Object);
     }
 
@@ -34,8 +28,8 @@ public class CreateGroupTests
 
         // Assert:
         Assert.False(isValid);
-        Assert.IsType<ValidationErrorResult<CreateResponse>>(result);
-
+        Assert.IsType<ValidationErrorResult<CreateResponse>>(result)
+              .ShouldContain(ErrorMessages.Group.EmptyName);
     }
 
     [Fact]

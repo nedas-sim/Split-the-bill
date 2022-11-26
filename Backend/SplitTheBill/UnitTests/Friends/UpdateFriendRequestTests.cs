@@ -1,21 +1,14 @@
 ﻿using Application.Friends.UpdateFriendRequest;
-using Application.Repositories;
-using Domain.Common.Results;
-using Domain.Database;
-using Domain.Results;
-using MediatR;
-using Moq;
 
 namespace UnitTests.Friends;
 
 public class UpdateFriendRequestTests
 {
     private readonly UpdateFriendRequestCommandHandler handler;
-    private readonly Mock<IUserRepository> mock;
+    private readonly Mock<IUserRepository> mock = new();
 
     public UpdateFriendRequestTests()
     {
-        mock = new Mock<IUserRepository>();
         handler = new(mock.Object);
     }
 
@@ -37,7 +30,8 @@ public class UpdateFriendRequestTests
         BaseResult<Unit> result = await handler.Handle(command, default);
 
         // Assert:
-        Assert.IsType<ValidationErrorResult<Unit>>(result);
+        Assert.IsType<ValidationErrorResult<Unit>>(result)
+              .ShouldContain(ErrorMessages.Friends.RequestDoesNotExist);
     }
 
     [Fact]
@@ -68,7 +62,8 @@ public class UpdateFriendRequestTests
         BaseResult<Unit> result = await handler.Handle(command, default);
 
         // Assert:
-        Assert.IsType<ValidationErrorResult<Unit>>(result);
+        Assert.IsType<ValidationErrorResult<Unit>>(result)
+              .ShouldContain(ErrorMessages.Friends.RequestDoesNotExist);
     }
 
     [Fact]

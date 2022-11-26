@@ -33,7 +33,7 @@ public class RegisterCommandHandler : BaseCreateHandler<RegisterCommand, User>
         bool emailExists = await userRepository.EmailExists(request.Email, cancellationToken);
         if (emailExists)
         {
-            throw new ValidationErrorException("User with this email already exists");
+            throw new ValidationErrorException(ErrorMessages.User.EmailAlreadyExists);
         }
     }
 
