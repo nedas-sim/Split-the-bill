@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.Common;
 using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
@@ -23,7 +24,7 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity, TResponse> : 
         try
         {
             await PreValidation(request);
-            request.ValidateAndThrow();
+            (request as IValidation).ValidateAndThrow();
             TDatabaseEntity databaseEntity = await repository.GetById(request.Id, cancellationToken)
                 ?? throw new NotFoundErrorException($"{typeof(TDatabaseEntity).Name} not found");
 

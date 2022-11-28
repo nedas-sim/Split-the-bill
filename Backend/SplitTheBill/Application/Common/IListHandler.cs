@@ -5,11 +5,6 @@ using MediatR;
 
 namespace Application.Common;
 
-public interface IListHandler<TRequest, TResponse> : IRequestHandler<TRequest, BaseListResult<TResponse>>
-    where TRequest : IListRequest<TResponse>
-{
-}
-
 public abstract class BaseListHandler<TRequest, TResponse> : IRequestHandler<TRequest, BaseListResult<TResponse>>
     where TRequest : IListRequest<TResponse>
 {
@@ -17,10 +12,7 @@ public abstract class BaseListHandler<TRequest, TResponse> : IRequestHandler<TRe
     {
         await PreValidation(request);
 
-        if (request is IValidation validationRequest)
-        {
-            validationRequest.ValidateAndThrow();
-        }
+        (request as IValidation).ValidateAndThrow();
 
         List<TResponse> responses = await GetResponses(request, cancellationToken);
         int totalCount = await GetTotalCount(request, cancellationToken);

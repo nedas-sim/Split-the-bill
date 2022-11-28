@@ -1,12 +1,10 @@
 ﻿using Application.Common;
 using Application.Repositories;
-using Domain.Common.Results;
 using Domain.Responses.Payments;
-using Domain.Results;
 
 namespace Application.Payments.GetPaymentList;
 
-public sealed class GetPaymentListQueryHandler : IListHandler<GetPaymentListQuery, PaymentResponse>
+public sealed class GetPaymentListQueryHandler : BaseListHandler<GetPaymentListQuery, PaymentResponse>
 {
     private readonly IPaymentRepository paymentRepository;
 
@@ -15,11 +13,9 @@ public sealed class GetPaymentListQueryHandler : IListHandler<GetPaymentListQuer
         this.paymentRepository = paymentRepository;
     }
 
-    public async Task<BaseListResult<PaymentResponse>> Handle(GetPaymentListQuery request, CancellationToken cancellationToken)
-    {
-        List<PaymentResponse> payments = await paymentRepository.GetPaymentResponseList(request, cancellationToken);
-        int totalCount = await paymentRepository.GetCount(cancellationToken);
+    public override async Task<List<PaymentResponse>> GetResponses(GetPaymentListQuery request, CancellationToken cancellationToken)
+        => await paymentRepository.GetPaymentResponseList(request, cancellationToken);
 
-        return new ListResult<PaymentResponse>(payments, totalCount, request);
-    }
+    public override async Task<int> GetTotalCount(GetPaymentListQuery request, CancellationToken cancellationToken)
+        => await paymentRepository.GetCount(cancellationToken);
 }

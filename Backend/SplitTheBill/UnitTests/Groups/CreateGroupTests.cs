@@ -24,7 +24,7 @@ public class CreateGroupTests
 
         // Act:
         BaseResult<CreateResponse> result = await handler.Handle(command, default);
-        bool isValid = command.IsValid(out _);
+        bool isValid = (command as IValidation).IsValid(out _);
 
         // Assert:
         Assert.False(isValid);
@@ -44,7 +44,7 @@ public class CreateGroupTests
 
         // Act:
         BaseResult<CreateResponse> result = await handler.Handle(command, default);
-        bool isValid = command.IsValid(out _);
+        bool isValid = (command as IValidation).IsValid(out _);
 
         // Assert:
         Assert.True(isValid);

@@ -8,4 +8,10 @@ public sealed class GetUsersGroupListQuery : PagingParameters, IListRequest<Grou
 {
     internal Guid UserId { get; set; }
     public void SetUserId(Guid userId) => UserId = userId;
+
+    public string ApiErrorMessagePrefix => throw new NotImplementedException();
+    public IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
+    {
+        throw new NotImplementedException();
+    }
 }

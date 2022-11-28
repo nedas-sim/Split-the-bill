@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.Common;
 using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
@@ -24,7 +25,7 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
         try
         {
             await PreValidation(request);
-            request.ValidateAndThrow();
+            (request as IValidation).ValidateAndThrow();
             await DatabaseValidation(request, cancellationToken);
             TDatabaseEntity dbEntity = request.BuildEntity();
             await PostEntityBuilding(request, dbEntity, cancellationToken);

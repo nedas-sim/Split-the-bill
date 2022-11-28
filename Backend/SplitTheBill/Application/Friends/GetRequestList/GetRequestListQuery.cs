@@ -10,4 +10,10 @@ public sealed class GetRequestListQuery : PagingParameters, IListRequest<UserRes
 
     internal Guid CallingUserId { get; set; }
     public void SetCallingUserId(Guid id) => CallingUserId = id;
+
+    public string ApiErrorMessagePrefix => throw new NotImplementedException();
+    public IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
+    {
+        throw new NotImplementedException();
+    }
 }
