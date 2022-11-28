@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Common.Results;
+using Domain.Extensions;
 using Domain.Results;
 using MediatR;
 
@@ -14,10 +15,7 @@ public abstract class BaseListHandler<TRequest, TResponse> : IRequestHandler<TRe
 
         if ((request as IValidation).IsValid(out string? errorMessage) is false)
         {
-            return new ListValidationResult<TResponse>
-            {
-                Message = errorMessage!,
-            };
+            return errorMessage!.ToListValidationResult<TResponse>();
         }
 
         List<TResponse> responses = await GetResponses(request, cancellationToken);

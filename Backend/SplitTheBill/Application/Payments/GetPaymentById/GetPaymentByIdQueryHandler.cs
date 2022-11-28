@@ -1,8 +1,8 @@
 ﻿using Application.Common;
 using Application.Repositories;
 using Domain.Common.Results;
+using Domain.Extensions;
 using Domain.Responses.Payments;
-using Domain.Results;
 
 namespace Application.Payments.GetPaymentById;
 
@@ -21,10 +21,7 @@ public class GetPaymentByIdQueryHandler : IResultHandler<GetPaymentByIdQuery, Pa
 
         if (paymentResponse is null)
         {
-            return new NotFoundResult<PaymentResponse>
-            {
-                Message = "Payment not found",
-            };
+            return "Payment not found".ToNotFoundResult<PaymentResponse>();
         }
 
         return paymentResponse;

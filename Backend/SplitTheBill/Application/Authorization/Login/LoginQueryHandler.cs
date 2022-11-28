@@ -4,8 +4,8 @@ using Application.Services;
 using Domain.Common;
 using Domain.Common.Results;
 using Domain.Database;
+using Domain.Extensions;
 using Domain.Responses.Authorization;
-using Domain.Results;
 
 namespace Application.Authorization.Login;
 
@@ -43,10 +43,5 @@ public sealed class LoginQueryHandler : IResultHandler<LoginQuery, LoginResponse
     }
 
     private static BaseResult<LoginResponse> BuildIncorrectRequestResult()
-    {
-        return new NotFoundResult<LoginResponse>
-        {
-            Message = ErrorMessages.User.IncorrectEmailOrPassword,
-        };
-    }
+        => ErrorMessages.User.IncorrectEmailOrPassword.ToNotFoundResult<LoginResponse>();
 }

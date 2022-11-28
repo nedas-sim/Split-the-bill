@@ -3,7 +3,7 @@ using Domain.Common;
 using Domain.Common.Results;
 using Domain.Database;
 using Domain.Enums;
-using Domain.Results;
+using Domain.Extensions;
 using MediatR;
 
 namespace Application.Friends.SendFriendRequest;
@@ -28,10 +28,7 @@ public sealed class SendFriendRequestCommandHandler
             string? errorMessage = GetErrorMessageForStatus(status);
             if (errorMessage is not null)
             {
-                return new ValidationErrorResult<Unit>
-                {
-                    Message = errorMessage!,
-                };
+                return errorMessage.ToValidationErrorResult<Unit>();
             }
         }
 

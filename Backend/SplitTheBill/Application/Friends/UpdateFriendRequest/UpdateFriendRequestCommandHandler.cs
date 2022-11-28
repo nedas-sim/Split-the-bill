@@ -3,7 +3,7 @@ using Application.Repositories;
 using Domain.Common;
 using Domain.Common.Results;
 using Domain.Database;
-using Domain.Results;
+using Domain.Extensions;
 using MediatR;
 
 namespace Application.Friends.UpdateFriendRequest;
@@ -24,10 +24,7 @@ public sealed class UpdateFriendRequestCommandHandler
 
         if (DoesFriendRequestExist(friendship) is false)
         {
-            return new ValidationErrorResult<Unit>
-            {
-                Message = ErrorMessages.Friends.RequestDoesNotExist,
-            };
+            return ErrorMessages.Friends.RequestDoesNotExist.ToValidationErrorResult<Unit>();
         }
 
         Func<UserFriendship, CancellationToken, Task> repositoryCall =

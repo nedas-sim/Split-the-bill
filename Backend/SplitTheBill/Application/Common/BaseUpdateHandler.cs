@@ -3,7 +3,7 @@ using Domain.Common;
 using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
-using Domain.Results;
+using Domain.Extensions;
 using MediatR;
 
 namespace Application.Common;
@@ -36,17 +36,11 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity, TResponse> : 
         }
         catch (ValidationErrorException validationEx)
         {
-            return new ValidationErrorResult<TResponse>
-            {
-                Message = validationEx.Message,
-            };
+            return validationEx.Message.ToValidationErrorResult<TResponse>();
         }
         catch (NotFoundErrorException notFoundEx)
         {
-            return new NotFoundResult<TResponse>
-            {
-                Message = notFoundEx.Message,
-            };
+            return notFoundEx.Message.ToNotFoundResult<TResponse>();
         }
     }
 

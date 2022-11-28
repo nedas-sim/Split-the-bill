@@ -3,8 +3,8 @@ using Domain.Common;
 using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
+using Domain.Extensions;
 using Domain.Responses;
-using Domain.Results;
 using MediatR;
 
 namespace Application.Common;
@@ -35,10 +35,7 @@ public abstract class BaseCreateHandler<TRequest, TDatabaseEntity> : IRequestHan
         }
         catch (ValidationErrorException validationEx)
         {
-            return new ValidationErrorResult<CreateResponse>
-            {
-                Message = validationEx.Message,
-            };
+            return validationEx.Message.ToValidationErrorResult<CreateResponse>();
         }
     }
 

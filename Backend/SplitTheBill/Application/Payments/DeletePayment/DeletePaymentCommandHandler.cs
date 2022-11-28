@@ -1,5 +1,6 @@
 ﻿using Application.Repositories;
 using Domain.Common.Results;
+using Domain.Extensions;
 using Domain.Results;
 using MediatR;
 
@@ -19,10 +20,7 @@ public sealed class DeletePaymentCommandHandler : IRequestHandler<DeletePaymentC
         bool deleted = await paymentRepository.Delete(request.Id, cancellationToken);
 
         return deleted ?
-            new NoContentResult<Unit>() :
-            new NotFoundResult<Unit>()
-            {
-                Message = "Payment not found",
-            };
+            new NoContentResult<Unit>() : 
+            "Payment not found".ToNotFoundResult<Unit>();
     }
 }
