@@ -12,7 +12,13 @@ public abstract class BaseListHandler<TRequest, TResponse> : IRequestHandler<TRe
     {
         await PreValidation(request);
 
-        (request as IValidation).ValidateAndThrow();
+        if ((request as IValidation).IsValid(out string? errorMessage) is false)
+        {
+            return new ListValidationResult<TResponse>
+            {
+                Message = errorMessage!,
+            };
+        }
 
         List<TResponse> responses = await GetResponses(request, cancellationToken);
         int totalCount = await GetTotalCount(request, cancellationToken);
