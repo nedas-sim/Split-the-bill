@@ -6,7 +6,7 @@ using MediatR;
 namespace Application.Common;
 
 public abstract class BaseListHandler<TRequest, TResponse> : IRequestHandler<TRequest, BaseListResult<TResponse>>
-    where TRequest : IListRequest<TResponse>
+    where TRequest : BaseListRequest<TResponse>
 {
     public async Task<BaseListResult<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {

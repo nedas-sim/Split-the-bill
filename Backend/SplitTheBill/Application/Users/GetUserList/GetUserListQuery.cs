@@ -4,11 +4,8 @@ using Domain.Responses.Users;
 
 namespace Application.Users.GetUserList;
 
-public sealed class GetUserListQuery : IListRequest<UserResponse>
+public sealed class GetUserListQuery : BaseListRequest<UserResponse>
 {
-    public int Page { get; set; } = 1;
-    public int Size { get; set; } = 20;
-
     internal Guid CallingUserId { get; set; }
     public void SetCallingUserId(Guid id) => CallingUserId = id;
 
@@ -16,8 +13,8 @@ public sealed class GetUserListQuery : IListRequest<UserResponse>
 
     internal UserSettings Config;
 
-    public string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
-    public IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
+    public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
+    public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         bool validUsernameLength = Search?.Length >= Config.MinUsernameLength;
 
