@@ -4,7 +4,7 @@ using Domain.Responses.Users;
 
 namespace Application.Users.GetUserList;
 
-public sealed class GetUserListQuery : BaseValidation, IPaging, IListRequest<UserResponse>
+public sealed class GetUserListQuery : IListRequest<UserResponse>
 {
     public int Page { get; set; } = 1;
     public int Size { get; set; } = 20;
@@ -14,11 +14,10 @@ public sealed class GetUserListQuery : BaseValidation, IPaging, IListRequest<Use
 
     public string Search { get; set; }
 
-    public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
-
     internal UserSettings Config;
 
-    public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
+    public string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
+    public IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         bool validUsernameLength = Search?.Length >= Config.MinUsernameLength;
 

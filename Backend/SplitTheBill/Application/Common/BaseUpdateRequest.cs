@@ -5,11 +5,17 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseUpdateRequest<TDatabaseEntity, TResponse> : BaseValidation, IRequest<BaseResult<TResponse>>
+public abstract class BaseUpdateRequest<TDatabaseEntity, TResponse> : IValidation, IRequest<BaseResult<TResponse>>
     where TDatabaseEntity : BaseEntity
 {
     internal Guid Id { get; set; }
     public void SetId(Guid id) => Id = id;
 
     public abstract void Update(TDatabaseEntity databaseEntity);
+
+    public abstract string ApiErrorMessagePrefix { get; }
+    public virtual IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
+    {
+        yield break;
+    }
 }

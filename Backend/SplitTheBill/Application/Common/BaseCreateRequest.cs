@@ -6,8 +6,15 @@ using MediatR;
 
 namespace Application.Common;
 
-public abstract class BaseCreateRequest<TDatabaseEntity> : BaseValidation, IRequest<BaseResult<CreateResponse>>
+public abstract class BaseCreateRequest<TDatabaseEntity> : IValidation, IRequest<BaseResult<CreateResponse>>
     where TDatabaseEntity : BaseEntity
 {
+    public abstract string ApiErrorMessagePrefix { get; }
+
     public abstract TDatabaseEntity BuildEntity();
+
+    public virtual IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
+    {
+        yield break;
+    }
 }
