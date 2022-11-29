@@ -9,7 +9,7 @@ namespace Application.Common;
 public abstract class BaseCreateRequest<TDatabaseEntity> : IValidation, IRequest<BaseResult<CreateResponse>>
     where TDatabaseEntity : BaseEntity
 {
-    public abstract string ApiErrorMessagePrefix { get; }
+    public virtual string ApiErrorMessagePrefix => string.Empty;
 
     public abstract TDatabaseEntity BuildEntity();
 

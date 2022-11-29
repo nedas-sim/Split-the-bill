@@ -36,7 +36,7 @@ public sealed class SendFriendRequestCommandHandler
         return Unit.Value;
     }
 
-    private static string? GetErrorMessageForStatus(FriendshipStatus status)
+    internal static string? GetErrorMessageForStatus(FriendshipStatus status)
         => status switch
         {
             FriendshipStatus.Friends => ErrorMessages.Friends.AlreadyFriends,

@@ -5,6 +5,8 @@ namespace Application.Groups.GetUsersGroupList;
 
 public sealed class GetUsersGroupListQuery : BaseListRequest<GroupResponse>
 {
+    #region Auth ID
     internal Guid UserId { get; set; }
     public void SetUserId(Guid userId) => UserId = userId;
+    #endregion
 }

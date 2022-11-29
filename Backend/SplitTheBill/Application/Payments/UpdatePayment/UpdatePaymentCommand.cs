@@ -7,10 +7,12 @@ namespace Application.Payments.UpdatePayment;
 
 public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment, PaymentResponse>
 {
+    #region API Params
     public DateTime? DateOfPayment { get; set; }
     public decimal? Amount { get; set; }
     public Currency? Currency { get; set; }
-
+    #endregion
+    #region Overrides
     public override string ApiErrorMessagePrefix => "Update payment request has validation errors";
 
     public override void Update(Payment databaseEntity)
@@ -30,4 +32,5 @@ public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment, PaymentRes
         yield return (isAmountValid, "Amount has to be positive");
         yield return (isCurrencyValid, "Currency is not supported");
     }
+    #endregion
 }
