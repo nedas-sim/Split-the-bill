@@ -4,24 +4,25 @@ using Domain.Responses.Users;
 
 namespace Application.Users.GetUserList;
 
-public sealed class GetUserListQuery : BaseValidation, IPaging, IListRequest<UserResponse>
+public sealed class GetUserListQuery : BaseListRequest<UserResponse>
 {
-    public int Page { get; set; } = 1;
-    public int Size { get; set; } = 20;
-
+    #region API Params
+    public string Search { get; set; }
+    #endregion
+    #region Auth ID
     internal Guid CallingUserId { get; set; }
     public void SetCallingUserId(Guid id) => CallingUserId = id;
-
-    public string Search { get; set; }
-
-    public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
-
+    #endregion
+    #region Config
     internal UserSettings Config;
-
+    #endregion
+    #region Overrides
+    public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
     public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         bool validUsernameLength = Search?.Length >= Config.MinUsernameLength;
 
         yield return (validUsernameLength, ErrorMessages.User.MinimumSearchLength(Config.MinUsernameLength));
     }
+    #endregion
 }

@@ -1,8 +1,9 @@
 ﻿using Application.Repositories;
+using Domain.Common;
 using Domain.Common.Identity;
 using Domain.Common.Results;
 using Domain.Exceptions;
-using Domain.Results;
+using Domain.Extensions;
 using MediatR;
 
 namespace Application.Common;
@@ -23,7 +24,7 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity, TResponse> : 
         try
         {
             await PreValidation(request);
-            request.ValidateAndThrow();
+            (request as IValidation).ValidateAndThrow();
             TDatabaseEntity databaseEntity = await repository.GetById(request.Id, cancellationToken)
                 ?? throw new NotFoundErrorException($"{typeof(TDatabaseEntity).Name} not found");
 
@@ -35,17 +36,11 @@ public abstract class BaseUpdateHandler<TRequest, TDatabaseEntity, TResponse> : 
         }
         catch (ValidationErrorException validationEx)
         {
-            return new ValidationErrorResult<TResponse>
-            {
-                Message = validationEx.Message,
-            };
+            return validationEx.Message.ToValidationErrorResult<TResponse>();
         }
         catch (NotFoundErrorException notFoundEx)
         {
-            return new NotFoundResult<TResponse>
-            {
-                Message = notFoundEx.Message,
-            };
+            return notFoundEx.Message.ToNotFoundResult<TResponse>();
         }
     }
 

@@ -18,7 +18,7 @@ public class RegistrationRequestTests
         command.FillDataWithSamePassword();
 
         // Act:
-        bool isValid = command.IsValid(out _);
+        bool isValid = (command as IValidation).IsValid(out _);
 
         // Assert:
         Assert.True(isValid);
@@ -36,7 +36,7 @@ public class RegistrationRequestTests
         command.RepeatPassword = repeatPassword;
 
         // Act:
-        bool isValid = command.IsValid(out string? errorMessage);
+        bool isValid = (command as IValidation).IsValid(out string? errorMessage);
 
         // Assert:
         Assert.False(isValid);

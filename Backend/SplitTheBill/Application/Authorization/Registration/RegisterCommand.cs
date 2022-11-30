@@ -7,18 +7,16 @@ namespace Application.Authorization.Registration;
 
 public sealed class RegisterCommand : BaseCreateRequest<User>
 {
-    internal UserSettings Config { get; set; }
-
+    #region API Params
     public string Email { get; set; }
     public string Password { get; set; }
     public string RepeatPassword { get; set; }
-
+    #endregion
+    #region Config
+    internal UserSettings Config { get; set; }
+    #endregion
+    #region Overrides
     public override string ApiErrorMessagePrefix => ErrorMessages.User.RegistrationRequestPrefix;
-
-    public void SetConfigurations(UserSettings config)
-    {
-        Config = config;
-    }
 
     public override User BuildEntity()
     {
@@ -42,4 +40,5 @@ public sealed class RegisterCommand : BaseCreateRequest<User>
         yield return (validPasswordLength, ErrorMessages.User.MinimumPasswordLength(minPasswordLength));
         yield return (passwordsMatch, ErrorMessages.User.PasswordMismatch);
     }
+    #endregion
 }

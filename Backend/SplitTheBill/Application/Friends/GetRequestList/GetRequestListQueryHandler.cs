@@ -1,12 +1,10 @@
 ﻿using Application.Common;
 using Application.Repositories;
-using Domain.Common.Results;
 using Domain.Responses.Users;
-using Domain.Results;
 
 namespace Application.Friends.GetRequestList;
 
-public sealed class GetRequestListQueryHandler : IListHandler<GetRequestListQuery, UserResponse>
+public sealed class GetRequestListQueryHandler : BaseListHandler<GetRequestListQuery, UserResponse>
 {
     private readonly IUserRepository userRepository;
 
@@ -15,13 +13,9 @@ public sealed class GetRequestListQueryHandler : IListHandler<GetRequestListQuer
         this.userRepository = userRepository;
     }
 
-    public async Task<BaseListResult<UserResponse>> Handle(GetRequestListQuery request, CancellationToken cancellationToken)
-    {
-        List<UserResponse> userResponses =
-            await userRepository.GetPendingFriendshipList(request, request, cancellationToken);
+    public override async Task<List<UserResponse>> GetResponses(GetRequestListQuery request, CancellationToken cancellationToken)
+        => await userRepository.GetPendingFriendshipList(request, request, cancellationToken);
 
-        int friendRequestCount = await userRepository.GetPendingFriendshipCount(request, cancellationToken);
-
-        return new ListResult<UserResponse>(userResponses, friendRequestCount, request);
-    }
+    public override async Task<int> GetTotalCount(GetRequestListQuery request, CancellationToken cancellationToken)
+        => await userRepository.GetPendingFriendshipCount(request, cancellationToken);
 }

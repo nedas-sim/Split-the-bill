@@ -6,11 +6,14 @@ namespace Application.Groups.CreateGroup;
 
 public sealed class CreateGroupCommand : BaseCreateRequest<Group>
 {
+    #region API Params
     public string Name { get; set; }
-
+    #endregion
+    #region Auth ID
     internal Guid UserId { get; set; }
     public void SetUserId(Guid id) => UserId = id;
-
+    #endregion
+    #region Overrides
     public override string ApiErrorMessagePrefix => ErrorMessages.Group.CreateRequestPrefix;
 
     public override Group BuildEntity()
@@ -30,4 +33,5 @@ public sealed class CreateGroupCommand : BaseCreateRequest<Group>
 
         yield return (validName, ErrorMessages.Group.EmptyName);
     }
+    #endregion
 }

@@ -1,14 +1,12 @@
 ﻿using Application.Common;
 using Application.Repositories;
 using Domain.Common;
-using Domain.Common.Results;
 using Domain.Responses.Users;
-using Domain.Results;
 using Microsoft.Extensions.Options;
 
 namespace Application.Users.GetUserList;
 
-public sealed class GetUserListQueryHandler : IListHandler<GetUserListQuery, UserResponse>
+public sealed class GetUserListQueryHandler : BaseListHandler<GetUserListQuery, UserResponse>
 {
     private readonly IUserRepository userRepository;
     private readonly UserSettings config;
@@ -20,23 +18,14 @@ public sealed class GetUserListQueryHandler : IListHandler<GetUserListQuery, Use
         this.config = config.Value;
     }
 
-    public async Task<BaseListResult<UserResponse>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
+    public override async Task PreValidation(GetUserListQuery request)
     {
         request.Config = config;
-
-        if (request.IsValid(out string? errorMessage) is false)
-        {
-            return new ListValidationResult<UserResponse>
-            {
-                Message = errorMessage!,
-            };
-        }
-
-        List<UserResponse> userResponses =
-            await userRepository.GetUserList(request, request, cancellationToken);
-
-        int userCount = await userRepository.GetUserCount(request, cancellationToken);
-
-        return new ListResult<UserResponse>(userResponses, userCount, request);
     }
+
+    public override async Task<List<UserResponse>> GetResponses(GetUserListQuery request, CancellationToken cancellationToken)
+        => await userRepository.GetUserList(request, request, cancellationToken);
+
+    public override async Task<int> GetTotalCount(GetUserListQuery request, CancellationToken cancellationToken)
+        => await userRepository.GetUserCount(request, cancellationToken);
 }

@@ -1,12 +1,10 @@
 ﻿using Application.Common;
 using Application.Repositories;
-using Domain.Common.Results;
 using Domain.Responses.Groups;
-using Domain.Results;
 
 namespace Application.Groups.GetUsersGroupList;
 
-public sealed class GetUsersGroupListQueryHandler : IListHandler<GetUsersGroupListQuery, GroupResponse>
+public sealed class GetUsersGroupListQueryHandler : BaseListHandler<GetUsersGroupListQuery, GroupResponse>
 {
     private readonly IGroupRepository groupRepository;
 
@@ -15,13 +13,9 @@ public sealed class GetUsersGroupListQueryHandler : IListHandler<GetUsersGroupLi
         this.groupRepository = groupRepository;
     }
 
-    public async Task<BaseListResult<GroupResponse>> Handle(GetUsersGroupListQuery request, CancellationToken cancellationToken)
-    {
-        List<GroupResponse> userGroups = 
-            await groupRepository.GetUsersGroups(request, request.UserId, cancellationToken);
+    public override async Task<List<GroupResponse>> GetResponses(GetUsersGroupListQuery request, CancellationToken cancellationToken)
+        => await groupRepository.GetUsersGroups(request, request.UserId, cancellationToken);
 
-        int groupCount = await groupRepository.UserGroupsCount(request.UserId, cancellationToken);
-
-        return new ListResult<GroupResponse>(userGroups, groupCount, request);
-    }
+    public override async Task<int> GetTotalCount(GetUsersGroupListQuery request, CancellationToken cancellationToken)
+        => await groupRepository.UserGroupsCount(request.UserId, cancellationToken);
 }

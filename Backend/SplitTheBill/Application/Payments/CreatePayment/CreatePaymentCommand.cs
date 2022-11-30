@@ -6,10 +6,12 @@ namespace Application.Payments.CreatePayment;
 
 public sealed class CreatePaymentCommand : BaseCreateRequest<Payment>
 {
+    #region API Params
     public DateTime DateOfPayment { get; set; }
     public decimal Amount { get; set; }
     public Currency Currency { get; set; }
-
+    #endregion
+    #region Overrides
     public override string ApiErrorMessagePrefix => "Create payment request has validation errors";
 
     public override Payment BuildEntity()
@@ -34,4 +36,5 @@ public sealed class CreatePaymentCommand : BaseCreateRequest<Payment>
         yield return (positiveAmount, "Amount has to be positive");
         yield return (validCurrency, "Currency is not supported");
     }
+    #endregion
 }
