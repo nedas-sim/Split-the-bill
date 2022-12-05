@@ -9,4 +9,7 @@ public sealed class GetUsersGroupListQuery : BaseListRequest<GroupResponse>
     internal Guid UserId { get; set; }
     public void SetUserId(Guid userId) => UserId = userId;
     #endregion
+    #region API Params
+    public string? Search { get; set; }
+    #endregion
 }

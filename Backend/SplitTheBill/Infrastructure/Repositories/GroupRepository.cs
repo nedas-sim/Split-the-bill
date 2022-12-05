@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Groups.GetUsersGroupList;
+using Application.Repositories;
 using Domain.Common;
 using Domain.Database;
 using Domain.Responses.Groups;
@@ -12,15 +13,25 @@ namespace Infrastructure.Repositories;
 
 public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
 {
+    #region Private Methods
+    internal IQueryable<GroupMembershipView> QueryGroupMembershipViewsByFilter(GetUsersGroupListQuery query)
+    {
+        return
+            context.GroupMembershipViews
+                   .Where(gm => gm.UserId == query.UserId)
+                   .Where(gm => gm.GroupName.Contains(query.Search ?? string.Empty));
+    }
+    #endregion
+
     public GroupRepository(DataContext context, IOptions<ConnectionStrings> options) 
         : base(context, options.Value.DefaultConnection)
     {
     }
 
-    public async Task<List<GroupResponse>> GetUsersGroups(IPaging pagingParameters, Guid userId, CancellationToken cancellationToken = default)
+    public async Task<List<GroupResponse>> GetUsersGroups(IPaging pagingParameters, GetUsersGroupListQuery query, CancellationToken cancellationToken = default)
     {
         List<GroupResponse> userGroups = await
-            QueryGroupMembershipViewsByUserId(userId)
+            QueryGroupMembershipViewsByFilter(query)
                 .AsNoTracking()
                 .OrderBy(gm => gm.AcceptedOn)
                 .ApplyPaging(pagingParameters)
@@ -37,22 +48,13 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
         return userGroups;
     }
 
-    public async Task<int> UserGroupsCount(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<int> UserGroupsCount(GetUsersGroupListQuery query, CancellationToken cancellationToken = default)
     {
         int totalCount = await
-            QueryGroupMembershipViewsByUserId(userId)
+            QueryGroupMembershipViewsByFilter(query)
                 .AsNoTracking()
                 .CountAsync(cancellationToken);
 
         return totalCount;
     }
-
-    #region Private Methods
-    private IQueryable<GroupMembershipView> QueryGroupMembershipViewsByUserId(Guid userId)
-    {
-        return 
-            context.GroupMembershipViews
-                   .Where(gm => gm.UserId == userId);
-    }
-    #endregion
 }
