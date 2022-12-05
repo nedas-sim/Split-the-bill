@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Groups.GetUsersGroupList;
+using Application.Repositories;
 using Domain.Common;
 using Domain.Database;
 using Domain.Responses.Groups;
@@ -17,10 +18,10 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
     }
 
-    public async Task<List<GroupResponse>> GetUsersGroups(IPaging pagingParameters, Guid userId, CancellationToken cancellationToken = default)
+    public async Task<List<GroupResponse>> GetUsersGroups(IPaging pagingParameters, GetUsersGroupListQuery query, CancellationToken cancellationToken = default)
     {
         List<GroupResponse> userGroups = await
-            QueryGroupMembershipViewsByUserId(userId)
+            QueryGroupMembershipViewsByQuery(query)
                 .AsNoTracking()
                 .OrderBy(gm => gm.AcceptedOn)
                 .ApplyPaging(pagingParameters)
@@ -37,10 +38,10 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
         return userGroups;
     }
 
-    public async Task<int> UserGroupsCount(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<int> UserGroupsCount(GetUsersGroupListQuery query, CancellationToken cancellationToken = default)
     {
         int totalCount = await
-            QueryGroupMembershipViewsByUserId(userId)
+            QueryGroupMembershipViewsByQuery(query)
                 .AsNoTracking()
                 .CountAsync(cancellationToken);
 
@@ -48,11 +49,12 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
     }
 
     #region Private Methods
-    private IQueryable<GroupMembershipView> QueryGroupMembershipViewsByUserId(Guid userId)
+    private IQueryable<GroupMembershipView> QueryGroupMembershipViewsByQuery(GetUsersGroupListQuery query)
     {
-        return 
+        return
             context.GroupMembershipViews
-                   .Where(gm => gm.UserId == userId);
+                   .Where(gm => gm.UserId == query.UserId)
+                   .Where(gm => gm.GroupName.Contains(query.Search ?? string.Empty));
     }
     #endregion
 }

@@ -14,8 +14,8 @@ public sealed class GetUsersGroupListQueryHandler : BaseListHandler<GetUsersGrou
     }
 
     public override async Task<List<GroupResponse>> GetResponses(GetUsersGroupListQuery request, CancellationToken cancellationToken)
-        => await groupRepository.GetUsersGroups(request, request.UserId, cancellationToken);
+        => await groupRepository.GetUsersGroups(request, request, cancellationToken);
 
     public override async Task<int> GetTotalCount(GetUsersGroupListQuery request, CancellationToken cancellationToken)
-        => await groupRepository.UserGroupsCount(request.UserId, cancellationToken);
+        => await groupRepository.UserGroupsCount(request, cancellationToken);
 }
