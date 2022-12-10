@@ -31,6 +31,10 @@ public static class ErrorMessages
     {
         public const string CreateRequestPrefix = "Create group request has validation errors";
         public const string EmptyName = "Group name should not be empty";
+        public const string ReceiverIsNotFriend = "You can not invite a user who is not your friend";
+        public const string NotAMember = "You are not a member of this group";
+        public const string ReceiverIsAlreadyMember = "User is already a member of the group";
+        public const string ReceiverHasAnInvitation = "User is already invited to join the group";
     }
 
     public static class API
