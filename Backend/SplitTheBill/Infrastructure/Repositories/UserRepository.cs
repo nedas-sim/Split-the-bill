@@ -309,4 +309,15 @@ OFFSET {pagingParameters.Skip} ROWS FETCH NEXT {pagingParameters.Take} ROWS ONLY
         IEnumerable<UserResponse> userResponses = await QueryList<UserResponse>(sql, parameters);
         return userResponses.ToList();
     }
+
+    public async Task<bool> ConfirmFriendship(Guid firstUserId, Guid secondUserId, CancellationToken cancellationToken = default)
+    {
+        bool usersAreFriends = await
+            context.AcceptedFriendshipViews
+                   .Where(afv => afv.RequestSenderId == firstUserId || afv.RequestReceiverId == firstUserId)
+                   .Where(afv => afv.RequestSenderId == secondUserId || afv.RequestReceiverId == secondUserId)
+                   .AnyAsync(cancellationToken);
+
+        return usersAreFriends;
+    }
 }

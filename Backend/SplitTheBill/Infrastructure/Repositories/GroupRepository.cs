@@ -1,4 +1,5 @@
 ﻿using Application.Groups.GetUsersGroupList;
+using Application.Groups.SendInvitation;
 using Application.Repositories;
 using Domain.Common;
 using Domain.Database;
@@ -56,5 +57,40 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
                 .CountAsync(cancellationToken);
 
         return totalCount;
+    }
+
+    public async Task<bool> IsUserAMember(Guid userId, Guid groupId, CancellationToken cancellationToken = default)
+    {
+        bool userIsMember = await
+            context.GroupMembershipViews
+                   .Where(gmv => gmv.UserId == userId)
+                   .Where(gmv => gmv.GroupId == groupId)
+                   .AnyAsync(cancellationToken);
+
+        return userIsMember;
+    }
+
+    public async Task<UserGroup?> GetUserMembership(Guid userId, Guid groupId, CancellationToken cancellationToken = default)
+    {
+        UserGroup? userGroup = await
+            context.UserGroups
+                   .Where(ug => ug.UserId == userId)
+                   .Where(ug => ug.GroupId == groupId)
+                   .FirstOrDefaultAsync(cancellationToken);
+
+        return userGroup;
+    }
+
+    public async Task SendGroupInvitation(SendInvitationCommand request, CancellationToken cancellationToken = default)
+    {
+        UserGroup userGroup = new()
+        {
+            GroupId = request.GroupId,
+            UserId = request.ReceivingUserId,
+            InvitedOn = DateTime.UtcNow,
+        };
+
+        context.UserGroups.Add(userGroup);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

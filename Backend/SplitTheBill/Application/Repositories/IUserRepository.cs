@@ -20,6 +20,7 @@ public interface IUserRepository : IBaseRepository<User>
     public Task PostFriendRequest(SendFriendRequestCommand request, CancellationToken cancellationToken = default);
     public Task AcceptFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default);
     public Task DeleteFriendRequest(UserFriendship userFriendship, CancellationToken cancellationToken = default);
+    public Task<bool> ConfirmFriendship(Guid firstUserId, Guid secondUserId, CancellationToken cancellationToken = default);
 
     public Task<int> GetUserCount(GetUserListQuery filterParams, CancellationToken cancellationToken = default);
     public Task<List<UserResponse>> GetUserList(IPaging pagingParameters,

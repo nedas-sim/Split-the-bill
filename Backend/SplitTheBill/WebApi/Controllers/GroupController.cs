@@ -1,5 +1,6 @@
 ﻿using Application.Groups.CreateGroup;
 using Application.Groups.GetUsersGroupList;
+using Application.Groups.SendInvitation;
 using Domain.Responses;
 using Domain.Responses.Groups;
 using Domain.Results;
@@ -33,5 +34,14 @@ public class GroupController : BaseController
         Guid userId = GetId();
         query.SetUserId(userId);
         return FromListResult(await sender.Send(query));
+    }
+
+    [HttpPost("invite")]
+    [Authorize]
+    public async Task<IActionResult> SendInvitation([FromBody] SendInvitationCommand command)
+    {
+        Guid userId = GetId();
+        command.SetCallingUserId(userId);
+        return ToNoContent(await sender.Send(command));
     }
 }
