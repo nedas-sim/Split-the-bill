@@ -2,6 +2,7 @@
 using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
 using Application.Friends.UpdateFriendRequest;
+using Application.Groups.GetFriendsForGroup;
 using Application.Repositories;
 using Application.Users.GetUserList;
 using Domain.Common;
@@ -319,5 +320,41 @@ OFFSET {pagingParameters.Skip} ROWS FETCH NEXT {pagingParameters.Take} ROWS ONLY
                    .AnyAsync(cancellationToken);
 
         return usersAreFriends;
+    }
+
+    public async Task<int> GetFriendSuggestionsForGroupCount(GetFriendsForGroupQuery request, CancellationToken cancellationToken = default)
+    {
+        // reiks rasyt raw sql
+
+        /*
+         DECLARE @callingUserId AS UNIQUEIDENTIFIER SET @callingUserId = 'eb733b22-b2ca-4e56-aa3f-08daae8ee83a'
+DECLARE @groupId AS UNIQUEIDENTIFIER SET @groupId = 'e061ab1c-7d19-4821-a75d-08dab39babf2'
+DECLARE @search AS NVARCHAR SET @search = ''
+
+SELECT *
+FROM (
+SELECT *
+FROM ( SELECT UserId FROM UserGroups ug WHERE ug.GroupId = @groupId ) AS ug
+RIGHT JOIN (
+-- SELECTING FRIENDS
+SELECT afw.RequestReceiverId AS FriendId, afw.ReceiverUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.ReceiverEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestSenderId = @callingUserId
+
+UNION ALL
+SELECT afw.RequestSenderId AS FriendId, afw.SenderUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.SenderEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestReceiverId = @callingUserId
+-- END SELECTING FRIENDS
+) AS Friends ON ug.UserId = Friends.FriendId
+) AS FriendStatusForGroup
+WHERE FriendStatusForGroup.UserId IS NULL
+         */
+        throw new NotImplementedException();
+    }
+
+    public Task<List<UserResponse>> GetFriendSuggestionsForGroup(GetFriendsForGroupQuery request, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

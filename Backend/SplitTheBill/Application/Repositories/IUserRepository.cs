@@ -2,6 +2,7 @@
 using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
 using Application.Friends.UpdateFriendRequest;
+using Application.Groups.GetFriendsForGroup;
 using Application.Users.GetUserList;
 using Domain.Common;
 using Domain.Database;
@@ -23,18 +24,26 @@ public interface IUserRepository : IBaseRepository<User>
     public Task<bool> ConfirmFriendship(Guid firstUserId, Guid secondUserId, CancellationToken cancellationToken = default);
 
     public Task<int> GetUserCount(GetUserListQuery filterParams, CancellationToken cancellationToken = default);
-    public Task<List<UserResponse>> GetUserList(IPaging pagingParameters,
-                                                GetUserListQuery filterParams,
-                                                CancellationToken cancellationToken = default);
+    public Task<List<UserResponse>> GetUserList
+        (IPaging pagingParameters,
+         GetUserListQuery filterParams,
+         CancellationToken cancellationToken = default);
 
 
     public Task<int> GetPendingFriendshipCount(GetRequestListQuery filterParams, CancellationToken cancellationToken = default);
-    public Task<List<UserResponse>> GetPendingFriendshipList(IPaging pagingParameters,
-                                                             GetRequestListQuery filterParams,
-                                                             CancellationToken cancellationToken = default);
+    public Task<List<UserResponse>> GetPendingFriendshipList
+        (IPaging pagingParameters,
+         GetRequestListQuery filterParams,
+         CancellationToken cancellationToken = default);
 
     public Task<int> GetFriendCount(GetFriendListQuery filterParams, CancellationToken cancellationToken = default);
-    public Task<List<UserResponse>> GetFriendList(IPaging pagingParameters,
-                                                  GetFriendListQuery filterParams,
-                                                  CancellationToken cancellationToken = default);
+    public Task<List<UserResponse>> GetFriendList
+        (IPaging pagingParameters,
+         GetFriendListQuery filterParams,
+         CancellationToken cancellationToken = default);
+
+    public Task<int> GetFriendSuggestionsForGroupCount(GetFriendsForGroupQuery request, CancellationToken cancellationToken = default);
+    public Task<List<UserResponse>> GetFriendSuggestionsForGroup
+        (GetFriendsForGroupQuery request,
+         CancellationToken cancellationToken = default);
 }
