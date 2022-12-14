@@ -14,7 +14,7 @@ public sealed class CreateGroupCommand : BaseCreateRequest<Group>
     public void SetUserId(Guid id) => UserId = id;
     #endregion
     #region Overrides
-    public override string ApiErrorMessagePrefix => ErrorMessages.Group.CreateRequestPrefix;
+    public override string ApiErrorMessagePrefix() => ErrorMessages.Group.CreateRequestPrefix;
 
     public override Group BuildEntity()
     {

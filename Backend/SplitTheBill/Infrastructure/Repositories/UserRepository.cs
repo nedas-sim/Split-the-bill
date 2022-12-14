@@ -2,6 +2,7 @@
 using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
 using Application.Friends.UpdateFriendRequest;
+using Application.Groups.GetFriendsForGroup;
 using Application.Repositories;
 using Application.Users.GetUserList;
 using Domain.Common;
@@ -319,5 +320,77 @@ OFFSET {pagingParameters.Skip} ROWS FETCH NEXT {pagingParameters.Take} ROWS ONLY
                    .AnyAsync(cancellationToken);
 
         return usersAreFriends;
+    }
+
+    public async Task<int> GetFriendSuggestionsForGroupCount(GetFriendsForGroupQuery request, CancellationToken cancellationToken = default)
+    {
+        string sql = $@"
+SELECT COUNT(*)
+FROM (
+SELECT *
+FROM ( SELECT UserId FROM UserGroups ug WHERE ug.GroupId = @groupId ) AS ug
+RIGHT JOIN (
+-- SELECTING FRIENDS
+SELECT afw.RequestReceiverId AS FriendId, afw.ReceiverUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.ReceiverEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestSenderId = @callingUserId
+
+UNION ALL
+SELECT afw.RequestSenderId AS FriendId, afw.SenderUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.SenderEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestReceiverId = @callingUserId
+-- END SELECTING FRIENDS
+) AS Friends ON ug.UserId = Friends.FriendId
+) AS FriendStatusForGroup WHERE FriendStatusForGroup.UserId IS NULL
+AND ((@search LIKE N'') OR (CHARINDEX(@search, Username) > 0) OR (Email = @search))";
+
+        Dictionary<string, object> parameters = new()
+        {
+            { "callingUserId", request.UserId },
+            { "search", request.Search ?? string.Empty },
+            { "groupId", request.GroupId },
+        };
+
+        return await QueryValue<int>(sql, parameters);
+    }
+
+    public async Task<List<UserResponse>> GetFriendSuggestionsForGroup(GetFriendsForGroupQuery request, CancellationToken cancellationToken = default)
+    {
+        IPaging pagingParameters = request;
+
+        string sql = $@"
+SELECT 
+	FriendId AS Id,
+	Username,
+	1 AS UserSentTheRequest
+FROM (
+SELECT *
+FROM ( SELECT UserId FROM UserGroups ug WHERE ug.GroupId = @groupId ) AS ug
+RIGHT JOIN (
+-- SELECTING FRIENDS
+SELECT afw.RequestReceiverId AS FriendId, afw.ReceiverUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.ReceiverEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestSenderId = @callingUserId
+
+UNION ALL
+SELECT afw.RequestSenderId AS FriendId, afw.SenderUsername AS Username, afw.AcceptedOn, afw.AcceptedOn AS InvitedOn, afw.SenderEmail AS Email
+FROM AcceptedFriendshipView AS afw
+WHERE afw.RequestReceiverId = @callingUserId
+-- END SELECTING FRIENDS
+) AS Friends ON ug.UserId = Friends.FriendId
+) AS FriendStatusForGroup WHERE FriendStatusForGroup.UserId IS NULL
+AND ((@search LIKE N'') OR (CHARINDEX(@search, Username) > 0) OR (Email = @search))
+ORDER BY Username
+OFFSET {pagingParameters.Skip} ROWS FETCH NEXT {pagingParameters.Take} ROWS ONLY";
+
+        Dictionary<string, object> parameters = new()
+        {
+            { "callingUserId", request.UserId },
+            { "search", request.Search ?? string.Empty },
+            { "groupId", request.GroupId },
+        };
+
+        IEnumerable<UserResponse> userResponses = await QueryList<UserResponse>(sql, parameters);
+        return userResponses.ToList();
     }
 }

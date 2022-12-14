@@ -6,7 +6,7 @@ namespace Application.Common;
 
 public abstract class BaseListRequest<TResponse> : PagingParameters, IRequest<BaseListResult<TResponse>>, IValidation
 {
-    public virtual string ApiErrorMessagePrefix => string.Empty;
+    public virtual string ApiErrorMessagePrefix() => string.Empty;
 
     public virtual IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {

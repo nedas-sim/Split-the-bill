@@ -96,6 +96,7 @@ public class UpdateFriendRequestTests
         // Assert:
         Assert.IsType<SuccessResult<Unit>>(result);
         mock.Verify(m => m.AcceptFriendRequest(userFriendship, default), Times.Once());
+        mock.Verify(m => m.DeleteFriendRequest(userFriendship, default), Times.Never());
     }
 
     [Fact]
@@ -128,5 +129,6 @@ public class UpdateFriendRequestTests
         // Assert:
         Assert.IsType<SuccessResult<Unit>>(result);
         mock.Verify(m => m.DeleteFriendRequest(userFriendship, default), Times.Once());
+        mock.Verify(m => m.AcceptFriendRequest(userFriendship, default), Times.Never());
     }
 }

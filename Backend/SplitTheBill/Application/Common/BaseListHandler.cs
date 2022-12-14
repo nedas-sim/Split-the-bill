@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Common.Results;
+using Domain.Exceptions;
 using Domain.Extensions;
 using Domain.Results;
 using MediatR;
@@ -11,23 +12,33 @@ public abstract class BaseListHandler<TRequest, TResponse> : IRequestHandler<TRe
 {
     public async Task<BaseListResult<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        await PreValidation(request);
-
-        if ((request as IValidation).IsValid(out string? errorMessage) is false)
+        try
         {
-            return errorMessage!.ToListValidationResult<TResponse>();
+            await PreValidation(request);
+            (request as IValidation).ValidateAndThrow();
+            await DatabaseValidation(request, cancellationToken);
+            List<TResponse> responses = await GetResponses(request, cancellationToken);
+            int totalCount = await GetTotalCount(request, cancellationToken);
+
+            return new ListResult<TResponse>(responses, totalCount, request);
         }
-
-        List<TResponse> responses = await GetResponses(request, cancellationToken);
-        int totalCount = await GetTotalCount(request, cancellationToken);
-
-        return new ListResult<TResponse>(responses, totalCount, request);
+        catch (ValidationErrorException validationEx)
+        {
+            return validationEx.Message.ToListValidationResult<TResponse>();
+        }
     }
 
     /// <summary>
     /// Called at the start
     /// </summary>
     public virtual async Task PreValidation(TRequest request)
+    {
+    }
+
+    /// <summary>
+    /// Called after request validation
+    /// </summary>
+    public virtual async Task DatabaseValidation(TRequest request, CancellationToken cancellationToken)
     {
     }
 

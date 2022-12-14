@@ -16,7 +16,7 @@ public sealed class UpdateUserCommand : BaseUpdateRequest<User, UserResponse>
     internal UserSettings Config { get; set; }
     #endregion
     #region Overrides
-    public override string ApiErrorMessagePrefix => ErrorMessages.User.UpdateRequestPrefix;
+    public override string ApiErrorMessagePrefix() => ErrorMessages.User.UpdateRequestPrefix;
 
     public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {

@@ -1,8 +1,10 @@
 ﻿using Application.Groups.CreateGroup;
+using Application.Groups.GetFriendsForGroup;
 using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
 using Domain.Responses;
 using Domain.Responses.Groups;
+using Domain.Responses.Users;
 using Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -43,5 +45,13 @@ public class GroupController : BaseController
         Guid userId = GetId();
         command.SetCallingUserId(userId);
         return ToNoContent(await sender.Send(command));
+    }
+
+    [HttpGet("friends/invitable")]
+    [Authorize]
+    public async Task<ActionResult<ListResult<UserResponse>>> GetInvitableFriendsForGroup([FromQuery] GetFriendsForGroupQuery query)
+    {
+        query.SetUserId(GetId());
+        return FromListResult(await sender.Send(query));
     }
 }

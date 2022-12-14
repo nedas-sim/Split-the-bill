@@ -17,7 +17,7 @@ public sealed class GetUserListQuery : BaseListRequest<UserResponse>
     internal UserSettings Config;
     #endregion
     #region Overrides
-    public override string ApiErrorMessagePrefix => ErrorMessages.User.GetListRequestPrefix;
+    public override string ApiErrorMessagePrefix() => ErrorMessages.User.GetListRequestPrefix;
     public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         bool validUsernameLength = Search?.Length >= Config.MinUsernameLength;
