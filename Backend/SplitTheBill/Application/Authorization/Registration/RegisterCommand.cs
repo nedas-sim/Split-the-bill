@@ -16,7 +16,7 @@ public sealed class RegisterCommand : BaseCreateRequest<User>
     internal UserSettings Config { get; set; }
     #endregion
     #region Overrides
-    public override string ApiErrorMessagePrefix => ErrorMessages.User.RegistrationRequestPrefix;
+    public override string ApiErrorMessagePrefix() => ErrorMessages.User.RegistrationRequestPrefix;
 
     public override User BuildEntity()
     {

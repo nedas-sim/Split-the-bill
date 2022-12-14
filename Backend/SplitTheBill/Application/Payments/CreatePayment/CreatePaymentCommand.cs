@@ -12,7 +12,7 @@ public sealed class CreatePaymentCommand : BaseCreateRequest<Payment>
     public Currency Currency { get; set; }
     #endregion
     #region Overrides
-    public override string ApiErrorMessagePrefix => "Create payment request has validation errors";
+    public override string ApiErrorMessagePrefix() => "Create payment request has validation errors";
 
     public override Payment BuildEntity()
     {

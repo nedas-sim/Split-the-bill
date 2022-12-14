@@ -13,7 +13,7 @@ public abstract class BaseUpdateRequest<TDatabaseEntity, TResponse> : IValidatio
 
     public abstract void Update(TDatabaseEntity databaseEntity);
 
-    public virtual string ApiErrorMessagePrefix => string.Empty;
+    public virtual string ApiErrorMessagePrefix() => string.Empty;
     public virtual IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         yield break;

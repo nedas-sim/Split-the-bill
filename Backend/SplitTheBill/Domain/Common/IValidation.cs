@@ -5,7 +5,7 @@ namespace Domain.Common;
 
 public interface IValidation
 {
-    public string ApiErrorMessagePrefix { get; }
+    public string ApiErrorMessagePrefix();
     public IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties();
 
     public bool IsValid(out string? errorMessage)
@@ -22,7 +22,7 @@ public interface IValidation
             return true;
         }
 
-        errorMessage = validations.BuildErrorMessage(ApiErrorMessagePrefix);
+        errorMessage = validations.BuildErrorMessage(ApiErrorMessagePrefix());
 
         return string.IsNullOrEmpty(errorMessage);
     }

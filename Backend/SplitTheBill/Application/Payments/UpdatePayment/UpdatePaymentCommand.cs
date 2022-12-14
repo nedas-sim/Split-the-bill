@@ -13,7 +13,7 @@ public sealed class UpdatePaymentCommand : BaseUpdateRequest<Payment, PaymentRes
     public Currency? Currency { get; set; }
     #endregion
     #region Overrides
-    public override string ApiErrorMessagePrefix => "Update payment request has validation errors";
+    public override string ApiErrorMessagePrefix() => "Update payment request has validation errors";
 
     public override void Update(Payment databaseEntity)
     {
