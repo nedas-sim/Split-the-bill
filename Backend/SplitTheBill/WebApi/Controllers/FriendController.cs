@@ -2,6 +2,8 @@
 using Application.Friends.GetRequestList;
 using Application.Friends.SendFriendRequest;
 using Application.Friends.UpdateFriendRequest;
+using Application.Groups.GetGroupsForFriend;
+using Domain.Responses.Groups;
 using Domain.Responses.Users;
 using Domain.Results;
 using MediatR;
@@ -51,6 +53,14 @@ public class FriendController : BaseController
     {
         Guid userId = GetId();
         query.SetCallingUserId(userId);
+        return FromListResult(await sender.Send(query));
+    }
+
+    [HttpGet("groups/invitable")]
+    [Authorize]
+    public async Task<ActionResult<ListResult<GroupResponse>>> GetPotentialGroups([FromQuery] GetGroupsForFriendQuery query)
+    {
+        query.SetUserId(GetId());
         return FromListResult(await sender.Send(query));
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.Groups.GetUsersGroupList;
+﻿using Application.Groups.GetGroupsForFriend;
+using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
 using Application.Repositories;
 using Domain.Common;
@@ -40,9 +41,6 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
                 {
                     GroupId = gm.GroupId,
                     GroupName = gm.GroupName,
-                    MemberCount = context.GroupMembershipViews
-                                         .Where(gmv => gmv.GroupId == gm.GroupId)
-                                         .Count(),
                 })
                 .ToListAsync(cancellationToken);
 
@@ -92,5 +90,57 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
 
         context.UserGroups.Add(userGroup);
         await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<List<GroupResponse>> GetPotentialGroupsForFriend(GetGroupsForFriendQuery request, CancellationToken cancellationToken = default)
+    {
+        IPaging paging = request;
+
+        string sql = $@"
+SELECT MyGroups.GroupId, GroupName
+FROM (
+SELECT GroupId, GroupName
+FROM GroupMembershipView AS gmv
+WHERE gmv.UserId = @callingUserId
+) as MyGroups
+LEFT JOIN UserGroups AS ug
+ON MyGroups.GroupId = ug.GroupId AND @friendId = ug.UserId
+WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) > 0))
+ORDER BY GroupName
+OFFSET {paging.Skip} ROWS FETCH NEXT {paging.Take} ROWS ONLY";
+
+        Dictionary<string, object> parameters = new()
+        {
+            { "callingUserId", request.UserId },
+            { "search", request.Search ?? string.Empty },
+            { "friendId", request.FriendId },
+        };
+
+        IEnumerable<GroupResponse> responses = await QueryList<GroupResponse>(sql, parameters);
+        return responses.ToList();
+    }
+
+    public async Task<int> GetPotentialGroupsForFriendCount(GetGroupsForFriendQuery request, CancellationToken cancellationToken = default)
+    {
+        string sql = $@"
+SELECT COUNT(*)
+FROM (
+SELECT GroupId, GroupName
+FROM GroupMembershipView AS gmv
+WHERE gmv.UserId = @callingUserId
+) as MyGroups
+LEFT JOIN UserGroups AS ug
+ON MyGroups.GroupId = ug.GroupId AND @friendId = ug.UserId
+WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) > 0))";
+
+        Dictionary<string, object> parameters = new()
+        {
+            { "callingUserId", request.UserId },
+            { "search", request.Search ?? string.Empty },
+            { "friendId", request.FriendId },
+        };
+
+        int count = await QueryValue<int>(sql, parameters);
+        return count;
     }
 }

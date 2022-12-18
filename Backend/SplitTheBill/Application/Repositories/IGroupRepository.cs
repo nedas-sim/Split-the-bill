@@ -1,4 +1,5 @@
-﻿using Application.Groups.GetUsersGroupList;
+﻿using Application.Groups.GetGroupsForFriend;
+using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
 using Domain.Common;
 using Domain.Database;
@@ -13,4 +14,7 @@ public interface IGroupRepository : IBaseRepository<Group>
     public Task<bool> IsUserAMember(Guid userId, Guid groupId, CancellationToken cancellationToken = default);
     public Task<UserGroup?> GetUserMembership(Guid userId, Guid groupId, CancellationToken cancellationToken = default);
     public Task SendGroupInvitation(SendInvitationCommand request, CancellationToken cancellationToken = default);
+
+    public Task<List<GroupResponse>> GetPotentialGroupsForFriend(GetGroupsForFriendQuery request, CancellationToken cancellationToken = default);
+    public Task<int> GetPotentialGroupsForFriendCount(GetGroupsForFriendQuery request, CancellationToken cancellationToken = default);
 }
