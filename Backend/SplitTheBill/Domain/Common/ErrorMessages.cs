@@ -25,6 +25,7 @@ public static class ErrorMessages
         public const string RequestSent = "Friend request is already sent";
         public const string RequestReceived = "You have already received an invitation from this user";
         public const string RequestDoesNotExist = "Friend request does not exist";
+        public const string NotAFriend = "You are not friends";
     }
 
     public static class Group
