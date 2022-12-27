@@ -7,9 +7,8 @@
 ## searchEnabled:
 
 - bool value
-
-* Shows search bar
-* Calls _fetchItems_ with _search_ as a GET query parameter
+- Shows search bar
+- Calls _fetchItems_ with _search_ as a GET query parameter
 
 ## fetchItems:
 
