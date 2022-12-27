@@ -6,6 +6,7 @@ import styles from './styles';
 import CoreInput from '../../../components/CoreInput/CoreInput';
 import GenericList from '../GenericList/GenericList';
 import PageNavigationButton from '../../../components/PageNavigationButton/PageNavigationButton';
+import config from '../../../common/config';
 
 const GenericListScreen = (props) => {
   const { searchEnabled, fetchItems, renderItem, noItemsMessages, onAddNew, emptySearch } = props;
@@ -19,11 +20,12 @@ const GenericListScreen = (props) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (searchEnabled && !emptySearch && !(search?.length >= 3)) {
+    if (searchEnabled && !emptySearch && !(search?.length >= config.MINIMUM_SEARCH_TERM_SIZE)) {
       return;
     }
 
-    const debounceTimeInMs = emptySearch && search.length === 0 ? 0 : 1000;
+    const debounceTimeInMs =
+      emptySearch && search.length === 0 ? 0 : config.DEBOUNCE_TIME_IN_MILLISECONDS;
 
     const debounceTimeout = setTimeout(() => {
       const getItems = async () => {
@@ -38,7 +40,7 @@ const GenericListScreen = (props) => {
     }, debounceTimeInMs);
 
     return () => clearTimeout(debounceTimeout);
-  }, [isFocused, page, search]);
+  }, [isFocused, search, page]);
 
   const retrieveItems = async () => {
     const response = searchEnabled ? await fetchItems(page, search) : await fetchItems(page);

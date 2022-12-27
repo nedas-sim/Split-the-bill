@@ -1,9 +1,8 @@
 import axios from 'axios';
-// eslint-disable-next-line import/no-unresolved
-import { REACT_APP_API_BASE_URL } from '@env';
+import config from '../common/config';
 
 const axiosInstance = axios.create({
-  baseURL: REACT_APP_API_BASE_URL,
+  baseURL: config.BASE_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
