@@ -32,3 +32,7 @@
 - bool value
 - If provided, search bar can be empty
 - Otherwise, some value has to be entered to call the API
+
+## queryParams:
+
+- Object of parameters that are sent to API alongside _page_ and optionally _search_

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import { Text, View, BackHandler } from 'react-native';
+import { Text, View, BackHandler, Button } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import ScreenNames from '../../common/screenNames';
 import backHandlerHelper from '../../common/backHandlerHelper';
 
 const GroupDetailsScreen = ({ route, navigation }) => {
-  const { groupId } = route.params;
+  const { groupId, groupName } = route.params;
 
   useFocusEffect(
     useCallback(() => {
@@ -26,6 +26,15 @@ const GroupDetailsScreen = ({ route, navigation }) => {
   return (
     <View>
       <Text>{groupId}</Text>
+      <Button
+        title="Add Friends"
+        onPress={() => {
+          navigation.navigate(ScreenNames.friendsForGroup, {
+            groupId,
+            name: groupName,
+          });
+        }}
+      />
     </View>
   );
 };

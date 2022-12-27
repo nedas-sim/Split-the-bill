@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { Text, TouchableOpacity, Button, View, Alert } from 'react-native';
-import styles from './styles';
+import { Button, Alert } from 'react-native';
 import friendService from '../../../services/friendService';
 import { RefetchContext } from '../../../common/context';
+import CoreUserListItem from '../../../components/CoreUserListItem/CoreUserListItem';
 
-const UserListItem = ({ user }) => {
+const FriendListItem = ({ user }) => {
   const retrieveUsers = useContext(RefetchContext);
 
   const handleSendFriendRequest = async () => {
@@ -32,16 +32,13 @@ const UserListItem = ({ user }) => {
     }
   };
 
-  const showButtonContainer = user.canInvite || user.canAccept;
-
   return (
-    <TouchableOpacity style={styles.card}>
-      <View>
-        <Text style={styles.username}>{user.username}</Text>
-        <Text style={styles.status}>{user.status}</Text>
-      </View>
-      {showButtonContainer && (
-        <View style={styles.buttonContainer}>
+    <CoreUserListItem
+      showStatus
+      user={user}
+      showButtonContainer={user.canInvite || user.canAccept}
+      renderButtonContainer={() => (
+        <>
           {user.canInvite && <Button title="Invite" onPress={handleSendFriendRequest} />}
           {user.canAccept && (
             <>
@@ -49,10 +46,10 @@ const UserListItem = ({ user }) => {
               <Button title="Reject" onPress={() => handleFriendRequestInteraction(false)} />
             </>
           )}
-        </View>
+        </>
       )}
-    </TouchableOpacity>
+    />
   );
 };
 
-export default UserListItem;
+export default FriendListItem;

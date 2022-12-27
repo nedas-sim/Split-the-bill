@@ -2,3 +2,4 @@
 import { createContext } from 'react';
 
 export const RefetchContext = createContext();
+export const GroupInvitationContext = createContext();

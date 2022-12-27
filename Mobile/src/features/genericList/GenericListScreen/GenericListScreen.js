@@ -9,7 +9,15 @@ import PageNavigationButton from '../../../components/PageNavigationButton/PageN
 import config from '../../../common/config';
 
 const GenericListScreen = (props) => {
-  const { searchEnabled, fetchItems, renderItem, noItemsMessages, onAddNew, emptySearch } = props;
+  const {
+    searchEnabled,
+    fetchItems,
+    renderItem,
+    noItemsMessages,
+    onAddNew,
+    emptySearch,
+    queryParams,
+  } = props;
 
   const [items, setItems] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,7 +51,7 @@ const GenericListScreen = (props) => {
   }, [isFocused, search, page]);
 
   const retrieveItems = async () => {
-    const response = searchEnabled ? await fetchItems(page, search) : await fetchItems(page);
+    const response = await fetchItems({ page, search, ...queryParams });
     setItems(response.data.items);
     setPageButtonActive({ previous: response.data.previousPage, next: response.data.nextPage });
   };
