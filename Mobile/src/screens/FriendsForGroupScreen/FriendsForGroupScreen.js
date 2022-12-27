@@ -1,7 +1,7 @@
 import React from 'react';
 import GenericListScreen from '../../features/genericList/GenericListScreen/GenericListScreen';
 import groupService from '../../services/groupService';
-import FriendForGroupItem from '../../features/userList/FriendForGroupItem/FriendForGroupItem';
+import FriendForGroupItem from '../../features/user/FriendForGroupItem/FriendForGroupItem';
 import { GroupInvitationContext } from '../../common/context';
 
 const FriendsForGroupScreen = ({ route }) => {

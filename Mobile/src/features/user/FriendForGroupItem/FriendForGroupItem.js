@@ -1,6 +1,6 @@
 import React from 'react';
 import CoreUserListItem from '../../../components/CoreUserListItem/CoreUserListItem';
-import InviteToGroupButton from '../../groupList/InviteToGroupButton/InviteToGroupButton';
+import InviteToGroupButton from '../../group/InviteToGroupButton/InviteToGroupButton';
 
 const FriendForGroupItem = ({ user }) => (
   <CoreUserListItem

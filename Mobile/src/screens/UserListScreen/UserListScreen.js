@@ -1,6 +1,6 @@
 import React from 'react';
 import userService from '../../services/userService';
-import FriendListItem from '../../features/userList/FriendListItem/FriendListItem';
+import FriendListItem from '../../features/user/FriendListItem/FriendListItem';
 import GenericListScreen from '../../features/genericList/GenericListScreen/GenericListScreen';
 
 const UserListScreen = () => (
