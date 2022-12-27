@@ -8,6 +8,8 @@ const apiPaths = {
   FRIEND: '/friend',
   FRIEND_REQUEST: '/friend/request',
   USER_PROFILE: '/user/profile',
+  FRIENDS_FOR_GROUP: '/group/friends/invitable',
+  GROUP_INVITE: '/group/invite',
 };
 
 export default apiPaths;

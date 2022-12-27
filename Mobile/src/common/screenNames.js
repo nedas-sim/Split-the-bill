@@ -9,6 +9,7 @@ const ScreenNames = {
   friendRequests: 'Friend Requests',
   friendList: 'Friends',
   profile: 'Profile',
+  friendsForGroup: 'Friends for Group',
 };
 
 export default ScreenNames;

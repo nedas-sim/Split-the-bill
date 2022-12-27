@@ -2,7 +2,7 @@ import React from 'react';
 import groupService from '../../services/groupService';
 import ScreenNames from '../../common/screenNames';
 import GenericListScreen from '../../features/genericList/GenericListScreen/GenericListScreen';
-import GroupListItem from '../../features/groupList/GroupListItem/GroupListItem';
+import GroupListItem from '../../features/group/GroupListItem/GroupListItem';
 
 const GroupListScreen = ({ navigation }) => (
   <GenericListScreen
