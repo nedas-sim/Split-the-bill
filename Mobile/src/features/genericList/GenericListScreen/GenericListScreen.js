@@ -40,7 +40,21 @@ const GenericListScreen = (props) => {
     }, debounceTimeInMs);
 
     return () => clearTimeout(debounceTimeout);
-  }, [isFocused, page, search]);
+  }, [isFocused, search]);
+
+  useEffect(() => {
+    if (searchEnabled && !emptySearch && !(search?.length >= config.MINIMUM_SEARCH_TERM_SIZE)) {
+      return;
+    }
+
+    const getItems = async () => {
+      await retrieveItems();
+    };
+
+    if (isFocused) {
+      getItems();
+    }
+  }, [page]);
 
   const retrieveItems = async () => {
     const response = searchEnabled ? await fetchItems(page, search) : await fetchItems(page);
