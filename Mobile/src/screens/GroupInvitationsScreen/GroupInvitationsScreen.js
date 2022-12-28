@@ -1,17 +1,15 @@
 import React from 'react';
 import GenericListScreen from '../../features/genericList/GenericListScreen/GenericListScreen';
 import groupService from '../../services/groupService';
-import GroupListItem from '../../features/group/GroupListItem/GroupListItem';
+import GroupInvitationItem from '../../features/group/GroupInvitationItem/GroupInvitationItem';
 
-const GroupInvitationsScreen = ({ navigation }) => (
+const GroupInvitationsScreen = () => (
   <GenericListScreen
     searchEnabled
     emptySearch
     fetchItems={groupService.getInvitations}
     noItemsMessages={['There are no invitations']}
-    renderItem={(group) => (
-      <GroupListItem key={group.groupId} group={group} navigation={navigation} />
-    )}
+    renderItem={(group) => <GroupInvitationItem key={group.groupId} group={group} />}
   />
 );
 
