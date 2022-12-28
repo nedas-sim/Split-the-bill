@@ -36,6 +36,8 @@ public static class ErrorMessages
         public const string NotAMember = "You are not a member of this group";
         public const string ReceiverIsAlreadyMember = "User is already a member of the group";
         public const string ReceiverHasAnInvitation = "User is already invited to join the group";
+        public const string NotInvited = "You don't have an invitation to this group";
+        public const string AlreadyMember = "You are already a member of this group";
     }
 
     public static class API

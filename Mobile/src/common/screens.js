@@ -13,6 +13,7 @@ import UserProfileScreen from '../screens/UserProfileScreen/UserProfileScreen';
 import FriendsForGroupScreen from '../screens/FriendsForGroupScreen/FriendsForGroupScreen';
 import FriendDetailsScreen from '../screens/FriendDetailsScreen/FriendDetailsScreen';
 import GroupsForFriendScreen from '../screens/GroupsForFriendScreen/GroupsForFriendScreen';
+import GroupInvitationsScreen from '../screens/GroupInvitationsScreen/GroupInvitationsScreen';
 
 const Screens = {
   loginScreen: {
@@ -107,6 +108,13 @@ const Screens = {
     options: ({ navigation, route }) => ({
       headerRight: () => <LogoutButton navigation={navigation} />,
       title: `Invite ${route.params.name}`,
+    }),
+  },
+  groupInvitations: {
+    name: ScreenNames.groupInvitations,
+    component: GroupInvitationsScreen,
+    options: ({ navigation }) => ({
+      headerRight: () => <LogoutButton navigation={navigation} />,
     }),
   },
 };

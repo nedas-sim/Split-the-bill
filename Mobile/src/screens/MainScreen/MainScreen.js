@@ -29,6 +29,10 @@ const MainScreen = ({ navigation }) => {
       title: 'Profile',
       redirectTo: ScreenNames.profile,
     },
+    {
+      title: 'Group Invitations',
+      redirectTo: ScreenNames.groupInvitations,
+    },
   ];
 
   useEffect(() => {
