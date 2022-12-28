@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#5520DA',
     marginTop: 5,
     marginBottom: 5,
+    flexDirection: 'row',
   },
   groupName: {
     color: '#fff',
@@ -13,6 +14,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 'auto',
     marginBottom: 'auto',
+  },
+  buttonContainer: {
+    marginLeft: 'auto',
+    marginRight: 20,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    width: 80,
   },
 });
 

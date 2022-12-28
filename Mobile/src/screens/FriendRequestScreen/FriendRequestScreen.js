@@ -1,13 +1,13 @@
 import React from 'react';
 import GenericListScreen from '../../features/genericList/GenericListScreen/GenericListScreen';
 import friendService from '../../services/friendService';
-import FriendListItem from '../../features/user/FriendListItem/FriendListItem';
+import UserListItem from '../../features/user/UserListItem/UserListItem';
 
 const FriendRequestScreen = () => (
   <GenericListScreen
     searchEnabled
     fetchItems={friendService.getFriendRequests}
-    renderItem={(user) => <FriendListItem key={user.id} user={user} />}
+    renderItem={(user) => <UserListItem key={user.id} user={user} />}
     noItemsMessages={['You have no friend requests']}
     emptySearch
   />

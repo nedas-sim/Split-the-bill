@@ -10,6 +10,7 @@ const apiPaths = {
   USER_PROFILE: '/user/profile',
   FRIENDS_FOR_GROUP: '/group/friends/invitable',
   GROUP_INVITE: '/group/invite',
+  GROUPS_FOR_FRIEND: '/friend/groups/invitable',
 };
 
 export default apiPaths;
