@@ -1,4 +1,5 @@
 ﻿using Application.Groups.GetGroupsForFriend;
+using Application.Groups.GetInvitations;
 using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
 using Application.Repositories;
@@ -22,6 +23,16 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
             context.GroupMembershipViews
                    .Where(gm => gm.UserId == query.UserId)
                    .Where(gm => gm.GroupName.Contains(query.Search ?? string.Empty));
+    }
+
+    internal IQueryable<UserGroup> QueryUserGroupsByFilter(GetInvitationsQuery request)
+    {
+        return
+            context.UserGroups
+                   .AsNoTracking()
+                   .Where(ug => ug.AcceptedOn == null)
+                   .Where(ug => ug.UserId == request.UserId)
+                   .Where(ug => ug.Group.Name.Contains(request.Search ?? string.Empty));
     }
     #endregion
 
@@ -141,6 +152,31 @@ WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) >
         };
 
         int count = await QueryValue<int>(sql, parameters);
+        return count;
+    }
+
+    public async Task<List<GroupResponse>> GetInvitations(GetInvitationsQuery request, CancellationToken cancellationToken = default)
+    {
+        List<GroupResponse> invitations = await
+            QueryUserGroupsByFilter(request)
+                .OrderBy(ug => ug.Group.Name)
+                .ApplyPaging(request)
+                .Select(ug => new GroupResponse
+                {
+                    GroupId = ug.GroupId,
+                    GroupName = ug.Group.Name,
+                })
+                .ToListAsync(cancellationToken);
+
+        return invitations;
+    }
+
+    public async Task<int> GetInvitationCount(GetInvitationsQuery request, CancellationToken cancellationToken = default)
+    {
+        int count = await
+            QueryUserGroupsByFilter(request)
+                .CountAsync(cancellationToken);
+
         return count;
     }
 }
