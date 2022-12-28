@@ -3,6 +3,7 @@ using Application.Groups.GetFriendsForGroup;
 using Application.Groups.GetInvitations;
 using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
+using Application.Groups.UpdateInvitation;
 using Domain.Responses;
 using Domain.Responses.Groups;
 using Domain.Responses.Users;
@@ -62,5 +63,13 @@ public class GroupController : BaseController
     {
         query.SetUserId(GetId());
         return FromListResult(await sender.Send(query));
+    }
+
+    [HttpPut("invitation")]
+    [Authorize]
+    public async Task<IActionResult> UpdateGroupInvitation([FromBody] UpdateInvitationCommand command)
+    {
+        command.SetUserId(GetId());
+        return ToNoContent(await sender.Send(command));
     }
 }

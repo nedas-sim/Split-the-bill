@@ -179,4 +179,17 @@ WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) >
 
         return count;
     }
+
+    public async Task AcceptInvitation(UserGroup userGroup, CancellationToken cancellationToken = default)
+    {
+        userGroup.AcceptedOn = DateTime.UtcNow;
+        context.UserGroups.Update(userGroup);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task RejectInvitation(UserGroup userGroup, CancellationToken cancellationToken = default)
+    {
+        context.UserGroups.Remove(userGroup);
+        await context.SaveChangesAsync(cancellationToken);
+    }
 }
