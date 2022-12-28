@@ -24,6 +24,16 @@ public sealed class GroupRepository : BaseRepository<Group>, IGroupRepository
                    .Where(gm => gm.UserId == query.UserId)
                    .Where(gm => gm.GroupName.Contains(query.Search ?? string.Empty));
     }
+
+    internal IQueryable<UserGroup> QueryUserGroupsByFilter(GetInvitationsQuery request)
+    {
+        return
+            context.UserGroups
+                   .AsNoTracking()
+                   .Where(ug => ug.AcceptedOn == null)
+                   .Where(ug => ug.UserId == request.UserId)
+                   .Where(ug => ug.Group.Name.Contains(request.Search ?? string.Empty));
+    }
     #endregion
 
     public GroupRepository(DataContext context, IOptions<ConnectionStrings> options) 
@@ -148,19 +158,15 @@ WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) >
     public async Task<List<GroupResponse>> GetInvitations(GetInvitationsQuery request, CancellationToken cancellationToken = default)
     {
         List<GroupResponse> invitations = await
-            context.UserGroups
-                   .AsNoTracking()
-                   .Where(ug => ug.AcceptedOn == null)
-                   .Where(ug => ug.UserId == request.UserId)
-                   .Where(ug => ug.Group.Name.Contains(request.Search ?? string.Empty))
-                   .OrderBy(ug => ug.Group.Name)
-                   .ApplyPaging(request)
-                   .Select(ug => new GroupResponse
-                   {
-                       GroupId = ug.GroupId,
-                       GroupName = ug.Group.Name,
-                   })
-                   .ToListAsync(cancellationToken);
+            QueryUserGroupsByFilter(request)
+                .OrderBy(ug => ug.Group.Name)
+                .ApplyPaging(request)
+                .Select(ug => new GroupResponse
+                {
+                    GroupId = ug.GroupId,
+                    GroupName = ug.Group.Name,
+                })
+                .ToListAsync(cancellationToken);
 
         return invitations;
     }
@@ -168,12 +174,8 @@ WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) >
     public async Task<int> GetInvitationCount(GetInvitationsQuery request, CancellationToken cancellationToken = default)
     {
         int count = await
-            context.UserGroups
-                   .AsNoTracking()
-                   .Where(ug => ug.AcceptedOn == null)
-                   .Where(ug => ug.UserId == request.UserId)
-                   .Where(ug => ug.Group.Name.Contains(request.Search ?? string.Empty))
-                   .CountAsync(cancellationToken);
+            QueryUserGroupsByFilter(request)
+                .CountAsync(cancellationToken);
 
         return count;
     }
