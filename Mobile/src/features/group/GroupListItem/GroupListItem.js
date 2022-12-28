@@ -1,7 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-import styles from './styles';
 import ScreenNames from '../../../common/screenNames';
+import CoreGroupListItem from '../../../components/CoreGroupListItem/CoreGroupListItem';
 
 const GroupListItem = ({ group, navigation }) => {
   const handleItemPress = () => {
@@ -11,11 +10,7 @@ const GroupListItem = ({ group, navigation }) => {
     });
   };
 
-  return (
-    <TouchableOpacity style={styles.card} onPress={handleItemPress}>
-      <Text style={styles.groupName}>{group.groupName}</Text>
-    </TouchableOpacity>
-  );
+  return <CoreGroupListItem group={group} onCardPress={handleItemPress} />;
 };
 
 export default GroupListItem;

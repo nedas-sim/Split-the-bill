@@ -10,6 +10,8 @@ const ScreenNames = {
   friendList: 'Friends',
   profile: 'Profile',
   friendsForGroup: 'Friends for Group',
+  friendDetailsScreen: 'Friend Details',
+  groupsForFriend: 'Groups for Friend',
 };
 
 export default ScreenNames;
