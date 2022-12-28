@@ -1,5 +1,6 @@
 ﻿using Application.Groups.CreateGroup;
 using Application.Groups.GetFriendsForGroup;
+using Application.Groups.GetInvitations;
 using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
 using Domain.Responses;
@@ -38,7 +39,7 @@ public class GroupController : BaseController
         return FromListResult(await sender.Send(query));
     }
 
-    [HttpPost("invite")]
+    [HttpPost("invitation")]
     [Authorize]
     public async Task<IActionResult> SendInvitation([FromBody] SendInvitationCommand command)
     {
@@ -50,6 +51,14 @@ public class GroupController : BaseController
     [HttpGet("friends/invitable")]
     [Authorize]
     public async Task<ActionResult<ListResult<UserResponse>>> GetInvitableFriendsForGroup([FromQuery] GetFriendsForGroupQuery query)
+    {
+        query.SetUserId(GetId());
+        return FromListResult(await sender.Send(query));
+    }
+
+    [HttpGet("invitation")]
+    [Authorize]
+    public async Task<ActionResult<ListResult<GroupResponse>>> GetInvitations([FromQuery] GetInvitationsQuery query)
     {
         query.SetUserId(GetId());
         return FromListResult(await sender.Send(query));

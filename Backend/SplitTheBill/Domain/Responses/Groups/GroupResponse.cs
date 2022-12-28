@@ -1,6 +1,4 @@
-﻿using Domain.Views;
-
-namespace Domain.Responses.Groups;
+﻿namespace Domain.Responses.Groups;
 
 public sealed class GroupResponse
 {

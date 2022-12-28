@@ -1,4 +1,5 @@
 ﻿using Application.Groups.GetGroupsForFriend;
+using Application.Groups.GetInvitations;
 using Application.Groups.GetUsersGroupList;
 using Application.Groups.SendInvitation;
 using Domain.Common;
@@ -17,4 +18,7 @@ public interface IGroupRepository : IBaseRepository<Group>
 
     public Task<List<GroupResponse>> GetPotentialGroupsForFriend(GetGroupsForFriendQuery request, CancellationToken cancellationToken = default);
     public Task<int> GetPotentialGroupsForFriendCount(GetGroupsForFriendQuery request, CancellationToken cancellationToken = default);
+
+    public Task<List<GroupResponse>> GetInvitations(GetInvitationsQuery request, CancellationToken cancellationToken = default);
+    public Task<int> GetInvitationCount(GetInvitationsQuery request, CancellationToken cancellationToken = default);
 }

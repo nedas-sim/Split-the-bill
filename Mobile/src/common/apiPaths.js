@@ -9,7 +9,7 @@ const apiPaths = {
   FRIEND_REQUEST: '/friend/request',
   USER_PROFILE: '/user/profile',
   FRIENDS_FOR_GROUP: '/group/friends/invitable',
-  GROUP_INVITE: '/group/invite',
+  GROUP_INVITATION: '/group/invitation',
   GROUPS_FOR_FRIEND: '/friend/groups/invitable',
 };
 
