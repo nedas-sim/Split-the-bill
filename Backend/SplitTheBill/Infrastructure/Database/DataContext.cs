@@ -17,10 +17,12 @@ public sealed class DataContext : DbContext
 	public DbSet<Group> Groups { get; set; }
 	public DbSet<UserGroup> UserGroups { get; set; }
 	public DbSet<UserFriendship> UserFriendships { get; set; }
+    public DbSet<Entry> Entries { get; set; }
+    public DbSet<EntryExpense> EntryExpenses { get; set; }
     #endregion
 
     #region Views
-	public DbSet<GroupMembershipView> GroupMembershipViews { get; set; }
+    public DbSet<GroupMembershipView> GroupMembershipViews { get; set; }
 	public DbSet<AcceptedFriendshipView> AcceptedFriendshipViews { get; set; }
 	public DbSet<PendingFriendshipView> PendingFriendshipViews { get; set; }
 	#endregion
@@ -30,5 +32,6 @@ public sealed class DataContext : DbContext
 		PaymentConfiguration.Configure(modelBuilder);
 		GroupConfiguration.Configure(modelBuilder);
 		FriendshipConfiguration.Configure(modelBuilder);
+		FinancialEntryConfiguration.Configure(modelBuilder);
 	}
 }
