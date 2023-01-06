@@ -23,7 +23,7 @@ public static class FinancialEntryConfiguration
     private static void ConfigureFinancialEntryLines(EntityTypeBuilder<EntryExpense> builder)
     {
         builder.HasOne(ee => ee.Entry)
-               .WithMany()
+               .WithMany(e => e.Expenses)
                .HasForeignKey(ee => ee.EntryId)
                .OnDelete(DeleteBehavior.NoAction);
 

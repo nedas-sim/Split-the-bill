@@ -38,11 +38,20 @@ public static class ErrorMessages
         public const string ReceiverHasAnInvitation = "User is already invited to join the group";
         public const string NotInvited = "You don't have an invitation to this group";
         public const string AlreadyMember = "You are already a member of this group";
+        public const string NotAMemberMultiple = "One or more users are not members of the group";
     }
 
     public static class API
     {
         public const string TokenNotFound = "Token not found";
         public const string InvalidToken = "Invalid token";
+    }
+
+    public static class Finances
+    {
+        public const string CreateRequestPrefix = "Create entry request has validation errors";
+        public const string NoExpenseLines = "No expense lines were provided";
+        public const string LineWithNegativeAmount = "Expense lines can't contain negative amounts";
+        public const string PayerIsDebtor = "Payer can't be a debtor";
     }
 }

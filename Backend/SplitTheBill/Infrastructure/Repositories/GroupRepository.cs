@@ -192,4 +192,15 @@ WHERE UserId IS NULL AND ((@search LIKE N'') OR (CHARINDEX(@search, GroupName) >
         context.UserGroups.Remove(userGroup);
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<bool> AreUsersMembers(Guid groupId, List<Guid> userIds, CancellationToken cancellationToken = default)
+    {
+        int membershipCount = await
+            context.GroupMembershipViews
+                   .Where(gmv => gmv.GroupId == groupId)
+                   .Where(gmv => userIds.Contains(gmv.UserId))
+                   .CountAsync(cancellationToken);
+
+        return membershipCount == userIds.Count;
+    }
 }

@@ -32,6 +32,7 @@ public static class ApiDependencies
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IPaymentRepository, PaymentRepository>();
         services.AddTransient<IGroupRepository, GroupRepository>();
+        services.AddTransient<IEntryRepository, EntryRepository>();
     }
 
     private static void AddServices(IServiceCollection services)
