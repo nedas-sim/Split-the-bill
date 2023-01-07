@@ -76,7 +76,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
         }
     }
 
-    protected async Task<IEnumerable<TResponse>> QueryList<TResponse>(string query, Dictionary<string, object> parameters)
+    protected async Task<IEnumerable<TResponse>> QueryList<TResponse>(string query, Dictionary<string, object?> parameters)
     {
         using SqlConnection connection = new(ConnectionString);
         connection.Open();
@@ -86,7 +86,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
         return responses;
     }
 
-    protected async Task<T> QueryValue<T>(string query, Dictionary<string, object> parameters)
+    protected async Task<T> QueryValue<T>(string query, Dictionary<string, object?> parameters)
     {
         using SqlConnection connection = new(ConnectionString);
         connection.Open();
