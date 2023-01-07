@@ -43,7 +43,7 @@ public sealed class CreateEntryCommand : BaseCreateRequest<Entry>
     public override IEnumerable<(bool Success, string ErrorMessage)> ValidateProperties()
     {
         bool anyFinanceLines = FinancialLines?.Any() ?? false;
-        bool nonNegativeAmounts = FinancialLines?.All(fl => fl.Amount >= 0) ?? false;
+        bool nonNegativeAmounts = FinancialLines?.All(fl => fl.Amount >= 0) ?? true;
         bool payerIsDebtor = FinancialLines?.Any(fl => fl.DebtorId == ActualPayerId) ?? true;
 
         yield return (anyFinanceLines, ErrorMessages.Finances.NoExpenseLines);
