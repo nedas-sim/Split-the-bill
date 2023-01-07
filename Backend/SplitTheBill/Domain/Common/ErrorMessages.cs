@@ -53,5 +53,7 @@ public static class ErrorMessages
         public const string NoExpenseLines = "No expense lines were provided";
         public const string LineWithNegativeAmount = "Expense lines can't contain negative amounts";
         public const string PayerIsDebtor = "Payer can't be a debtor";
+        public const string InvalidUserFilter = "Entry expenses can't include yourself as other user";
+        public const string GetExpensesRequestPrefix = "Get expenses request has validation errors";
     }
 }

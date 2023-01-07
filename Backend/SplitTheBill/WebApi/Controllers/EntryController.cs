@@ -1,4 +1,5 @@
 ﻿using Application.Finances.CreateEntry;
+using Application.Finances.GetEntryExpenses;
 using Application.Finances.GetGroupEntries;
 using Domain.Responses;
 using Domain.Responses.Finances;
