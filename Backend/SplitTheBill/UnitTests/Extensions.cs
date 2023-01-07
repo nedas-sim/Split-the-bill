@@ -8,4 +8,11 @@ public static class Extensions
 
         return @this;
     }
+
+    public static BaseMessageResult<T> ShouldNotContain<T>(this BaseMessageResult<T> @this, string errorMessage)
+    {
+        Assert.DoesNotContain(errorMessage, @this.Message);
+
+        return @this;
+    }
 }

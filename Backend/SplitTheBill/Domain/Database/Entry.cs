@@ -9,4 +9,6 @@ public sealed class Entry : BaseEntity
 
     public Guid GroupId { get; set; }
     public Group Group { get; set; }
+
+    public ICollection<EntryExpense> Expenses { get; set; }
 }
